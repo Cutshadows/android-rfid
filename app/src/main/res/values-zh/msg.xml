@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="rfid_mgs_error_config">Error de configuración del dispositivo</string>
+    <string name="rfid_mgs_error_init">Inicialización fallida</string>
+    <string name="rfid_mgs_error_lessthan12">La longitud de la clave debe ser de 12 bits.</string>
+    <string name="rfid_mgs_error_nohex">Por favor ingrese un número hexadecimal</string>
+    <string name="rfid_mgs_error_nopwd">La contraseña no puede estar vacía</string>
+    <string name="rfid_mgs_error_nolockcode">El código de bloqueo no puede estar vacío</string>
+    <string name="rfid_mgs_kill_fail">Falló al eliminar</string>
+    <string name="rfid_mgs_kill_succ">Eliminado con éxito</string>
+    <string name="rfid_mgs_lock_succ">Bloqueado con éxito</string>
+    <string name="rfid_mgs_lock_fail">Bloqueo fallido</string>
+    <string name="rfid_mgs_killpwdtip">No se puede destruir con contraseña predeterminada</string>
+    <string name="rfid_mgs_lockpwdtip">No se puede bloquear con contraseña predeterminada</string>
+    <string name="rfid_mgs_locktip">Consejo: después del bloqueo permanente, no se puede desbloquear; después del desbloqueo permanente, no se puede bloquear</string>
+    <string name="rfid_mgs_error_veri_fail">Verificación de clave fallida</string>
+    <string name="rfid_mgs_error_not_found">Búsqueda de tarjeta fallida</string>
+    <string name="rfid_msg_uid">\nUID：</string>
+    <string name="rfid_msg_type">\nTipo de tarjeta：</string>
+    <string name="rfid_msg_data">\nDatos：</string>
+    <string name="rfid_msg_read_fail">\nLectura de tarjeta fallida</string>
+    <string name="rfid_msg_read_succ">\nLectura de tarjeta exitosa</string>
+    <string name="rfid_msg_write_fail">\nEscritura tarjeta fallida</string>
+    <string name="rfid_msg_write_succ">\nEscritura tarjeta exitosamente</string>
+    <string name="rfid_mgs_error_0not_write">El bloque 0 del sector 0 no se puede escribir</string>
+    <string name="rfid_mgs_error_not_write_null">Escribir contenido no puede estar vacío</string>
+    <string name="rfid_mgs_error_not_supper_write">Este programa no admite la operación de escritura del bloque de datos, \nque es un bloque de control de contraseña</string>
+    <string name="rfid_msg_1byte_fail">Los datos deben ser de un byte</string>
+    <string name="rfid_msg_confirm_title">Estas seguro？</string>
+    <string name="rfid_msg_confirm_true">Ok</string>
+    <string name="rfid_msg_confirm_flase">Cancelar</string>
+    <string name="rfid_msg_confirm_afi">!Después de la operación, el AFI de la etiqueta no puede modificarse nuevamente! ¿Quieres bloquear AFI?</string>
+    <string name="rfid_msg_confirm_dsfid">¡Después de la operación, el DSFID de la etiqueta no puede modificarse nuevamente! ¿Quieres bloquear AFI?</string>
+    <string name="rfid_msg_lock_fail">\nFaló bloqueo</string>
+    <string name="rfid_msg_lock_succ">\nBloqueo Éxitoso</string>
+
+    <string name="uhf_msg_read_tag_fail">Error al leer el número de etiqueta</string>
+    <string name="uhf_msg_addr_not_null">La dirección no puede estar vacía</string>
+    <string name="uhf_msg_addr_must_decimal">La dirección debe ser datos decimales</string>
+    <string name="uhf_msg_addr_must_len8">La contraseña de acceso debe tener 8 dígitos.</string>
+    <string name="uhf_msg_write_must_not_null">Escribir datos no puede estar vacío</string>
+    <string name="uhf_msg_write_must_len4">La longitud de la cadena a escribir debe ser de 4 bits.</string>
+    <string name="uhf_msg_tag_must_not_null">El número de etiqueta no puede estar vacío</string>
+    <string name="uhf_msg_write_succ">Datos escritos exitosamente</string>
+    <string name="uhf_msg_write_fail">Escritura de datos fallida</string>
+    <string name="uhf_msg_len_not_null">La longitud no puede estar vacía.</string>
+    <string name="uhf_msg_len_must_decimal">La longitud debe ser datos decimales</string>
+    <string name="uhf_msg_write_must_len4x">La longitud de la cadena a escribir debe ser un múltiplo de 4.</string>
+    <string name="uhf_msg_read_data_fail">Lectura de datos fallida</string>
+
+    <string name="uhf_msg_inventory_fail">Fallo de reconocimiento</string>
+    <string name="uhf_msg_inventory_stop_fail">Dejar de identificar etiquetas fallidas</string>
+    <string name="uhf_msg_inventory_open_fail">Error al abrir la etiqueta de identificación</string>
+    <string name="uhf_msg_set_frequency_fail">Error al establecer la frecuencia</string>
+    <string name="uhf_msg_set_frequency_succ">Establecer frecuencia con éxito</string>
+    <string name="uhf_msg_read_frequency_fail">Frecuencia de lectura fallida</string>
+    <string name="uhf_msg_read_frequency_succ">Leer frecuencia exitosa</string>
+
+
+</resources>

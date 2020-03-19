@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="network_not_connected">Falló la conexión de red, verifique la configuración de red</string>
+    <string name="xml_parser_failed">Excepción de análisis de datos</string>
+    <string name="io_exception_error">Excepción de secuencia de archivo</string>
+    <string name="http_status_code_error">Excepción de red, código de error：%d</string>
+    <string name="http_exception_error">Excepción de red, solicitud agotada</string>
+    <string name="socket_exception_error">Excepción de red, tiempo de espera de lectura de datos</string>
+    <string name="app_run_code_error">Excepción de tiempo de ejecución de la aplicación</string>
+
+    <string name="app_menu_surelogout">¿Estás seguro de que quieres salir del programa?</string>
+    <string name="sure">Ok</string>
+    <string name="cancle">Cancelar</string>
+
+    <string name="app_error">Error de aplicación</string>
+    <string name="app_error_message">Lo sentimos, la aplicación encontró un error y está a punto de salir. \n Envíe un informe de error y lo arreglaremos lo antes posible！</string>
+    <string name="submit_report">Enviar informe</string>
+
+    <string name="load_more">Más</string>
+    <string name="load_ing">Cargando···</string>
+    <string name="load_full">Todo cargado</string>
+    <string name="load_empty">Sin datos</string>
+    <string name="load_error">Error al cargar datos</string>
+
+    <string name="new_data_toast_message">%d actualizaciones</string>
+    <string name="new_data_toast_none">No hay actualizaciones nuevas.</string>
+
+    <string name="select">Elegir</string>
+    <string name="share">Compartir</string>
+    <string name="sharing">Compartiendo...</string>
+    <string name="publishing">En lanzamiento...</string>
+    <string name="choose_image">Por favor seleccione un archivo de imagen！</string>
+    <string name="delete_image">¿Estás seguro de que deseas eliminar esta imagen?</string>
+    <string name="delete_tweet">¿Estás seguro de que deseas eliminar el movimiento?</string>
+    <string name="delete_blog">¿Estás seguro de que deseas eliminar este blog?</string>
+    <string name="republish_tweet">¿Tiempo de espera de la red？</string>
+    <string name="clearwords">¿Texto claro？</string>
+
+    <string name="msg_load_is_null">Lectura fallida, puede haber sido eliminada</string>
+    <string name="msg_login_email_error">Dirección de correo electrónico no válida</string>
+    <string name="msg_login_username_null">Por favor ingrese su nombre de usuario</string>
+    <string name="msg_login_pwd_null">Por favor ingrese la contraseña</string>
+    <string name="msg_login_success">Inicio de sesión exitoso</string>
+    <string name="msg_login_fail">Inicio de sesión fallido</string>
+    <string name="msg_login_logout">Salir exitosamente</string>
+    <string name="msg_login_error">El usuario no ha iniciado sesión o la contraseña es incorrecta</string>
+    <string name="msg_load_userface_fail">El avatar del usuario no se pudo cargar</string>
+    <string name="msg_load_image_fail">La imagen no se pudo cargar</string>
+    <string name="msg_read_detail_fail">No se puede obtener información del artículo</string>
+    <string name="msg_noaccess_delete">No tienes permiso para eliminar</string>
+
+    <!-- LoginSina -->
+    <string name="sinalogin_check_account">La cuenta no puede estar vacía</string>
+    <string name="sinalogin_check_pass">La contraseña no puede estar vacía</string>
+    <string name="sinalogin_check_server">Verificación del servidor...</string>
+
+    <!-- sina share message -->
+    <string name="OAUTH_ERROR">La autenticación del servidor falló</string>
+    <string name="OAUTH_RequestToken_ACCESS">La verificación de la aplicación de terceros se realizó correctamente</string>
+    <string name="OAUTH_RequestToken_ERROR">La verificación de la aplicación de terceros falló</string>
+    <string name="OAUTH_AccessToken_ACCESS">Usuario autorizado para iniciar sesión correctamente</string>
+    <string name="OAUTH_AccessToken_ERROR">Error de inicio de sesión de autorización de usuario</string>
+    <string name="OAUTH_AccessToken_SXPIRED">Autorización caducada, vuelva a autorizar el inicio de sesión</string>
+    <string name="Weibo_Message_NULL">Los datos compartidos no pueden estar vacíos</string>
+    <string name="Weibo_Message_LONG">Más de 140 palabras</string>
+    <string name="Weibo_Share_Success">Weibo compartiendo el éxito</string>
+    <string name="Weibo_Share_Error">El uso compartido de Weibo falló</string>
+    <string name="Weibo_Share_Repeat">Ya compartido</string>
+
+    <string name="font_size">Fuente del cuerpo</string>
+</resources>

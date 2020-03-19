@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="item_inventory">inventory
+    <item >
+         <TextView
+             android:layout_width="match_parent"
+             android:layout_height="wrap_content"
+             android:background="#113056"
+             android:textSize="24sp"
+             android:padding="10sp"
+             android:textColor="#fffff"
+             xmlns:android="http://schemas.android.com/apk/res/android">
+             Inventory 1
+         </TextView>
+    </item>
+        <item >
+         <TextView
+             android:layout_width="match_parent"
+             android:layout_height="wrap_content"
+             android:background="#113056"
+             android:textSize="24sp"
+             android:padding="10sp"
+             android:textColor="#fffff"
+             xmlns:android="http://schemas.android.com/apk/res/android">
+             Inventory 2
+         </TextView>
+    </item>
+    <item >
+         <TextView
+             android:layout_width="match_parent"
+             android:layout_height="wrap_content"
+             android:background="#113056"
+             android:textSize="24sp"
+             android:padding="10sp"
+             android:textColor="#fffff"
+             xmlns:android="http://schemas.android.com/apk/res/android">
+             Inventory 3
+         </TextView>
+    </item>
+
+    </string-array>
+</resources>
