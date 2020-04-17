@@ -21,9 +21,10 @@ import com.appc72_uhf.app.widget.NoScrollViewPager;
 import com.rscja.deviceapi.RFIDWithUHF;
 import com.rscja.utility.StringUtility;
 
-//import java.io.Reader;
 import java.util.ArrayList;
 import java.util.List;
+
+//import java.io.Reader;
 
 /**
  * Created by Administrator on 2015-03-10.
@@ -46,7 +47,7 @@ public class BaseTabFragmentActivity extends FragmentActivity {
 	public RFIDWithUHF mReader;
 	private int index = 0;
 
-	private ActionBar.Tab tab_kill, tab_lock, tab_set ;
+	private ActionBar.Tab tab_inventory, tab_kill, tab_lock, tab_set ;
 	private DisplayMetrics metrics;
 	private AlertDialog dialog;
 	private long[] timeArr;
@@ -104,13 +105,14 @@ public class BaseTabFragmentActivity extends FragmentActivity {
 	}
 
 	protected void initTabs() {
-		for (int i = 0; i < mViewPagerAdapter.getCount() - 3; ++i) {
+		for (int i = 0; i < mViewPagerAdapter.getCount() - 4; ++i) {
 			mActionBar.addTab(mActionBar.newTab()
 					.setText(mViewPagerAdapter.getPageTitle(i)).setTabListener(mTabListener));
 		}
-		tab_kill = mActionBar.newTab().setText(mViewPagerAdapter.getPageTitle(3)).setTabListener(mTabListener);
-		tab_lock = mActionBar.newTab().setText(mViewPagerAdapter.getPageTitle(4)).setTabListener(mTabListener);
-		tab_set = mActionBar.newTab().setText(mViewPagerAdapter.getPageTitle(5)).setTabListener(mTabListener);
+		tab_inventory = mActionBar.newTab().setText(mViewPagerAdapter.getPageTitle(3)).setTabListener(mTabListener);
+		tab_kill = mActionBar.newTab().setText(mViewPagerAdapter.getPageTitle(4)).setTabListener(mTabListener);
+		tab_lock = mActionBar.newTab().setText(mViewPagerAdapter.getPageTitle(5)).setTabListener(mTabListener);
+		tab_set = mActionBar.newTab().setText(mViewPagerAdapter.getPageTitle(6)).setTabListener(mTabListener);
 
 		//��Ӳ˵�
 //        mActionBar.addTab(mActionBar.newTab().setText(getString(R.string.myMenu)).setTabListener(mTabListener));
@@ -155,19 +157,22 @@ public class BaseTabFragmentActivity extends FragmentActivity {
 			case android.R.id.home:
 				finish();
 				break;
-			case R.id.action_kill:
+			case R.id.action_inventory:
 				index = 3;
+				mActionBar.addTab(tab_inventory, true);
+				break;
+			case R.id.action_kill:
+				index = 4;
 				mActionBar.addTab(tab_kill, true);
 				break;
 			case R.id.action_lock:
-				index = 4;
+				index = 5;
 				mActionBar.addTab(tab_lock, true);
 				break;
 			case R.id.action_set:
-				index = 5;
+				index = 6;
 				mActionBar.addTab(tab_set, true);
 				break;
-
 			case R.id.UHF_ver:
 				getUHFVersion();
 				break;

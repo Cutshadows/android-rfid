@@ -24,6 +24,10 @@
         android:title="@string/uhf_msg_tab_write"/>
     -->
     <item
+        android:id="@+id/action_inventory"
+        android:title="@string/uhf_msg_tab_inventory"
+        app:showAsAction="never" />
+    <item
         android:id="@+id/action_kill"
         android:title="@string/uhf_msg_tab_kill"
         app:showAsAction="never" />

@@ -1,7 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">UHF C72</string>
+    <!--VIEW MAINACTIVITY-->
+    <string name="app_name">Tags</string>
+    <string name="textEditCode" translatable="false">codigo</string>
+    <string name="textEditDesc" translatable="false">Descripcion</string>
+    <string name="textBtnSave" translatable="false">Guardar</string>
+    <string name="textBtnConectarApi" translatable="false">Conectar con API</string>
+
+
+    <!--INVENOTRY-->
+
+    <string name="inventory_list" translatable="false">Lista Inventario</string>
+    <string name="inventory_title" translatable="false">Lista Inventario</string>
+    <string name="btnEjecutarInventario" translatable="false">Ejecutar</string>
+    <string name="title_activity_login__rfid" translatable="false">Sign in</string>
+    <string name="prompt_email" translatable="false">Email</string>
+    <string name="prompt_password" translatable="false">Password</string>
+    <string name="action_sign_in" translatable="false">Sign in or register</string>
+    <string name="action_sign_in_short" translatable="false">Sign in</string>
+    <string name="welcome" translatable="false">"Welcome !"</string>
+    <string name="invalid_username" translatable="false">Not a valid username</string>
+    <string name="invalid_password" translatable="false">Password must be >5 characters</string>
+    <string name="login_failed" translatable="false">"Login failed"</string>
+
+    <!--LOGIN -->
+    <string name="login_title" translatable="false">Login</string>
+    <string name="login_code" translatable="false">Codigo</string>
+    <string name="login_username" translatable="false">Username</string>
+    <string name="login_password" translatable="false">Password</string>
+    <string name="btn_login" translatable="false">Ingresar</string>
+
+    <!--string name="app_name">UHF C72</string-->
     <string name="action_settings">Settings</string>
     <string name="action_about">About</string>
     <string name="action_display">Display Settings</string>
@@ -120,13 +150,13 @@
     <string name="rbInventoryLoop">Auto</string>
     <string name="rbInventoryAnti">Anti</string>
     <string name="tvQ">Q value：</string>
-    <string name="btInventory">Start</string>
-    <string name="title_stop_Inventory">Stop</string>
+    <string name="btInventory">Iniciar</string>
+    <string name="title_stop_Inventory">Parar</string>
     <string name="tvTagUii">EPC</string>
     <string name="tvTagLen">Length</string>
     <string name="tvTagCount">Count</string>
-    <string name="btClear">Clear</string>
-    <string name="btImport">Import</string>
+    <string name="btClear">Limpiar</string>
+    <string name="btSync" translatable="false">Sincronizar</string>
     <string name="tvTag">Tag</string>
     <string-array name="arrayAntiQ">
         <item>0</item>
@@ -196,7 +226,7 @@
     <string name="uhf_title_read">Read</string>
     <string name="uhf_title_write">Write</string>
 
-    <string name="uhf_title_filter">filter</string>
+    <string name="uhf_title_filter">filtrar</string>
 
 
     <string name="uhf_title_temp">Temporary mask</string>
@@ -798,8 +828,9 @@
     <string name="gps_msg_Locate_stop">Finish positioning</string>
     <string name="gps_msg_title_satellite_signal">The satellite signal</string>
     <string name="uhf_msg_tab_scan">Scan</string>
-    <string name="uhf_msg_tab_read">Read</string>
-    <string name="uhf_msg_tab_write">Write</string>
+    <string name="uhf_msg_tab_inventory" translatable="false">Inventario</string>
+    <string name="uhf_msg_tab_read">Leer</string>
+    <string name="uhf_msg_tab_write">Escribir</string>
     <string name="uhf_msg_tab_set">Config</string>
     <string name="uhf_msg_tab_kill">Kill</string>
     <string name="uhf_msg_tab_lock">Lock</string>
@@ -1433,5 +1464,8 @@
 
     <!-- Inventory -->
 
-    <string name="InventoryApp">Inventario</string>
+    <string name="InventoryApp" translatable="false">Inventario</string>
+    <string name="name">Name</string>
+    <string name="title_prompt_select" translatable="false">Seleccionar Inventario</string>
+
 </resources>

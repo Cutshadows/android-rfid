@@ -165,7 +165,7 @@
                 android:layout_width="100dp"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:text="命令"
+                android:text="Comando"
                 android:textSize="16sp" />
 
             <EditText

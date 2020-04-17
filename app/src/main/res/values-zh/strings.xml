@@ -1169,5 +1169,6 @@
     <string name="America">美国</string>
     <string name="Others">其他</string>
     <string name="freHopType">频点类型：</string>
+    <string name="name">Name</string>
 
 </resources>

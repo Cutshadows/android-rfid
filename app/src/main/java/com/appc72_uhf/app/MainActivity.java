@@ -1,5 +1,6 @@
 package com.appc72_uhf.app;
 
+import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.media.AudioManager;
 import android.media.SoundPool;
@@ -7,6 +8,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.widget.Toast;
 
+import com.appc72_uhf.app.activities.inventoryList;
 import com.appc72_uhf.app.fragment.UHFKillFragment;
 import com.appc72_uhf.app.fragment.UHFLockFragment;
 import com.appc72_uhf.app.fragment.UHFReadFragment;
@@ -27,7 +29,6 @@ public class MainActivity extends BaseTabFragmentActivity {
         setContentView(R.layout.activity_main);
 
 
-
         initSound();
         initUHF();
         initViewPageData();
@@ -40,14 +41,15 @@ public class MainActivity extends BaseTabFragmentActivity {
         lstFrg.add(new UHFReadTagFragment());
         lstFrg.add(new UHFReadFragment());
         lstFrg.add(new UHFWriteFragment());
+        lstFrg.add(new inventoryList());
         lstFrg.add(new UHFKillFragment());
         lstFrg.add(new UHFLockFragment());
         lstFrg.add(new UHFSetFragment());
 
-
         lstTitles.add(getString(R.string.uhf_msg_tab_scan));
         lstTitles.add(getString(R.string.uhf_msg_tab_read));
         lstTitles.add(getString(R.string.uhf_msg_tab_write));
+        lstTitles.add(getString(R.string.uhf_msg_tab_inventory));
         lstTitles.add(getString(R.string.uhf_msg_tab_kill));
         lstTitles.add(getString(R.string.uhf_msg_tab_lock));
         lstTitles.add(getString(R.string.uhf_msg_tab_set));
@@ -61,6 +63,7 @@ public class MainActivity extends BaseTabFragmentActivity {
         }
         super.onDestroy();
     }
+    @SuppressLint("StaticFieldLeak")
     public class InitTask extends AsyncTask<String, Integer, Boolean> {
         ProgressDialog mypDialog;
 

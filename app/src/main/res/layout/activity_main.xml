@@ -3,12 +3,12 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:clipToPadding="false"
-    android:fitsSystemWindows="true" >
+    android:fitsSystemWindows="true">
 
     <com.appc72_uhf.app.widget.NoScrollViewPager
         android:id="@+id/pager"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" >
+        android:layout_height="match_parent">
     </com.appc72_uhf.app.widget.NoScrollViewPager>
     <!--
     <LinearLayout
