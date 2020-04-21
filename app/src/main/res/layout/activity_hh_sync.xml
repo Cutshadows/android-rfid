@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".activities.HhSyncActivity">
+    <RelativeLayout
+        android:layout_width="330dp"
+        android:layout_height="420dp"
+        android:layout_marginStart="40dp"
+        android:layout_marginLeft="40dp"
+        android:layout_marginTop="119dp"
+        android:layout_marginEnd="41dp"
+        android:layout_marginRight="41dp"
+        android:layout_marginBottom="120dp"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="MissingConstraints">
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:id="@+id/imageView"
+                android:layout_width="match_parent"
+                android:layout_height="78dp"
+                android:background="@color/gray"
+                android:paddingLeft="@dimen/text_size_12"
+                android:paddingRight="@dimen/text_size_12"
+                app:srcCompat="@drawable/logo_white_text1" />
+
+            <EditText
+                android:id="@+id/et_syncCode"
+                android:layout_width="match_parent"
+                android:layout_height="52dp"
+                android:autofillHints=""
+                android:ems="10"
+                android:hint="@string/et_syncCode"
+                android:inputType="textPersonName" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_gravity="bottom">
+
+                <TextView
+                    android:layout_width="143dp"
+                    android:layout_height="wrap_content"
+                    android:gravity="bottom"
+                    android:text="@string/tv_idHardware"
+                    android:textAlignment="textStart"
+                    android:paddingStart="@dimen/text_size_7"
+                    android:textSize="@dimen/text_size_16"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tv_idDevice"
+                    android:layout_width="185dp"
+                    android:layout_height="wrap_content"
+                    android:gravity="bottom"
+                    android:paddingEnd="10dp"
+                    android:textAlignment="textEnd"
+                    android:textSize="@dimen/text_size_12"
+                    android:textStyle="bold" />
+            </LinearLayout>
+            <Button
+                android:id="@+id/btn_syncronousDevice"
+                android:layout_width="match_parent"
+                android:layout_height="67dp"
+                android:text="@string/btn_syncronousDevice" />
+        </LinearLayout></RelativeLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

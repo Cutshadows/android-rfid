@@ -421,13 +421,12 @@ public class UHFReadTagFragment extends KeyDwonFragment {
                 } else {
                     int tagcount = Integer.parseInt(tagList.get(index).get("tagCount"), 10) + 1;
                     map.put("tagCount", String.valueOf(tagcount));
-                    Log.e("Save Tags", "Error False ");
                     tagList.set(index, map);
                 }
                 adapter.notifyDataSetChanged();
             }
         }catch (Exception ex){
-            Log.e("Error Exception List", ex.getLocalizedMessage());
+            Log.i("Error Exception List", ex.getLocalizedMessage());
         }
     }
 
@@ -605,7 +604,7 @@ public class UHFReadTagFragment extends KeyDwonFragment {
                         strResult = "";
                     }
                     Log.i("data","EPC:"+mContext.mReader.convertUiiToEPC(res[1])+" | "+strResult);
-                    boolean saveRes=repositoryTag.InsertTag(strResult +" EPC:"+ mContext.mReader.convertUiiToEPC(res[1]), "deviceRFID", "1", true);
+                    boolean saveRes=repositoryTag.InsertTag(strResult +" EPC:"+ mContext.mReader.convertUiiToEPC(res[1]), android_id, "1", strResult,true);
                     if(saveRes){
                         Message msg = handler.obtainMessage();
                         Log.e("EPC","EPC:"+ mContext.mReader.convertUiiToEPC(res[1]));
@@ -654,13 +653,13 @@ public class UHFReadTagFragment extends KeyDwonFragment {
                 for(int index=0;index<=tagList.size()-1; index++){
                     String strEPC=tagList.get(index).toString();
 
-                    String strEPCleanFront=strEPC.replace("{tagUii= EPC:", "");
+                    String strEPCleanFront=strEPC.replace("{tagUii=EPC:", "");
                     String strEPCleanEnd=strEPCleanFront.replace("}", "");
 
                     jsonBody.put("InventoryId","1");
-                    jsonBody.put("TId", strEPCleanEnd);
+                    jsonBody.put("TId", "");
                     jsonBody.put("IdHardware", android_id);
-                    jsonBody.put("RFID","350024012003200010000020");
+                    jsonBody.put("RFID",strEPCleanEnd);
                     Log.e("JSONObject", jsonBody.toString());
                     data.put(jsonBody);
                 }

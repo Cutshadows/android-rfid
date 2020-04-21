@@ -1466,6 +1466,19 @@
 
     <string name="InventoryApp" translatable="false">Inventario</string>
     <string name="name">Name</string>
+
+    <!--LOGIN-->
     <string name="title_prompt_select" translatable="false">Seleccionar Inventario</string>
+    <string name="et_email" translatable="false">Email</string>
+    <string name="et_password" translatable="false">Password</string>
+    <string name="et_code" translatable="false">Codigo</string>
+    <string name="btn_ingresar" translatable="false">Ingresar</string>
+
+    <!--Sincronizar-->
+    <string name="et_syncCode" translatable="false">Codigo</string>
+    <string name="tv_idHardware" translatable="false">Id Dispositivo :</string>
+    <string name="tv_idDevice" translatable="false">uasd123ajlka3123jsd</string>
+    <string name="btn_syncronousDevice" translatable="false">Sincronizar</string>
+
 
 </resources>
