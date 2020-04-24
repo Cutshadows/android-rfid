@@ -157,6 +157,8 @@
     <string name="tvTagCount">Count</string>
     <string name="btClear">Limpiar</string>
     <string name="btSync" translatable="false">Sincronizar</string>
+    <string name="tv_wellcome" translatable="false">Bienvenido:</string>
+    <string name="tv_welkomen_user" translatable="false"></string>
     <string name="tvTag">Tag</string>
     <string-array name="arrayAntiQ">
         <item>0</item>
@@ -1473,12 +1475,19 @@
     <string name="et_password" translatable="false">Password</string>
     <string name="et_code" translatable="false">Codigo</string>
     <string name="btn_ingresar" translatable="false">Ingresar</string>
+    <string name="btn_nueva_empresa" translatable="false">Nueva empresa</string>
 
     <!--Sincronizar-->
     <string name="et_syncCode" translatable="false">Codigo</string>
     <string name="tv_idHardware" translatable="false">Id Dispositivo :</string>
     <string name="tv_idDevice" translatable="false">uasd123ajlka3123jsd</string>
     <string name="btn_syncronousDevice" translatable="false">Sincronizar</string>
+    <string name="btn_asynDevice_back_login" translatable="false">Volver</string>
+
+    <!--DASHBOARD-->
+    <string name="ibtn_takeInventory" translatable="false">Inventario</string>
+    <string name="ibtn_takelallable" translatable="false">Etiquetado</string>
+
 
 
 </resources>

@@ -4,13 +4,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activities.HhSyncActivity">
+    tools:context=".activities.LoginActivity">
+
     <RelativeLayout
-        android:layout_width="330dp"
-        android:layout_height="420dp"
+        android:layout_width="327dp"
+        android:layout_height="458dp"
         android:layout_marginStart="40dp"
         android:layout_marginLeft="40dp"
-        android:layout_marginTop="119dp"
+        android:layout_marginTop="109dp"
         android:layout_marginEnd="41dp"
         android:layout_marginRight="41dp"
         android:layout_marginBottom="120dp"
@@ -22,9 +23,9 @@
         tools:ignore="MissingConstraints">
 
         <LinearLayout
-            android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
             <ImageView
                 android:id="@+id/imageView"
@@ -36,58 +37,57 @@
                 app:srcCompat="@drawable/logo_white_text1" />
 
             <EditText
-                android:id="@+id/et_syncCode"
+                android:id="@+id/et_email"
                 android:layout_width="match_parent"
-                android:layout_height="52dp"
-                android:autofillHints=""
+                android:layout_height="65dp"
                 android:ems="10"
-                android:hint="@string/et_syncCode"
-                android:inputType="textPersonName" />
+                android:hint="@string/et_email"
+                android:inputType="textEmailAddress"
+                android:textAllCaps="false" />
 
-            <LinearLayout
+            <EditText
+                android:id="@+id/et_password"
+                android:layout_width="match_parent"
+                android:layout_height="63dp"
+                android:ems="10"
+                android:hint="@string/et_password"
+                android:inputType="textPassword" />
+
+            <EditText
+                android:id="@+id/et_code"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_gravity="bottom">
+                android:autofillHints=""
+                android:ems="10"
+                android:hint="@string/et_code"
+                android:inputType="textPersonName" />
 
-                <TextView
-                    android:layout_width="143dp"
-                    android:layout_height="wrap_content"
-                    android:gravity="bottom"
-                    android:text="@string/tv_idHardware"
-                    android:textAlignment="textStart"
-                    android:paddingStart="@dimen/text_size_7"
-                    android:textSize="@dimen/text_size_16"
-                    android:textStyle="bold" />
+            <Spinner
+                android:id="@+id/sp_code"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:spinnerMode="dialog"
+                android:theme="@style/MyDropDownNav"
+                android:visibility="visible" />
 
-                <TextView
-                    android:id="@+id/tv_idDevice"
-                    android:layout_width="185dp"
-                    android:layout_height="wrap_content"
-                    android:gravity="bottom"
-                    android:paddingEnd="10dp"
-                    android:textAlignment="textEnd"
-                    android:textSize="@dimen/text_size_12"
-                    android:textStyle="bold" />
-            </LinearLayout>
             <Button
-                android:id="@+id/btn_syncronousDevice"
+                android:id="@+id/btn_ingresar"
                 android:layout_width="match_parent"
                 android:layout_height="67dp"
-                android:textStyle="bold"
-                android:textSize="@dimen/text_size_19"
                 android:background="@drawable/button_bg_up"
+                android:text="@string/btn_ingresar"
                 android:textColor="@color/white1"
-                android:text="@string/btn_syncronousDevice" />
+                android:textSize="@dimen/text_size_19" />
+
             <Button
-                android:id="@+id/btn_asynDevice_back_login"
+                android:id="@+id/btn_nuevaEmpresa"
                 android:layout_width="match_parent"
                 android:layout_height="67dp"
-                android:layout_marginTop="15dp"
-                android:textStyle="bold"
-                android:textSize="@dimen/text_size_19"
+                android:layout_marginTop="30dp"
                 android:background="@drawable/button_bg_up"
+                android:text="@string/btn_nueva_empresa"
                 android:textColor="@color/white1"
-                android:text="@string/btn_asynDevice_back_login" />
-        </LinearLayout></RelativeLayout>
+                android:textSize="@dimen/text_size_19" />
+        </LinearLayout>
+    </RelativeLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

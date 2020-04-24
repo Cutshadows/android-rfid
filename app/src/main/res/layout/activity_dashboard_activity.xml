@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".activities.Dashboard_activity">
+
+    <RelativeLayout
+        android:layout_width="379dp"
+        android:layout_height="522dp"
+        android:layout_marginStart="40dp"
+        android:layout_marginLeft="40dp"
+        android:layout_marginTop="119dp"
+        android:layout_marginEnd="41dp"
+        android:layout_marginRight="41dp"
+        android:layout_marginBottom="120dp"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.489"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0"
+        tools:ignore="MissingConstraints">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:paddingTop="30dp">
+
+            <ImageView
+                android:id="@+id/imageView"
+                android:layout_width="match_parent"
+                android:layout_height="78dp"
+                android:layout_marginTop="50dp"
+                android:background="@color/gray"
+                android:paddingLeft="50dp"
+                android:paddingRight="50dp"
+                app:srcCompat="@drawable/logo_white_text1" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1px"
+                android:background="@color/gray1" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:layout_marginTop="50dp">
+
+                <TextView
+                    android:id="@+id/tv_wellcome"
+                    android:layout_width="7dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2"
+                    android:gravity="center"
+                    android:text="@string/tv_wellcome"
+                    android:textSize="20dp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tv_welkomen_user"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="3"
+                    android:gravity="center"
+                    android:text="@string/tv_welkomen_user"
+                    android:textSize="20dp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="207dp"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:paddingTop="20dp">
+
+                <ImageButton
+                    android:id="@+id/ibtn_takeInventory"
+                    android:layout_width="150dp"
+                    android:layout_height="141dp"
+                    android:layout_margin="15dp"
+                    android:layout_marginTop="@dimen/text_size_19"
+                    android:background="@color/full_transparent"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/etiquetado"
+                    tools:src="@drawable/etiquetado"></ImageButton>
+
+                <ImageButton
+                    android:id="@+id/ibtn_Labelled"
+                    android:layout_width="150dp"
+                    android:layout_height="140dp"
+                    android:layout_margin="15dp"
+                    android:layout_marginTop="@dimen/text_size_19"
+                    android:background="@color/full_transparent"
+
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/tomar_inventario"></ImageButton>
+            </LinearLayout>
+        </LinearLayout>
+
+    </RelativeLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

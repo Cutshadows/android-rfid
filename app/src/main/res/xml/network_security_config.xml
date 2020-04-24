@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<network-security-config>
+    <domain-config cleartextTrafficPermitted="true">
+        <domain includeSubdomains="true">demo.izyrfid.com</domain>
+        <domain includeSubdomains="true">izyrfid.com</domain>
+        <domain includeSubdomains="true">rw.izyrfid.com</domain>
+        <domain includeSubdomains="true">demo.izyrfid.com/api/devices/GetInfoDevice</domain>
+    </domain-config>
+    <base-config cleartextTrafficPermitted="true" />
+</network-security-config>

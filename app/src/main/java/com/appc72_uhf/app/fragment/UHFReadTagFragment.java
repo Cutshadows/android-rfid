@@ -31,8 +31,6 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.Nullable;
-
 import com.android.volley.AuthFailureError;
 import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
@@ -85,113 +83,70 @@ public class UHFReadTagFragment extends KeyDwonFragment {
     private Spinner spInventories;
     ArrayList<String> result = new ArrayList<>();
     ArrayAdapter<String> adapterSelect;
-
     private boolean shouldRefreshOnResume =false;
-
 
 
     public static final String URLRFID="http://demo.izyrfid.com/";
 
-
-    protected Context context;
-    //private boolean valLoadData=false;
-
-    /*public static UHFReadTagFragment newInstance() {
-        UHFReadTagFragment fragment = new UHFReadTagFragment();
-        return fragment;
-    }
-
-    @Override
-    public void onViewStateRestored(@Nullable Bundle savedInstanceState) {
-        super.onViewStateRestored(savedInstanceState);
-        adapterSelect.clear();
-        getInventories();
-    }*/
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        Log.e("MY", "UHFReadTagFragment.onCreateView ");
-
+        Log.i("MY", "UHFReadTagFragment.onCreateView ");
         return inflater
                 .inflate(R.layout.uhf_readtag_fragment, container, false);
     }
-
     @Override
     public void onDestroyView() {
         super.onDestroyView();
         shouldRefreshOnResume = true;
-        Log.e("onDestroyView", "Estado: onDestroyView");
     }
-
-    @Override
-    public void onViewStateRestored(@Nullable Bundle savedInstanceState) {
-        super.onViewStateRestored(savedInstanceState);
-
-        Log.e("onViewStateRestored", "Estado: onViewStateRestored");
-        /*spInventories=(Spinner) getView().findViewById(R.id.spInventories);
-        //GET INVENTORIES
-        adapterSelect=new ArrayAdapter<String>(this.mContext, R.layout.spinner_item_inventories, result);
-        spInventories.setAdapter(adapterSelect);
-        adapterSelect.notifyDataSetChanged();
-        getInventories();*/
-
-
-    }
-
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         Log.e("MY", "UHFReadTagFragment.onActivityCreated");
-        mContext = (MainActivity) getActivity();
+        initComponent();
+        loadData();
+        getInventories();
+    }
 
+
+    //INICIALIZACION DE COMPONENTES
+    private void initComponent(){
+        mContext = (MainActivity) getActivity();
         tagList = new ArrayList<HashMap<String, String>>();
         spInventories=(Spinner) getView().findViewById(R.id.spInventories);
-
-
 
         BtClear = (Button) getView().findViewById(R.id.BtClear);
         BtSync = (Button) getView().findViewById(R.id.BtSync);
         tv_count = (TextView) getView().findViewById(R.id.tv_count);
         RgInventory = (RadioGroup) getView().findViewById(R.id.RgInventory);
-
         String tr = "";
         result=new ArrayList<>();
-
         //RbInventorySingle = (RadioButton) getView().findViewById(R.id.RbInventorySingle);
         RbInventoryLoop = (RadioButton) getView()
                 .findViewById(R.id.RbInventoryLoop);
-
         BtInventory = (Button) getView().findViewById(R.id.BtInventory);
         LvTags = (ListView) getView().findViewById(R.id.LvTags);
-
-
         llContinuous = (LinearLayout) getView().findViewById(R.id.llContinuous);
-
         adapter = new SimpleAdapter(mContext, tagList, R.layout.listtag_items,
                 new String[]{"tagUii", "tagLen", "tagCount", "tagRssi"},
                 new int[]{R.id.TvTagUii, R.id.TvTagLen, R.id.TvTagCount,
                         R.id.TvTagRssi});
-
-
         BtClear.setOnClickListener(new BtClearClickListener());
         //BtImport.setOnClickListener(new BtImportcClickListener());
         BtSync.setOnClickListener(new BtSyncClickListener());
         RgInventory.setOnCheckedChangeListener(new RgInventoryCheckedListener());
         BtInventory.setOnClickListener(new BtInventoryClickListener());
         btnFilter = (Button) getView().findViewById(R.id.btnFilter);
-
         android_id = Settings.Secure.getString(getContext().getContentResolver(),
                 Settings.Secure.ANDROID_ID);
-
-
-
 
         //GET INVENTORIES
         adapterSelect=new ArrayAdapter<String>(this.mContext, R.layout.spinner_item_inventories, result);
         spInventories.setAdapter(adapterSelect);
         adapterSelect.notifyDataSetChanged();
+
         spInventories.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -203,27 +158,6 @@ public class UHFReadTagFragment extends KeyDwonFragment {
 
             }
         });
-
-        /*SimpleCursorAdapter cursorAdapter = new SimpleCursorAdapter (mContext, R.layout.spinner_item_inventories, null, from, to, 0);
-        cursorAdapter.setDropDownViewResource (R.layout.spinner_item_inventories);
-        spInventories.setAdapter (cursorAdapter);
-        spInventories.setOnItemSelectedListener (new AdapterView.OnItemSelectedListener () {
-            @Override
-            public void onItemSelected (AdapterView<?> adapterView, View view, int i, long l) {
-                if (i != -1) {
-                    Cursor c = (Cursor) adapterView.getItemAtPosition (i);
-
-                }
-            }
-
-            @Override
-            public void onNothingSelected (AdapterView<?> adapterView) {
-
-            }
-        });*/
-
-
-
 
         btnFilter.setOnClickListener(new OnClickListener() {
             @Override
@@ -362,19 +296,12 @@ public class UHFReadTagFragment extends KeyDwonFragment {
                 mContext.playSound(1);
             }
         };
-        //CARGAR LISTA
-        loadData();
-        getInventories();
-
-
-
     }
     @Override
     public void onResume(){
         super.onResume();
         Log.e("onResume", "Estado: onResume");
         if(shouldRefreshOnResume){
-            // refresh fragment
             adapterSelect.clear();
             getInventories();
         }
@@ -386,14 +313,10 @@ public class UHFReadTagFragment extends KeyDwonFragment {
     }
     @Override
     public void onPause() {
-        Log.i("MY", "UHFReadTagFragment.onPause");
         super.onPause();
         // 停止识别
         stopInventory();
-        if(shouldRefreshOnResume){
-            // refresh fragment
-            adapterSelect.clear();
-        }
+        shouldRefreshOnResume = true;
     }
 
 
@@ -470,7 +393,6 @@ public class UHFReadTagFragment extends KeyDwonFragment {
         tagsRepository.ClearTags("1");
         tv_count.setText("0");
         tagList.clear();
-        Log.i("MY", "tagList.size " + tagList.size());
         adapter.notifyDataSetChanged();
     }
 
@@ -550,6 +472,9 @@ public class UHFReadTagFragment extends KeyDwonFragment {
         BtClear.setEnabled(enabled);
         BtSync.setEnabled(enabled);
     }
+    private void btnSyncEnabled(boolean enabled){
+        BtSync.setEnabled(enabled);
+    }
 
     private void stopInventory() {
         if (loopFlag) {
@@ -589,7 +514,7 @@ public class UHFReadTagFragment extends KeyDwonFragment {
         public void run() {
             Context mContextReadTag = getActivity();
             final TagsRepository repositoryTag= new TagsRepository(mContextReadTag);
-            String test;
+            //String test;
             String strTid;
             String strResult;
             String[] res = null;
@@ -603,14 +528,15 @@ public class UHFReadTagFragment extends KeyDwonFragment {
                     } else {
                         strResult = "";
                     }
-                    Log.i("data","EPC:"+mContext.mReader.convertUiiToEPC(res[1])+" | "+strResult);
-                    boolean saveRes=repositoryTag.InsertTag(strResult +" EPC:"+ mContext.mReader.convertUiiToEPC(res[1]), android_id, "1", strResult,true);
+                    //Log.i("data","EPC:"+mContext.mReader.convertUiiToEPC(res[1])+" | "+strResult);
+                    boolean saveRes=repositoryTag.InsertTag(strResult +" EPC:"+ mContext.mReader.convertUiiToEPC(res[1]), android_id, "1", strResult,1);
                     if(saveRes){
                         Message msg = handler.obtainMessage();
                         Log.e("EPC","EPC:"+ mContext.mReader.convertUiiToEPC(res[1]));
                         msg.obj = strResult +"EPC:"+ mContext.mReader.convertUiiToEPC(res[1])+ "@" + res[2]; //+ "EPC:"
                         handler.sendMessage(msg);
                     }else{
+                        Toast.makeText(mContext, "No se puede ingresar tag duplicado", Toast.LENGTH_SHORT).show();
                         Log.i("Duplicate error", "Duplicate tag");
                     }
                 }
@@ -656,16 +582,12 @@ public class UHFReadTagFragment extends KeyDwonFragment {
                     String strEPCleanFront=strEPC.replace("{tagUii=EPC:", "");
                     String strEPCleanEnd=strEPCleanFront.replace("}", "");
 
-                    jsonBody.put("InventoryId","1");
-                    jsonBody.put("TId", "");
+                    jsonBody.put("InventoryId","2");
+                    jsonBody.put("TId", strEPCleanEnd);
                     jsonBody.put("IdHardware", android_id);
-                    jsonBody.put("RFID",strEPCleanEnd);
-                    Log.e("JSONObject", jsonBody.toString());
+                    jsonBody.put("RFID","");
                     data.put(jsonBody);
                 }
-
-                Log.e("JSONArray", data.toString());
-                String requestBody = data.toString();
 
                 BooleanRequest booleanRequest = new BooleanRequest(1, URL, data, new Response.Listener<Boolean>() {
                     @Override
