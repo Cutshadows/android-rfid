@@ -6,6 +6,7 @@
 
     <uses-sdk android:targetSdkVersion="29" />
 
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.BLUETOOTH" />
     <uses-permission android:name="android.permission.INTERNET" />
@@ -19,12 +20,19 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".activities.Dashboard_activity" android:theme="@style/Theme.AppCompat">
+        <activity android:name=".activities.Server_inventory_activity"
+            android:configChanges="orientation|screenSize"
+            android:theme="@style/Theme.AppCompat" >
 
         </activity>
         <activity
-            android:name=".activities.LoginActivity"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar">
+            android:name=".activities.Detail_product_activity"
+            android:configChanges="orientation|screenSize"
+            android:theme="@style/Theme.AppCompat" />
+        <activity
+            android:name=".activities.Dashboard_activity"
+            android:configChanges="orientation|screenSize"
+            android:theme="@style/Theme.AppCompat">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -32,11 +40,19 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".activities.HhSyncActivity"
+            android:name=".activities.LoginActivity"
+            android:configChanges="orientation|screenSize"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar">
+
+
         </activity>
-        <activity android:name=".MainActivity">
-        </activity>
+        <activity
+            android:name=".activities.HhSyncActivity"
+            android:configChanges="orientation|screenSize"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+        <activity
+            android:name=".MainActivity"
+            android:configChanges="orientation|screenSize" />
     </application>
 
 </manifest>

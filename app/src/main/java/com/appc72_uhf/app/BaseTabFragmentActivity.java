@@ -109,10 +109,10 @@ public class BaseTabFragmentActivity extends FragmentActivity {
 			mActionBar.addTab(mActionBar.newTab()
 					.setText(mViewPagerAdapter.getPageTitle(i)).setTabListener(mTabListener));
 		}
-		tab_inventory = mActionBar.newTab().setText(mViewPagerAdapter.getPageTitle(3)).setTabListener(mTabListener);
-		tab_kill = mActionBar.newTab().setText(mViewPagerAdapter.getPageTitle(4)).setTabListener(mTabListener);
-		tab_lock = mActionBar.newTab().setText(mViewPagerAdapter.getPageTitle(5)).setTabListener(mTabListener);
-		tab_set = mActionBar.newTab().setText(mViewPagerAdapter.getPageTitle(6)).setTabListener(mTabListener);
+		tab_inventory = mActionBar.newTab().setText(mViewPagerAdapter.getPageTitle(1)).setTabListener(mTabListener);
+		tab_kill = mActionBar.newTab().setText(mViewPagerAdapter.getPageTitle(2)).setTabListener(mTabListener);
+		tab_lock = mActionBar.newTab().setText(mViewPagerAdapter.getPageTitle(3)).setTabListener(mTabListener);
+		tab_set = mActionBar.newTab().setText(mViewPagerAdapter.getPageTitle(4)).setTabListener(mTabListener);
 
 		//��Ӳ˵�
 //        mActionBar.addTab(mActionBar.newTab().setText(getString(R.string.myMenu)).setTabListener(mTabListener));
@@ -123,10 +123,10 @@ public class BaseTabFragmentActivity extends FragmentActivity {
 
 		@Override
 		public void onTabSelected(ActionBar.Tab tab, android.app.FragmentTransaction fragmentTransaction) {
-			if (mActionBar.getTabCount() > 3 && tab.getPosition() != 3) {
-				mActionBar.removeTabAt(3);
+			if (mActionBar.getTabCount() > 1 && tab.getPosition() != 1) {
+				mActionBar.removeTabAt(1);
 			}
-			if (tab.getPosition() == 3) {
+			if (tab.getPosition() == 1) {
 				mViewPager.setCurrentItem(index, false);
 			} else {
 				mViewPager.setCurrentItem(tab.getPosition());
@@ -149,28 +149,28 @@ public class BaseTabFragmentActivity extends FragmentActivity {
 		if (mActionBar.getSelectedTab().getText().equals(item.getTitle())) {
 			return true;
 		}
-		if (mActionBar.getTabCount() > 3
+		if (mActionBar.getTabCount() > 1
 				&& item.getItemId() != android.R.id.home && item.getItemId() != R.id.UHF_ver) {
-			mActionBar.removeTabAt(3);
+			mActionBar.removeTabAt(1);
 		}
 		switch (item.getItemId()) {
 			case android.R.id.home:
 				finish();
 				break;
 			case R.id.action_inventory:
-				index = 3;
+				index = 1;
 				mActionBar.addTab(tab_inventory, true);
 				break;
 			case R.id.action_kill:
-				index = 4;
+				index = 2;
 				mActionBar.addTab(tab_kill, true);
 				break;
 			case R.id.action_lock:
-				index = 5;
+				index = 3;
 				mActionBar.addTab(tab_lock, true);
 				break;
 			case R.id.action_set:
-				index = 6;
+				index = 4;
 				mActionBar.addTab(tab_set, true);
 				break;
 			case R.id.UHF_ver:

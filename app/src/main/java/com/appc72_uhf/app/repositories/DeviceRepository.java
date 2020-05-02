@@ -12,6 +12,7 @@ public class DeviceRepository {
     public DeviceRepository(Context context) {
         this.context = context;
     }
+
     public boolean DeviceInsert(
             int Id,
             String Name,
@@ -51,16 +52,15 @@ public class DeviceRepository {
             AdminSQLOpenHelper admin = new AdminSQLOpenHelper(context);
             SQLiteDatabase db = admin.getWritableDatabase();
             boolean result_code;
-            try{
                 Cursor selectCode=db.rawQuery("SELECT CompanyId FROM Device WHERE CompanyId="+companyId, null);
                 if(selectCode.moveToFirst()){
                     result_code=true;
                 }else{
                     result_code=false;
                 }
-            }catch (Exception e){
-                result_code=false;
-            }
             return result_code;
     }
+
+
+
 }

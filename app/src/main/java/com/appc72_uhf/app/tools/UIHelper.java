@@ -1,31 +1,14 @@
 package com.appc72_uhf.app.tools;
 
 
-import com.appc72_uhf.app.R;
-
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
-import android.content.Intent;
-import android.graphics.Point;
-import android.net.Uri;
-import android.os.Handler;
-import android.os.Message;
-import android.util.Log;
-import android.view.Display;
-import android.view.Gravity;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.webkit.WebView;
-import android.webkit.WebViewClient;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
+import com.appc72_uhf.app.R;
 
 
 public class UIHelper {
@@ -80,6 +63,7 @@ public class UIHelper {
      * @param message
      * @param iconInt
      */
+
     public static void alert(Activity act, int titleInt, String message,
                              int iconInt) {
         try {

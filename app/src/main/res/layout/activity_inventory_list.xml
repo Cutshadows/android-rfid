@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
 
 <LinearLayout
     android:layout_width="fill_parent"
@@ -43,7 +44,38 @@
                 android:text="@string/uhf_title_filter"
                 android:textColor="@color/white"
                 android:textSize="11sp" /-->
-            <Button
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/title_inventory_status"
+                android:textStyle="bold"
+                android:textSize="@dimen/text_size_19"
+                android:layout_marginRight="60dp" />
+            <LinearLayout
+                android:id="@+id/llPlusInventoryServer"
+                android:layout_gravity="end"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="end"
+                android:orientation="horizontal"
+                android:layout_marginLeft="60dp"
+                android:paddingTop="5dp"
+                android:paddingBottom="5dp">
+
+                <ImageButton
+                    android:id="@+id/btnInventory"
+                    android:layout_width="40dp"
+                    android:layout_height="37dp"
+                    android:background="@color/full_transparent"
+                    android:focusableInTouchMode="false"
+                    android:paddingLeft="0dp"
+                    android:paddingRight="0dp"
+                    android:scaleType="fitCenter"
+                    android:soundEffectsEnabled="true"
+                    android:src="@drawable/blue_plus_button"
+                    tools:src="@drawable/blue_plus_button" />
+            </LinearLayout>
+            <!--Button
                 android:id="@+id/btnInventory"
                 android:layout_width="74dp"
                 android:layout_height="37dp"
@@ -52,7 +84,7 @@
                 android:background="@drawable/button_bg"
                 android:text="@string/btSync"
                 android:textColor="@color/white"
-                android:textSize="11sp" />
+                android:textSize="11sp" /-->
             <!--  -->
 
         </LinearLayout>
@@ -70,7 +102,7 @@
     <ListView
         android:id="@+id/lstData"
         android:layout_width="match_parent"
-        android:layout_height="654dp"
+        android:layout_height="520dp"
         android:scrollingCache="true"
         android:smoothScrollbar="true"></ListView>
 </LinearLayout>

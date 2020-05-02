@@ -1,6 +1,7 @@
 package com.appc72_uhf.app.fragment;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.os.Handler;
@@ -36,13 +37,13 @@ import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
-import com.android.volley.RetryPolicy;
 import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.HttpHeaderParser;
 import com.android.volley.toolbox.Volley;
 import com.appc72_uhf.app.MainActivity;
 import com.appc72_uhf.app.R;
+import com.appc72_uhf.app.repositories.CompanyRepository;
 import com.appc72_uhf.app.repositories.InventaryRespository;
 import com.appc72_uhf.app.repositories.TagsRepository;
 import com.appc72_uhf.app.tools.StringUtils;
@@ -84,9 +85,14 @@ public class UHFReadTagFragment extends KeyDwonFragment {
     ArrayList<String> result = new ArrayList<>();
     ArrayAdapter<String> adapterSelect;
     private boolean shouldRefreshOnResume =false;
+    String code_enterprise;
+    int inventoryID;
+    int codeCompany;
 
 
-    public static final String URLRFID="http://demo.izyrfid.com/";
+
+    public static final String PROTOCOL_URLRFID="http://";
+    public static final String DOMAIN_URLRFID=".izyrfid.com/";
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -146,11 +152,19 @@ public class UHFReadTagFragment extends KeyDwonFragment {
         adapterSelect=new ArrayAdapter<String>(this.mContext, R.layout.spinner_item_inventories, result);
         spInventories.setAdapter(adapterSelect);
         adapterSelect.notifyDataSetChanged();
+        code_enterprise=getCompany();
 
         spInventories.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-
+                final InventaryRespository inventaryRespository=new InventaryRespository(mContext);
+                try{
+                    inventoryID=inventaryRespository.ViewInventory(parent.getItemAtPosition(position).toString());
+                    //et_code=parent.getItemAtPosition(position).toString();
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
+                Log.e("CLICK LISTENER ", "parent:"+parent.getItemAtPosition(position)+"  idCompany:"+inventoryID);
             }
 
             @Override
@@ -292,7 +306,7 @@ public class UHFReadTagFragment extends KeyDwonFragment {
                 Log.e("data Handle", ""+msg);
                 String result = msg.obj + "";
                 String[] strs = result.split("@");
-                addEPCToList(strs[0]); //, strs[1]
+                addEPCToList(strs[0], strs[2]); //, strs[1]
                 mContext.playSound(1);
             }
         };
@@ -324,13 +338,14 @@ public class UHFReadTagFragment extends KeyDwonFragment {
      * @param epc
      * Agregar tag a la lista taglist
      */
-    private void addEPCToList(String epc) {
+    private void addEPCToList(String epc, String tid) {
         try {
             if (!TextUtils.isEmpty(epc)) {
                 int index = checkIsExist(epc);
 
                 map = new HashMap<String, String>();
                 map.put("tagUii", epc);
+                map.put("tagRssi", tid);
 
                 //aca se divide
                 //map.put("tagCount", String.valueOf(1));
@@ -528,12 +543,12 @@ public class UHFReadTagFragment extends KeyDwonFragment {
                     } else {
                         strResult = "";
                     }
-                    //Log.i("data","EPC:"+mContext.mReader.convertUiiToEPC(res[1])+" | "+strResult);
-                    boolean saveRes=repositoryTag.InsertTag(strResult +" EPC:"+ mContext.mReader.convertUiiToEPC(res[1]), android_id, "1", strResult,1);
+                    Log.e("EPC",strResult+"EPC:"+ mContext.mReader.convertUiiToEPC(res[1])+"@"+res[2]);
+                    boolean saveRes=repositoryTag.InsertTag("EPC:"+ mContext.mReader.convertUiiToEPC(res[1]), android_id, inventoryID, strResult,0);
                     if(saveRes){
                         Message msg = handler.obtainMessage();
-                        Log.e("EPC","EPC:"+ mContext.mReader.convertUiiToEPC(res[1]));
-                        msg.obj = strResult +"EPC:"+ mContext.mReader.convertUiiToEPC(res[1])+ "@" + res[2]; //+ "EPC:"
+                        Log.e("EPC","EPC:"+ mContext.mReader.convertUiiToEPC(res[1])+"@"+res[2]+"@"+strResult);
+                        msg.obj ="EPC:"+ mContext.mReader.convertUiiToEPC(res[1])+"@"+ res[2]+"@"+strResult; //+ "EPC:"
                         handler.sendMessage(msg);
                     }else{
                         Toast.makeText(mContext, "No se puede ingresar tag duplicado", Toast.LENGTH_SHORT).show();
@@ -548,12 +563,17 @@ public class UHFReadTagFragment extends KeyDwonFragment {
         TagsRepository tagRepo= new TagsRepository(this.mContext);
         ArrayList<String> Tags=tagRepo.ViewAllTags();
         try{
+            Log.e("TAG SQLI", Tags.toString());
+
             if(Tags.size()!=0){
                 for(int i=0; i<=Tags.size();i++){
-                    String tagsString=String.valueOf(Tags.get(i));
-                    int index = checkIsExist(tagsString);
-                    if(index == -1 ){
-                        addEPCToList(tagsString);
+                    String etags=String.valueOf(Tags.get(i));
+                    String[] spliTags=etags.split("@");
+                    String RFIDtagsString=spliTags[0];
+                    String TIDtagsString=spliTags[1];
+                    int index = checkIsExist(RFIDtagsString);
+                     if(index == -1 ){
+                        addEPCToList(RFIDtagsString, TIDtagsString);
                     }
                 }
 
@@ -573,8 +593,10 @@ public class UHFReadTagFragment extends KeyDwonFragment {
                 RequestQueue requestQueue= Volley.newRequestQueue(mcontext);
                 JSONObject jsonBody;
                 jsonBody = new JSONObject();
-                String URL = URLRFID+"api/inventory/SaveTagReaded";
+                String URL = PROTOCOL_URLRFID+code_enterprise+DOMAIN_URLRFID+"api/inventory/SaveTagReaded";
                 JSONArray data=new JSONArray();
+                Log.e("TODO ELGLOSE", tagList.toString());
+
 
                 for(int index=0;index<=tagList.size()-1; index++){
                     String strEPC=tagList.get(index).toString();
@@ -582,14 +604,15 @@ public class UHFReadTagFragment extends KeyDwonFragment {
                     String strEPCleanFront=strEPC.replace("{tagUii=EPC:", "");
                     String strEPCleanEnd=strEPCleanFront.replace("}", "");
 
-                    jsonBody.put("InventoryId","2");
+                    jsonBody.put("InventoryId",String.valueOf(inventoryID));
                     jsonBody.put("TId", strEPCleanEnd);
                     jsonBody.put("IdHardware", android_id);
                     jsonBody.put("RFID","");
                     data.put(jsonBody);
                 }
+                Log.e("TODO ELGLOSE", jsonBody.toString());
 
-                BooleanRequest booleanRequest = new BooleanRequest(1, URL, data, new Response.Listener<Boolean>() {
+                /*BooleanRequest booleanRequest = new BooleanRequest(1, URL, data, new Response.Listener<Boolean>() {
                     @Override
                     public void onResponse(Boolean response) {
                         Toast.makeText(mContext, "Envio de tags con exito!!", Toast.LENGTH_LONG).show();
@@ -616,7 +639,7 @@ public class UHFReadTagFragment extends KeyDwonFragment {
 
                     }
                 });
-                requestQueue.add(booleanRequest);
+                requestQueue.add(booleanRequest);*/
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -689,14 +712,15 @@ public class UHFReadTagFragment extends KeyDwonFragment {
         result.clear();
         try{
             InventaryRespository inv = new InventaryRespository(this.mContext);
-            ArrayList<String> invs = inv.ViewAllInventories();
+            ArrayList<String> invs = inv.ViewInventoriesHH(codeCompany);
             adapterSelect.notifyDataSetInvalidated();
 
             for(int inven=0; inven<=invs.size()-1; inven++){
                 String recip=invs.get(inven);
                 String[] strs = recip.split("@");
-                result.add(strs[1]);
-
+                if(strs[3].equals("0")){
+                    result.add(strs[1]);
+                }
             }
 
             //adapter2= new SimpleCursorAdapter(this.mContext, R.layout.spinner_item_inventories, result);
@@ -712,5 +736,22 @@ public class UHFReadTagFragment extends KeyDwonFragment {
     public void myOnKeyDwon() {
         readTag();
         }
+    private String getCompany(){
+        CompanyRepository companyRepository=new CompanyRepository(mContext);
+        SharedPreferences preferenceCodeActive=getContext().getSharedPreferences("code_activate", Context.MODE_PRIVATE);
+        String enterprises_code=preferenceCodeActive.getString("code_activate", "");
+        String code_result="";
+        int companyId;
+        if(enterprises_code.isEmpty()){
+            Log.e("No data preferences", " Error data no empty "+enterprises_code);
+
+        }else{
+            code_result=enterprises_code;
+            companyId=companyRepository.getCompanieId(code_result);
+            codeCompany=companyId;
+
+        }
+        return code_result;
+    }
 
 }

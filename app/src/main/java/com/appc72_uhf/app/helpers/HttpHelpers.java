@@ -133,6 +133,59 @@ public class HttpHelpers {
         });
     }
 
+    public void clientProductDetail(int method, String url, final  Map<String, String> params, Response.Listener listener, @Nullable Response.ErrorListener errorListener) {
+
+        jsonRequest = new StringRequest(method, this.urlBase + url, listener, errorListener) {
+
+            @Override
+            public byte[] getBody() throws AuthFailureError {
+                if(params != null && params.size()>0){
+                    return HttpHelpers.this.encodeParameters(params, getParamsEncoding());
+                }
+                return null;
+            }
+
+            @Override
+            public String getBodyContentType()
+            {
+                return "application/json; charset=UTF-8";
+            }
+
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                //Map<String, String> pars = new HashMap<String, String>();
+                //pars.put("Content-Type", "application/json; charset=UTF-8");
+                //return pars;
+                return headers;
+            }
+        };
+        jsonRequest.setRetryPolicy(new RetryPolicy() {
+            @Override
+            public int getCurrentTimeout() {
+                return 30000;
+            }
+
+            @Override
+            public int getCurrentRetryCount() {
+                return 30000;
+            }
+
+            @Override
+            public void retry(VolleyError error) throws VolleyError {
+
+            }
+        });
+        request.add(jsonRequest);
+
+
+        request.addRequestFinishedListener(new RequestQueue.RequestFinishedListener<Object>() {
+            @Override
+            public void onRequestFinished(Request<Object> requestObject) {
+                request.getCache().clear();
+            }
+        });
+    }
+
     public void addHeader(String name, String value) {
         headers.put(name, value);
     }

@@ -54,22 +54,23 @@
 
                 <TextView
                     android:id="@+id/tv_wellcome"
-                    android:layout_width="7dp"
+                    android:layout_width="10dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="2"
-                    android:gravity="center"
+                    android:layout_weight="1"
+                    android:layout_gravity="start"
+                    android:gravity="end"
                     android:text="@string/tv_wellcome"
-                    android:textSize="20dp"
+                    android:textSize="16dp"
                     android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/tv_welkomen_user"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="3"
-                    android:gravity="center"
-                    android:text="@string/tv_welkomen_user"
-                    android:textSize="20dp" />
+                    android:layout_weight="1"
+                    android:layout_gravity="end"
+                    android:gravity="start"
+                    android:textSize="16dp" />
             </LinearLayout>
 
             <LinearLayout

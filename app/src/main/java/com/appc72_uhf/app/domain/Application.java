@@ -20,11 +20,15 @@ public class Application {
     private String MakeLabel;
     private String AccessToken;
     private String DetailForDevice;
+    private boolean Validate;
+    private int IsSelect;
 
     public Application() {
     }
 
-    public Application(int id, String name, String description, String applicationUserId, String applicationUser, String createDate, float locationId, Location locationObject, int inventoryStatus, String closeDate, String closeUserId, int companyId, String hardwareId, String isActive, String isAssigned, String takingInventory, String makeLabel, String accessToken, String detailForDevice) {
+
+
+    public Application(int id, String name, String description, String applicationUserId, String applicationUser, String createDate, float locationId, Location locationObject, int inventoryStatus, String closeDate, String closeUserId, int companyId, String hardwareId, String isActive, String isAssigned, String takingInventory, String makeLabel, String accessToken, String detailForDevice, boolean validate, int isSelect) {
         Id = id;
         Name = name;
         Description = description;
@@ -44,8 +48,17 @@ public class Application {
         MakeLabel=makeLabel;
         AccessToken= accessToken;
         DetailForDevice=detailForDevice;
+        Validate=validate;
+        IsSelect=isSelect;
+
+    }
+    public int getIsSelect() {
+        return IsSelect;
     }
 
+    public void setSelect(int select) {
+        IsSelect = select;
+    }
     // Getter Methods
     public String getMakeLabel(){
         return MakeLabel;
@@ -111,6 +124,9 @@ public class Application {
 
     public String getCloseUserId() {
         return CloseUserId;
+    }
+    public boolean getValidate() {
+        return Validate;
     }
 
     // Setter Methods

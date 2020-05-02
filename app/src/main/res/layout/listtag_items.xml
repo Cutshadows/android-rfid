@@ -10,7 +10,7 @@
         android:id="@+id/TvTagUii"
         android:layout_width="0dip"
         android:layout_height="wrap_content"
-        android:layout_weight="5"
+        android:layout_weight="3"
         android:paddingTop="3dp"
         android:paddingBottom="2dp" />
 
@@ -18,13 +18,12 @@
         android:id="@+id/TvTagLen"
         android:layout_width="0dip"
         android:layout_height="wrap_content"
-        android:layout_weight="1" android:visibility="gone" />
+        android:layout_weight="0" android:visibility="gone" />
 
     <TextView
         android:id="@+id/TvTagCount"
-        android:layout_width="0dip"
+        android:layout_width="10dp"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
         android:paddingTop="3dp"
         android:paddingBottom="2dp" />
     
@@ -32,7 +31,7 @@
         android:id="@+id/TvTagRssi"
         android:layout_width="0dip"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
+        android:layout_weight="3"
         android:paddingTop="3dp"
         android:paddingBottom="2dp" />
 

@@ -17,7 +17,7 @@ public class TagsRepository {
         this.context = context;
     }
 
-    public boolean InsertTag(String RFID, String IdHardware, String idInventory, String TID, Integer TagStatus) {
+    public boolean InsertTag(String RFID, String IdHardware, int idInventory, String TID, Integer TagStatus) {
         AdminSQLOpenHelper admin = new AdminSQLOpenHelper(context);
         SQLiteDatabase db = admin.getWritableDatabase();
         boolean result;
@@ -84,8 +84,8 @@ public class TagsRepository {
 
         if (read.moveToFirst()) {
             do {
-                datos.add(read.getString(read.getColumnIndex("RFID")));
-                //datos.add(read.getString(1));
+                datos.add(read.getString(read.getColumnIndex("RFID"))+"@"+read.getString(read.getColumnIndex("TID")));
+                //datos.add(read.getString(read.getColumnIndex("TID")));
                 //datos.add(read.getString(2));
                 //datos.add(read.getString(3));
 

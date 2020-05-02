@@ -27,12 +27,15 @@ public class AdminSQLOpenHelper extends SQLiteOpenHelper {
                 "TID TEXT, " +
                 "TagStatus " +
                 "INTEGER);"); //String, String, Float
+
         db.execSQL("CREATE TABLE IF  NOT EXISTS Inventory(" +
                 "Id TEXT UNIQUE, " +
                 "CompanyId INTEGER, " +
                 "Name TEXT, " +
                 "DetailForDevice TEXT, " +
-                "InventoryStatus INTEGER);"); //String, String, Float
+                "InventoryStatus INTEGER,"+
+                "IsSelect INTEGER);"); //String, String, Float //isSelect=1 true || 0 false
+
         db.execSQL("CREATE TABLE IF  NOT EXISTS Device(" +
                 "Id INTEGER UNIQUE, " +
                 "Name TEXT, " +
@@ -42,7 +45,21 @@ public class AdminSQLOpenHelper extends SQLiteOpenHelper {
                 "CompanyId INTEGER, " +
                 "HardwareId TEXT, " +
                 "TakingInventory TEXT, " +
-                "MakeLabel TEXT);"); //String, String, Float
+                "MakeLabel TEXT);");
+
+        db.execSQL("CREATE TABLE IF  NOT EXISTS Company(" +
+                "Id INTEGER UNIQUE, " +
+                "Name TEXT,"+
+                "IsActive TEXT,"+
+                "Code TEXT);");
+
+        db.execSQL("CREATE TABLE IF  NOT EXISTS DetailForDevice(" +
+                "Id INTEGER UNIQUE, " +
+                "EPC TEXT,"+
+                "Code TEXT,"+
+                "Name TEXT,"+
+                "Found TEXT,"+
+                "ProductMasterId INTEGER);");//String, String, Float
 
     }
 
@@ -51,6 +68,8 @@ public class AdminSQLOpenHelper extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS Tags");
         db.execSQL("DROP TABLE IF EXISTS Inventory");
         db.execSQL("DROP TABLE IF EXISTS Device");
+        db.execSQL("DROP TABLE IF EXISTS Company");
+        db.execSQL("DROP TABLE IF EXISTS DetailForDevice");
     }
 
 }

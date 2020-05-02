@@ -53,21 +53,21 @@
                 android:hint="@string/et_password"
                 android:inputType="textPassword" />
 
-            <EditText
+            <!--EditText
                 android:id="@+id/et_code"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:autofillHints=""
                 android:ems="10"
                 android:hint="@string/et_code"
-                android:inputType="textPersonName" />
+                android:inputType="textPersonName" /-->
 
             <Spinner
                 android:id="@+id/sp_code"
                 android:layout_width="match_parent"
-                android:layout_height="45dp"
-                android:spinnerMode="dialog"
-                android:theme="@style/MyDropDownNav"
+                android:layout_height="60dp"
+                android:spinnerMode="dropdown"
+                android:prompt="@string/title_prompt_select"
                 android:visibility="visible" />
 
             <Button

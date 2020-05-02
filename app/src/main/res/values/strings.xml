@@ -158,7 +158,7 @@
     <string name="btClear">Limpiar</string>
     <string name="btSync" translatable="false">Sincronizar</string>
     <string name="tv_wellcome" translatable="false">Bienvenido:</string>
-    <string name="tv_welkomen_user" translatable="false"></string>
+    <string name="tv_welkomen_user" translatable="false">admin@izysearch.com</string>
     <string name="tvTag">Tag</string>
     <string-array name="arrayAntiQ">
         <item>0</item>
@@ -1468,6 +1468,12 @@
 
     <string name="InventoryApp" translatable="false">Inventario</string>
     <string name="name">Name</string>
+    <string name="title_inventory_status" translatable="false">Estado Inventarios</string>
+    <string name="tv_inventaryofServer" translatable="false">Inventarios en Servidor</string>
+    <string name="btn_syncronousInventary" translatable="false">Obtener \n Inventarios</string>
+
+
+
 
     <!--LOGIN-->
     <string name="title_prompt_select" translatable="false">Seleccionar Inventario</string>
@@ -1487,7 +1493,6 @@
     <!--DASHBOARD-->
     <string name="ibtn_takeInventory" translatable="false">Inventario</string>
     <string name="ibtn_takelallable" translatable="false">Etiquetado</string>
-
 
 
 </resources>

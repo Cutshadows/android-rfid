@@ -21,6 +21,7 @@ import com.android.volley.VolleyError;
 import com.appc72_uhf.app.R;
 import com.appc72_uhf.app.domain.Application;
 import com.appc72_uhf.app.helpers.HttpHelpers;
+import com.appc72_uhf.app.repositories.CompanyRepository;
 import com.appc72_uhf.app.repositories.DeviceRepository;
 import com.appc72_uhf.app.tools.UIHelper;
 import com.google.gson.Gson;
@@ -40,6 +41,7 @@ public class HhSyncActivity extends AppCompatActivity implements View.OnClickLis
     int codeCompany;
 
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,6 +59,8 @@ public class HhSyncActivity extends AppCompatActivity implements View.OnClickLis
         tv_idDevice.setText(android_id.toUpperCase());
         btn_syncronousDevice.setOnClickListener(this);
         btn_asynDevice_back_login.setOnClickListener(this);
+
+
     }
 
     @Override
@@ -73,9 +77,9 @@ public class HhSyncActivity extends AppCompatActivity implements View.OnClickLis
     }
 
     private void SyncHandleCompanyId() {
-            final String code = et_syncCode.getText().toString();
+        final CompanyRepository companyRepository=new CompanyRepository(HhSyncActivity.this);
+        final String code = et_syncCode.getText().toString().toLowerCase();
             if(!code.isEmpty()){
-
                 /**
                  * primero consulta el id del codigo que estoy enviando al endpoint getcompanies
                  * CONSULTA AL ENDPOINT /api/document/GetCompanies
@@ -94,12 +98,18 @@ public class HhSyncActivity extends AppCompatActivity implements View.OnClickLis
                             Gson gson = new Gson();
                             Application[] apps = gson.fromJson(response, Application[].class);
                             for (Application app : apps) {
-                                codeCompany = app.getCompanyId();
-                                Log.e("CODECOMPANY", String.valueOf(codeCompany));
+
+                                boolean resulCompany=companyRepository.CompanyInsert(app.getCompanyId(), app.getName(), code, app.getIsActive());
+                                if(resulCompany){
+                                    SharedPreferences savePreferenceCodeActive=getSharedPreferences("code_activate", Context.MODE_PRIVATE);
+                                    SharedPreferences.Editor obj_codeActive=savePreferenceCodeActive.edit();
+                                    obj_codeActive.putString("code_activate", code);
+                                    obj_codeActive.commit();
+                                    codeCompany = app.getCompanyId();
+                                }
                             }
                             setViewEnabled(false);
                             if(codeCompany>0){
-
                                 obtainAuthorizationHH(codeCompany);
                             }
 
@@ -127,7 +137,6 @@ public class HhSyncActivity extends AppCompatActivity implements View.OnClickLis
 
     private void obtainAuthorizationHH(int codeCompany){
         final DeviceRepository deviceRepository=new DeviceRepository(HhSyncActivity.this);
-
         boolean validarCodigoLocal=deviceRepository.FindCode(codeCompany);
         if(validarCodigoLocal){
             try {
@@ -139,7 +148,7 @@ public class HhSyncActivity extends AppCompatActivity implements View.OnClickLis
                 jsonBody.put("CompanyId", codeCompany);
 
                 //jsonBody.put("", "{´HardwareId´:´f2e47736ce53306c´, ´CompanyId´:1}");
-                String code = et_syncCode.getText().toString();
+                String code = et_syncCode.getText().toString().toLowerCase();
                 String URL_COMPLETE = PROTOCOL + code + URL;
 
                 HttpHelpers http2 = new HttpHelpers(HhSyncActivity.this, URL_COMPLETE, "");
@@ -164,16 +173,6 @@ public class HhSyncActivity extends AppCompatActivity implements View.OnClickLis
                                     apps.getMakeLabel()
                             );
                             if(inserT){
-                                SharedPreferences savePreferencesCompanyId=getSharedPreferences("CompanyId", Context.MODE_PRIVATE);
-                                SharedPreferences.Editor obj_edite=savePreferencesCompanyId.edit();
-                                obj_edite.putInt("CompanyId", apps.getCompanyId());
-                                obj_edite.commit();
-
-                                SharedPreferences savePreferencesNameCompany=getSharedPreferences("CompanyName", Context.MODE_PRIVATE);
-                                SharedPreferences.Editor obj_editeName=savePreferencesNameCompany.edit();
-                                obj_editeName.putString("CompanyName", et_syncCode.getText().toString());
-                                obj_editeName.commit();
-
                                 Toast.makeText(HhSyncActivity.this, "Dispositivo Sincronizado", Toast.LENGTH_SHORT).show();
                                 Intent goToLogin=new Intent(HhSyncActivity.this, LoginActivity.class);
                                 startActivity(goToLogin);

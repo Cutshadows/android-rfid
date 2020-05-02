@@ -7,21 +7,24 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.appc72_uhf.app.R;
-import com.appc72_uhf.app.domain.Application;
 import com.appc72_uhf.app.helpers.HttpHelpers;
+import com.appc72_uhf.app.repositories.CompanyRepository;
 import com.appc72_uhf.app.tools.UIHelper;
-import com.google.gson.Gson;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -31,13 +34,15 @@ import java.util.Map;
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
     private Button btn_ingresar, btn_nuevaEmpresa;
     private Spinner sp_code;
-    private EditText et_email, et_password, et_code;
+    private EditText et_email, et_password;
     private Integer codeCompany;
     public static final String PROTOCOL="http://";
     public static final String URL=".izyrfid.com";
     private static final String TAG="Login_activity";
     ProgressDialog mypDialog;
-
+    ArrayList<String> dataSelect = new ArrayList<>();
+    ArrayAdapter<String> adapterSelect;
+    String et_code="";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,13 +60,46 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
         et_email=(EditText)findViewById(R.id.et_email);
         et_password=(EditText)findViewById(R.id.et_password);
-        et_code=(EditText)findViewById(R.id.et_code);
+        //et_code=(EditText)findViewById(R.id.et_code);
+        codeCompany=0;
+        sp_code.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                final CompanyRepository deviceRepository=new CompanyRepository(LoginActivity.this);
+                try{
+                    codeCompany=deviceRepository.getCompanieId(parent.getItemAtPosition(position).toString());
+                    et_code=parent.getItemAtPosition(position).toString();
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
 
         setViewEnabled(true);
 
+        dataSelect=new ArrayList<>();
+        /**
+         * LLenaddo de los codigos ingresados
+         */
+        getDataCompany();
+
+
+        SharedPreferences preferencesGetUsername=getSharedPreferences("username", Context.MODE_PRIVATE);
+        String Username=preferencesGetUsername.getString("username", "");
+        if(Username.length()==0){
+            Log.i("No data preferences", Username);
+        }else{
+            et_email.setText(Username);
+        }
+
         /**************************************************
-         * Load data preferences of the get code companies
-         ***************************************************/
+                 * Load data preferences of the get code companies
+
         SharedPreferences preferencesCompanyId=getSharedPreferences("CompanyId", Context.MODE_PRIVATE);
         codeCompany=preferencesCompanyId.getInt("CompanyId", 0);
 
@@ -70,10 +108,12 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         if(CompanyName.length()==0){
             Log.i("No data preferences", CompanyName);
         }else{
+            dataSelect.add(CompanyName);
             et_code.setText(CompanyName);
             et_code.setEnabled(false);
         }
         Log.e("COdeCompany Login", String.valueOf(codeCompany));
+       ***************************************************/
     }
 
     @Override
@@ -89,69 +129,40 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         }
 
     }
-
-    /**
-     * Por el momento no estoy utilizando este metodo para conseguir el codigo de la compañia
-     */
-    private  void getCompanyId(){
-        final String code=et_code.getText().toString();
-        String URL_COMPLETE=PROTOCOL+code+URL;
-
-        mypDialog = new ProgressDialog(LoginActivity.this);
-        mypDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-        mypDialog.setMessage("Verificando Codigo...");
-        mypDialog.setCanceledOnTouchOutside(false);
-        mypDialog.show();
-        HttpHelpers http = new HttpHelpers(this, URL_COMPLETE, "");
-        http.client(Request.Method.GET, "/api/document/GetCompanies", "application/json; charset=utf-8", null, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                Log.e("onResponseGetEmpresaID", response);
-                try{
-                    Gson gson = new Gson();
-                    Application[] apps = gson.fromJson(response, Application[].class);
-                    for (Application app: apps) {
-                        codeCompany=app.getCompanyId();
-                    }
-                    setViewEnabled(true);
-                    mypDialog.dismiss();
-                }catch (Exception e){
-                    mypDialog.dismiss();
-                    setViewEnabled(true);
-                    Toast.makeText(LoginActivity.this, "Error : "+e.getMessage(), Toast.LENGTH_SHORT).show();
-                }
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Log.d(TAG, "onErrorResponse " + error);
-                mypDialog.dismiss();
-            }
-        });
-    }
-
     /**
      * Metodo para validar la sesion del usuario
      */
 
     private void login_process() {
-        String username= et_email.getText().toString();
+        String username= et_email.getText().toString().toLowerCase();
         String password= et_password.getText().toString();
+        int companyId=codeCompany;
+
         if(username.isEmpty() || password.isEmpty()){
             UIHelper.ToastMessage(this, "Los campos usuario y contraseña son obligatorios", 2);
         }else{
+            SharedPreferences savePreferencesUsername=getSharedPreferences("username", Context.MODE_PRIVATE);
+            SharedPreferences.Editor obj_edite=savePreferencesUsername.edit();
+            obj_edite.putString("username", username);
+            obj_edite.commit();
             try{
                 setViewEnabled(false);
-                final String code=et_code.getText().toString();
+                final String code=et_code;
 
                 String URL_COMPLETE=PROTOCOL+code+URL;
                 Map<String, String> params = new HashMap<>();
                // params.put("username", "admin@izysearch.cl");
                 params.put("username", username);
-                //params.put("password", "@Mipassword123");
                 params.put("password", password);
                 params.put("grant_type", "password");
-                params.put("CompanyId", "1");
+                params.put("CompanyId", String.valueOf(companyId));
+
+
+                Log.e("valor 1", username);
+                Log.e("valor 2", password);
+                Log.e("valor 3", code);
+                Log.e("valor 4", String.valueOf(companyId));
+
                 mypDialog = new ProgressDialog(LoginActivity.this);
                 mypDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
                 mypDialog.setMessage("Iniciando sesion...");
@@ -162,7 +173,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 @Override
                 public void onResponse(String response) {
                     try{
-                        Log.e("onResponse Get Empresa", response);
                         ArrayList<String> resÁrray=new ArrayList<String>();
                         resÁrray.add(response);
                         String[] rest=response.split(",");
@@ -200,15 +210,20 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         }
     }
     public void getDataCompany(){
-
-
+        final CompanyRepository companyRepository=new CompanyRepository(LoginActivity.this);
+        dataSelect.clear();
+        try{
+            dataSelect=companyRepository.LoadCompanies();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        adapterSelect=new ArrayAdapter<String>(this, R.layout.spinner_item_companyid, dataSelect);
+        sp_code.setAdapter(adapterSelect);
+        adapterSelect.notifyDataSetChanged();
     }
-
-
 
     private void setViewEnabled(boolean enabled) {
         btn_ingresar.setEnabled(enabled);
         btn_nuevaEmpresa.setEnabled(enabled);
     }
-
 }

@@ -1,12 +1,17 @@
 package com.appc72_uhf.app.activities;
 
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.appc72_uhf.app.MainActivity;
 import com.appc72_uhf.app.R;
 
 public class Dashboard_activity extends AppCompatActivity implements View.OnClickListener {
@@ -27,13 +32,27 @@ public class Dashboard_activity extends AppCompatActivity implements View.OnClic
         tv_welkomen_user=(TextView) findViewById(R.id.tv_welkomen_user);
         ibtn_Labelled.setOnClickListener(this);
         ibtn_takeInventory.setOnClickListener(this);
+
+
+
+        SharedPreferences preferencesGetUsername=getSharedPreferences("username", Context.MODE_PRIVATE);
+        String Username=preferencesGetUsername.getString("username", "");
+        if(Username.length()==0){
+            Log.i("No data preferences", Username);
+        }else{
+            tv_welkomen_user.setText(" "+Username);
+        }
     }
     @Override
     public void onClick(View view) {
         switch (view.getId()){
             case R.id.ibtn_takeInventory:
+                Intent goToMain=new Intent(Dashboard_activity.this, MainActivity.class);
+                startActivity(goToMain);
                 break;
             case R.id.ibtn_Labelled:
+                Intent goToMain2=new Intent(Dashboard_activity.this, MainActivity.class);
+                startActivity(goToMain2);
                 break;
         }
     }
