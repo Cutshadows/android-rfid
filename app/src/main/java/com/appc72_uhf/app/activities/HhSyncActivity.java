@@ -104,7 +104,7 @@ public class HhSyncActivity extends AppCompatActivity implements View.OnClickLis
                                     SharedPreferences savePreferenceCodeActive=getSharedPreferences("code_activate", Context.MODE_PRIVATE);
                                     SharedPreferences.Editor obj_codeActive=savePreferenceCodeActive.edit();
                                     obj_codeActive.putString("code_activate", code);
-                                    obj_codeActive.commit();
+                                    obj_codeActive.apply();
                                     codeCompany = app.getCompanyId();
                                 }
                             }

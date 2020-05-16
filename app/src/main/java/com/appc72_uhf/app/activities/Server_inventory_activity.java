@@ -71,8 +71,6 @@ public class Server_inventory_activity extends AppCompatActivity implements View
 
     }
 
-
-
     public void onClick(View v){
         switch (v.getId()){
             case R.id.btn_syncInventoryServer:
@@ -112,7 +110,6 @@ public class Server_inventory_activity extends AppCompatActivity implements View
                 String URL_COMPLETE=PROTOCOL_URLRFID+code_enterprise+DOMAIN_URLRFID;
                 final InventaryRespository inventoryRepo = new InventaryRespository(Server_inventory_activity.this);
                 dataArrayList.clear();
-                Log.e("URL_COMPLETE", URL_COMPLETE);
                 HttpHelpers http = new HttpHelpers(Server_inventory_activity.this, URL_COMPLETE, "");
                 http.addHeader("Authorization", "Bearer "+token_access);
                 http.client(Request.Method.GET, "/api/inventory/GetAllInventories", "application/json; charset=utf-8", null, new Response.Listener<String>() {
@@ -122,10 +119,11 @@ public class Server_inventory_activity extends AppCompatActivity implements View
                             Gson gson = new Gson();
                             Application[] apps = gson.fromJson(response, Application[].class);
                             for( int i=0; i<=apps.length-1; i++){
-                                Log.e("DATA FOR", ""+apps[i].getId()+""+apps[i].getName()+" "+Boolean.valueOf(apps[i].getDetailForDevice()));
                                 boolean res = inventoryRepo.InventoryInsert(apps[i].getId(), apps[i].getName(), apps[i].getInventoryStatus(), apps[i].getDetailForDevice(), codeCompany);
+                                Log.e("DATA FOR", ""+apps[i].getId()+""+apps[i].getName()+" "+Boolean.valueOf(apps[i].getDetailForDevice())+" INVENTORY STATUS: "+apps[i].getInventoryStatus()+" Respuesta SQLI :"+res);
+
                                 if(res && apps[i].getInventoryStatus()==0) {
-                                    dataArrayList.add(new DatamodelInventories(Integer.valueOf(apps[i].getId()), String.valueOf(apps[i].getName()), Boolean.valueOf(apps[i].getDetailForDevice()), apps[i].getIsSelect()));
+                                    dataArrayList.add(new DatamodelInventories(apps[i].getId(), String.valueOf(apps[i].getName()), Boolean.parseBoolean(apps[i].getDetailForDevice()), apps[i].getIsSelect()));
                                 }
                             }
                             shouldRequestOffline=true;

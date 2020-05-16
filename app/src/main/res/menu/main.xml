@@ -28,8 +28,8 @@
         android:title="@string/uhf_msg_tab_inventory"
         app:showAsAction="never" />
     <item
-        android:id="@+id/action_kill"
-        android:title="@string/uhf_msg_tab_kill"
+        android:id="@+id/action_write"
+        android:title="@string/uhf_msg_tab_write"
         app:showAsAction="never" />
     <item
         android:id="@+id/action_lock"

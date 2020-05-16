@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="5dp"
+        android:background="@color/gray1" />
+
+    <LinearLayout
+        android:id="@+id/layout2"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp">
+        <LinearLayout
+            android:id="@+id/llContinuous"
+            android:layout_gravity="end"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/tv_titleMakeLabel"
+                android:textStyle="bold"
+                android:textSize="@dimen/text_size_14"
+                android:layout_marginRight="30dp" />
+            <LinearLayout
+                android:id="@+id/llPlusInventoryServer"
+                android:layout_gravity="end"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginLeft="30dp"
+                android:paddingTop="5dp"
+                android:paddingBottom="5dp">
+
+                <Button
+                    android:id="@+id/btn_syncDocumentServer"
+                    android:layout_width="wrap_content"
+                    android:layout_height="49dp"
+                    android:text="@string/btn_syncDocumentsMakeLabel"
+                    android:layout_marginEnd="10dp"
+                    android:textSize="10sp"
+                    android:gravity="center_horizontal"
+                    android:background="@drawable/button_bg"
+                    android:textStyle="bold"
+                    android:textColor="@color/white1"
+                    android:layout_marginRight="10dp" />
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+    <View
+        android:layout_width="fill_parent"
+        android:layout_height="5dp"
+        android:background="@color/gray1"
+        android:orientation="horizontal" />
+
+    <ListView
+        android:id="@+id/lv_server_documents"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:scrollingCache="true"
+        android:smoothScrollbar="true" />
+</LinearLayout>

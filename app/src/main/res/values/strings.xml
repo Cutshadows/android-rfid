@@ -1473,8 +1473,6 @@
     <string name="btn_syncronousInventary" translatable="false">Obtener \n Inventarios</string>
 
 
-
-
     <!--LOGIN-->
     <string name="title_prompt_select" translatable="false">Seleccionar Inventario</string>
     <string name="et_email" translatable="false">Email</string>
@@ -1482,6 +1480,12 @@
     <string name="et_code" translatable="false">Codigo</string>
     <string name="btn_ingresar" translatable="false">Ingresar</string>
     <string name="btn_nueva_empresa" translatable="false">Nueva empresa</string>
+
+    <!-- Botones opciones inventarios -->
+    <string name="ap_dialog_inventario_vaciar" translatable="false">Vaciar codigos</string>
+    <string name="ap_dialog_acept" translatable="false">aceptar</string>
+    <string name="ap_dialog_cancel" translatable="false">cancelar</string>
+
 
     <!--Sincronizar-->
     <string name="et_syncCode" translatable="false">Codigo</string>
@@ -1493,6 +1497,19 @@
     <!--DASHBOARD-->
     <string name="ibtn_takeInventory" translatable="false">Inventario</string>
     <string name="ibtn_takelallable" translatable="false">Etiquetado</string>
+
+    <!--PRODUCT DETAIL ACTIVITY -->
+    <string name="title_product_detail" translatable="false">Inventario: </string>
+    <string name="count_product">CANTIDAD:</string>
+    <string name="id_master_product" translatable="false">ID Producto Maestro:</string>
+    <string name="title_master_product" translatable="false">Nombre del Producto</string>
+
+
+    <!--MAKE LABEL -->
+    <string name="tv_titleMakeLabel" translatable="false">Documentos en Servidor</string>
+    <string name="btn_syncDocumentsMakeLabel" translatable="false">Obtener \n Documentos</string>
+
+
 
 
 </resources>

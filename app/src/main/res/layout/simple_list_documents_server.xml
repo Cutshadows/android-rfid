@@ -16,7 +16,7 @@
             android:orientation="vertical"
             android:padding="8dp">
             <TextView
-                android:id="@+id/tv_master_id"
+                android:id="@+id/tv_name_document"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignParentTop="true"
@@ -28,7 +28,7 @@
                 android:id="@+id/tv_name_product"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/tv_master_id"
+                android:layout_below="@+id/tv_name_document"
                 android:textStyle="bold"
                 android:layout_marginTop="1sp"
                 android:textColor="@android:color/white"
@@ -44,7 +44,7 @@
                 android:textAppearance="?android:attr/textAppearanceSmall"
                 android:textStyle="normal" />
             <TextView
-                android:id="@+id/tv_count"
+                android:id="@+id/tv_count_documents"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/tv_name_product"
@@ -55,7 +55,7 @@
                 android:layout_toEndOf="@+id/tv_count_view" />
 
             <ImageButton
-                android:id="@+id/item_more_details"
+                android:id="@+id/item_more_details_documents"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:layout_alignParentEnd="true"
@@ -67,39 +67,6 @@
                 android:layout_centerVertical="true"
                 android:scaleType="fitCenter"
                 tools:src="@drawable/ic_more_details"/>
-            <!--ImageView
-                android:id="@+id/item_found"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"
-                android:src="@drawable/found" />
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerInParent="true">
-
-                <TextView
-                    android:id="@+id/tv_count_view"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/count_product"
-                    android:textColor="@android:color/black"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:id="@+id/tv_count"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textSize="14sp"
-                    android:textStyle="bold"
-                    android:padding="10sp"
-                    android:textAppearance="?android:attr/textAppearanceButton"
-                    android:textColor="@android:color/white"
-                    xmlns:android="http://schemas.android.com/apk/res/android" />
-
-            </LinearLayout-->
         </RelativeLayout>
-</LinearLayout>
+    </LinearLayout>
 </ScrollView>

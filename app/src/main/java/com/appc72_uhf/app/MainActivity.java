@@ -9,10 +9,10 @@ import android.os.Bundle;
 import android.widget.Toast;
 
 import com.appc72_uhf.app.activities.inventoryList;
-import com.appc72_uhf.app.fragment.UHFKillFragment;
 import com.appc72_uhf.app.fragment.UHFLockFragment;
 import com.appc72_uhf.app.fragment.UHFReadTagFragment;
 import com.appc72_uhf.app.fragment.UHFSetFragment;
+import com.appc72_uhf.app.fragment.UHFWriteFragment;
 import com.rscja.utility.StringUtility;
 
 import java.util.HashMap;
@@ -39,17 +39,17 @@ public class MainActivity extends BaseTabFragmentActivity {
     protected void initViewPageData() {
         lstFrg.add(new UHFReadTagFragment());
         //lstFrg.add(new UHFReadFragment());
-        //lstFrg.add(new UHFWriteFragment());
         lstFrg.add(new inventoryList());
-        lstFrg.add(new UHFKillFragment());
+        lstFrg.add(new UHFWriteFragment());
+        //lstFrg.add(new UHFKillFragment());
         lstFrg.add(new UHFLockFragment());
         lstFrg.add(new UHFSetFragment());
 
         lstTitles.add(getString(R.string.uhf_msg_tab_scan));
         //lstTitles.add(getString(R.string.uhf_msg_tab_read));
-        //lstTitles.add(getString(R.string.uhf_msg_tab_write));
         lstTitles.add(getString(R.string.uhf_msg_tab_inventory));
-        lstTitles.add(getString(R.string.uhf_msg_tab_kill));
+        //lstTitles.add(getString(R.string.uhf_msg_tab_kill));
+        lstTitles.add(getString(R.string.uhf_msg_tab_write));
         lstTitles.add(getString(R.string.uhf_msg_tab_lock));
         lstTitles.add(getString(R.string.uhf_msg_tab_set));
 

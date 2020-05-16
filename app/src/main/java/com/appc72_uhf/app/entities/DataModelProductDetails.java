@@ -7,6 +7,8 @@ public class DataModelProductDetails {
     String Name;
     String Found;
     int ProductMasterId;
+    int Contador;
+    int InventoryId;
 
     public DataModelProductDetails(int id, String EPC, String code, String name, String found, int productMasterId) {
         Id = id;
@@ -17,6 +19,32 @@ public class DataModelProductDetails {
         ProductMasterId = productMasterId;
     }
 
+    public DataModelProductDetails(int contador, int productMasterId, String name, int inventoryId, String code) {
+        Contador=contador;
+        ProductMasterId=productMasterId;
+        Name=name;
+        InventoryId=inventoryId;
+        Code = code;
+    }
+
+    public DataModelProductDetails(String epc, String found) {
+        EPC = epc;
+        Found = found;
+    }
+
+    public int getInventoryId(){
+        return InventoryId;
+    }
+    public void setInventoryId(int inventoryId){
+        InventoryId=inventoryId;
+    }
+
+    public void setContador(int contador){
+        Contador=contador;
+    }
+    public int getContador(){
+        return Contador;
+    }
     public int getId() {
         return Id;
     }

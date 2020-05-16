@@ -33,10 +33,12 @@ public class InventaryRespository {
             reg.put("IsSelect", 0);
 
             if(readInventories.getCount()>0){
+                result = false;
+            }else{
                 db.insert("Inventory", null, reg);
+                result = true;
             }
 
-            result = true;
         } catch (Exception ex) {
             result = false;
         }

@@ -1,7 +1,6 @@
 package com.appc72_uhf.app.adapter;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -92,9 +91,6 @@ public class DataAdapterInventoryServer extends ArrayAdapter<DatamodelInventorie
         lastPosition = position;
         holder.tv_inventory.setText(datamodelInventories.getName());
         holder.chbx_takeInventory.setOnClickListener(this);
-
-        Log.e("ERROR ADAPTER CHECKED", String.valueOf(datamodelInventories.getisSelect()));
-        Log.e("ERROR ADAPTER ID", String.valueOf(datamodelInventories.getId()));
 
         if(datamodelInventories.getisSelect()==1){
             holder.chbx_takeInventory.setChecked(true);

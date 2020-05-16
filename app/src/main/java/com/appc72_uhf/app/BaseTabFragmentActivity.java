@@ -47,7 +47,7 @@ public class BaseTabFragmentActivity extends FragmentActivity {
 	public RFIDWithUHF mReader;
 	private int index = 0;
 
-	private ActionBar.Tab tab_inventory, tab_kill, tab_lock, tab_set ;
+	private ActionBar.Tab tab_inventory, tab_write, tab_lock, tab_set ;
 	private DisplayMetrics metrics;
 	private AlertDialog dialog;
 	private long[] timeArr;
@@ -76,6 +76,8 @@ public class BaseTabFragmentActivity extends FragmentActivity {
 
 		if (mReader != null) {
 			new InitTask().execute();
+
+
 		}
 	}
 
@@ -110,7 +112,7 @@ public class BaseTabFragmentActivity extends FragmentActivity {
 					.setText(mViewPagerAdapter.getPageTitle(i)).setTabListener(mTabListener));
 		}
 		tab_inventory = mActionBar.newTab().setText(mViewPagerAdapter.getPageTitle(1)).setTabListener(mTabListener);
-		tab_kill = mActionBar.newTab().setText(mViewPagerAdapter.getPageTitle(2)).setTabListener(mTabListener);
+		tab_write = mActionBar.newTab().setText(mViewPagerAdapter.getPageTitle(2)).setTabListener(mTabListener);
 		tab_lock = mActionBar.newTab().setText(mViewPagerAdapter.getPageTitle(3)).setTabListener(mTabListener);
 		tab_set = mActionBar.newTab().setText(mViewPagerAdapter.getPageTitle(4)).setTabListener(mTabListener);
 
@@ -161,9 +163,9 @@ public class BaseTabFragmentActivity extends FragmentActivity {
 				index = 1;
 				mActionBar.addTab(tab_inventory, true);
 				break;
-			case R.id.action_kill:
+			case R.id.action_write:
 				index = 2;
-				mActionBar.addTab(tab_kill, true);
+				mActionBar.addTab(tab_write, true);
 				break;
 			case R.id.action_lock:
 				index = 3;
@@ -229,6 +231,7 @@ public class BaseTabFragmentActivity extends FragmentActivity {
 		@Override
 		protected Boolean doInBackground(String... params) {
 			// TODO Auto-generated method stub
+
 			return mReader.init();
 		}
 

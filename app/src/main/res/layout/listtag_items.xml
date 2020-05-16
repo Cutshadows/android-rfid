@@ -1,4 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -10,29 +15,44 @@
         android:id="@+id/TvTagUii"
         android:layout_width="0dip"
         android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="1sp"
+        android:textSize="10sp"
+        android:textColor="@color/white"
         android:layout_weight="3"
         android:paddingTop="3dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginEnd="10dp"
         android:paddingBottom="2dp" />
 
-    <TextView
+    <!--TextView
         android:id="@+id/TvTagLen"
         android:layout_width="0dip"
         android:layout_height="wrap_content"
-        android:layout_weight="0" android:visibility="gone" />
+        android:layout_weight="0" android:visibility="gone" /-->
 
-    <TextView
+    <!--TextView
         android:id="@+id/TvTagCount"
         android:layout_width="10dp"
         android:layout_height="wrap_content"
         android:paddingTop="3dp"
-        android:paddingBottom="2dp" />
+        android:paddingBottom="2dp" /-->
     
     <TextView
         android:id="@+id/TvTagRssi"
+        android:layout_gravity="center_horizontal"
         android:layout_width="0dip"
         android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="1sp"
         android:layout_weight="3"
-        android:paddingTop="3dp"
-        android:paddingBottom="2dp" />
+        android:textSize="10sp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginStart="5dp"
+        android:textColor="@color/white"
+        android:paddingTop="5dp"
+        android:paddingBottom="2dp"/>
 
 </LinearLayout>
+</ScrollView>

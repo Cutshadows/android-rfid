@@ -25,11 +25,10 @@ public class AdminSQLOpenHelper extends SQLiteOpenHelper {
                 "InventoryId TEXT, " +
                 "IdHardware TEXT, " +
                 "TID TEXT, " +
-                "TagStatus " +
-                "INTEGER);"); //String, String, Float
+                "TagStatus INTEGER);"); //String, String, Float
 
         db.execSQL("CREATE TABLE IF  NOT EXISTS Inventory(" +
-                "Id TEXT UNIQUE, " +
+                "Id INTEGER UNIQUE, " +
                 "CompanyId INTEGER, " +
                 "Name TEXT, " +
                 "DetailForDevice TEXT, " +
@@ -59,7 +58,8 @@ public class AdminSQLOpenHelper extends SQLiteOpenHelper {
                 "Code TEXT,"+
                 "Name TEXT,"+
                 "Found TEXT,"+
-                "ProductMasterId INTEGER);");//String, String, Float
+                "ProductMasterId INTEGER, " +
+                "InventoryId INTEGER);");//String, String, Float
 
     }
 

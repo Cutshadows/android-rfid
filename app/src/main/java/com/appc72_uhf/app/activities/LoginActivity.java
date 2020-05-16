@@ -7,7 +7,6 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -15,7 +14,6 @@ import android.widget.EditText;
 import android.widget.Spinner;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.coordinatorlayout.widget.CoordinatorLayout;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -24,7 +22,6 @@ import com.appc72_uhf.app.R;
 import com.appc72_uhf.app.helpers.HttpHelpers;
 import com.appc72_uhf.app.repositories.CompanyRepository;
 import com.appc72_uhf.app.tools.UIHelper;
-import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -69,6 +66,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 try{
                     codeCompany=deviceRepository.getCompanieId(parent.getItemAtPosition(position).toString());
                     et_code=parent.getItemAtPosition(position).toString();
+
                 }catch (Exception e){
                     e.printStackTrace();
                 }
@@ -144,7 +142,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             SharedPreferences savePreferencesUsername=getSharedPreferences("username", Context.MODE_PRIVATE);
             SharedPreferences.Editor obj_edite=savePreferencesUsername.edit();
             obj_edite.putString("username", username);
-            obj_edite.commit();
+            obj_edite.apply();
             try{
                 setViewEnabled(false);
                 final String code=et_code;
@@ -158,7 +156,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 params.put("CompanyId", String.valueOf(companyId));
 
 
-                Log.e("valor 1", username);
                 Log.e("valor 2", password);
                 Log.e("valor 3", code);
                 Log.e("valor 4", String.valueOf(companyId));
@@ -173,18 +170,23 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 @Override
                 public void onResponse(String response) {
                     try{
-                        ArrayList<String> resÁrray=new ArrayList<String>();
-                        resÁrray.add(response);
+                        ArrayList<String> resArray=new ArrayList<String>();
+                        resArray.add(response);
                         String[] rest=response.split(",");
                         String quitStringToken=rest[0].replace("{\"access_token\":", "");
                         String access_token=quitStringToken.replace("\"", "");
 
                         Log.e("TOKEN ACCESS", access_token);
 
+                        SharedPreferences savePreferenceCodeActive=getSharedPreferences("code_activate", Context.MODE_PRIVATE);
+                        SharedPreferences.Editor obj_codeActive=savePreferenceCodeActive.edit();
+                        obj_codeActive.putString("code_activate", code);
+                        obj_codeActive.apply();
+
                         SharedPreferences savePreferencesToken=getSharedPreferences("access_token", Context.MODE_PRIVATE);
                         SharedPreferences.Editor obj_edite=savePreferencesToken.edit();
                         obj_edite.putString("access_token", access_token);
-                        obj_edite.commit();
+                        obj_edite.apply();
 
                         Intent goToMain=new Intent(LoginActivity.this, Dashboard_activity.class);
                         startActivity(goToMain);
