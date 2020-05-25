@@ -50,6 +50,11 @@ public class DatamodelDocumentsMakeLabel {
         DocumentDetailsVirtual = documentDetailsVirtual;
     }
 
+    public DatamodelDocumentsMakeLabel(int documentId, int deviceId) {
+        DocumentId = documentId;
+        DeviceId = deviceId;
+    }
+
     public int getDocumentId() {
         return DocumentId;
     }

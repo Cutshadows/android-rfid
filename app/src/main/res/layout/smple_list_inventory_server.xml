@@ -18,7 +18,7 @@
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerInParent="true">
+        android:layout_alignParentLeft="true">
         <TextView
             android:id="@+id/tv_inventory"
             android:layout_width="match_parent"
@@ -30,16 +30,16 @@
             android:textColor="#ffffff"
             xmlns:android="http://schemas.android.com/apk/res/android" />
     </LinearLayout>
-    <ImageView
+    <!--ImageView
         android:id="@+id/item_delete"
         android:layout_width="30sp"
-        android:layout_height="30sp"
+        android:layout_height="31sp"
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="@+id/chbx_takeInventory"
-        android:layout_marginRight="40dp"
+        android:layout_marginRight="60dp"
         android:layout_centerVertical="true"
-        android:src="@drawable/ic_delete" />
+        android:src="@drawable/ic_delete" /-->
     <CheckBox
         android:id="@+id/chbx_takeInventory"
         android:layout_width="wrap_content"
@@ -47,6 +47,7 @@
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
         android:foregroundGravity="center_horizontal"
+        android:layout_marginRight="20dp"
         android:gravity="center_horizontal"
         android:checked="true"
         android:textSize="18sp"

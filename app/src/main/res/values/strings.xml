@@ -829,11 +829,11 @@
     <string name="gps_msg_Locateing">Locating...</string>
     <string name="gps_msg_Locate_stop">Finish positioning</string>
     <string name="gps_msg_title_satellite_signal">The satellite signal</string>
-    <string name="uhf_msg_tab_scan">Scan</string>
+    <string name="uhf_msg_tab_scan">Lectura</string>
     <string name="uhf_msg_tab_inventory" translatable="false">Inventario</string>
     <string name="uhf_msg_tab_read">Leer</string>
     <string name="uhf_msg_tab_write">Escribir</string>
-    <string name="uhf_msg_tab_set">Config</string>
+    <string name="uhf_msg_tab_set">Configuracion</string>
     <string name="uhf_msg_tab_kill">Kill</string>
     <string name="uhf_msg_tab_lock">Lock</string>
     <string name="rfid_msg_scan_fail">Scan failed</string>
@@ -1467,10 +1467,13 @@
     <!-- Inventory -->
 
     <string name="InventoryApp" translatable="false">Inventario</string>
+    <string name="ap_dialog_inventario_eliminar" translatable="false">Eliminar Inventario</string>
+
     <string name="name">Name</string>
     <string name="title_inventory_status" translatable="false">Estado Inventarios</string>
     <string name="tv_inventaryofServer" translatable="false">Inventarios en Servidor</string>
     <string name="btn_syncronousInventary" translatable="false">Obtener \n Inventarios</string>
+    <string name="txt_inventoryLoad" translatable="false">Obteniendo inventarios...</string>
 
 
     <!--LOGIN-->
@@ -1497,6 +1500,8 @@
     <!--DASHBOARD-->
     <string name="ibtn_takeInventory" translatable="false">Inventario</string>
     <string name="ibtn_takelallable" translatable="false">Etiquetado</string>
+    <!--string name="tv_wellcome" translatable="false">Bienvenido:</string-->
+
 
     <!--PRODUCT DETAIL ACTIVITY -->
     <string name="title_product_detail" translatable="false">Inventario: </string>

@@ -18,6 +18,23 @@ public class TagsRepository {
         this.context = context;
     }
 
+    public boolean UpdateTagsFound(String RFID, int inventoryId){
+        final String NAME_TABLE="DetailForDevice";
+        AdminSQLOpenHelper admin = new AdminSQLOpenHelper(context);
+        SQLiteDatabase db = admin.getWritableDatabase();
+        final ContentValues cv=new ContentValues();
+        try{
+            db.beginTransaction();
+            cv.put("Found", "true");
+            final boolean result=db.update(NAME_TABLE, cv, "InventoryId="+inventoryId+" AND EPC=\""+RFID+"\"", null)>0;
+            db.setTransactionSuccessful();
+            return result;
+        }catch (SQLException sqlex){
+            throw sqlex;
+        }finally {
+            db.endTransaction();
+        }
+    }
     public boolean InsertTag(String RFID, int idInventory, String IdHardware, String TID, Integer TagStatus) {
         AdminSQLOpenHelper admin = new AdminSQLOpenHelper(context);
         SQLiteDatabase db = admin.getWritableDatabase();
@@ -38,13 +55,13 @@ public class TagsRepository {
         db.close();
         return result;
     }
-    public Boolean ClearTags(String idInventory){
+    public Boolean ClearTags(int idInventory){
         AdminSQLOpenHelper admin= new AdminSQLOpenHelper(context);
         SQLiteDatabase db = admin.getWritableDatabase();
         boolean resp=false;
         try{
 
-            Cursor delete=db.rawQuery("DELETE FROM Tags WHERE InventoryId=\""+idInventory+"\"", null);
+            Cursor delete=db.rawQuery("DELETE FROM Tags WHERE InventoryId="+idInventory, null);
             if(!delete.moveToFirst()){
                 resp=true;
             }
@@ -81,9 +98,10 @@ public class TagsRepository {
 
         try{
             Cursor read= db.rawQuery("DELETE FROM DetailForDevice WHERE InventoryId="+inventoryId, null);
-            Cursor read2= db.rawQuery("DELETE FROM Tags WHERE InventoryId=\""+inventoryId+"\"", null);
+            Cursor read2= db.rawQuery("DELETE FROM Tags WHERE InventoryId="+inventoryId, null);
 
             if (read.moveToFirst() && read2.moveToFirst()) {
+
                 resp=true;
             }
         }catch (SQLException ex){
@@ -96,12 +114,12 @@ public class TagsRepository {
     }
 
 
-    public ArrayList ViewAllTags(String inventoryId){
+    public ArrayList ViewAllTags(int inventoryId){
         ArrayList<String> datos=new ArrayList<>();
         AdminSQLOpenHelper admin = new AdminSQLOpenHelper(context);
         SQLiteDatabase db = admin.getWritableDatabase();
 
-        Cursor read= db.rawQuery("SELECT RFID, InventoryId, IdHardware, TID, TagStatus FROM Tags WHERE InventoryId='"+inventoryId+"'", null);
+        Cursor read= db.rawQuery("SELECT RFID, InventoryId, IdHardware, TID, TagStatus FROM Tags WHERE InventoryId="+inventoryId, null);
 
         if (read.moveToFirst()) {
             do {

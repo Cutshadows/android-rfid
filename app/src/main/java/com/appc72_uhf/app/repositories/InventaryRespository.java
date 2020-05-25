@@ -17,7 +17,7 @@ public class InventaryRespository {
         this.context = context;
     }
 
-    public boolean InventoryInsert(int id, String name, int InventoryStatus, String detailForDevice, int codeCompany) {
+    public boolean InventoryInsert(int id, String name, String detailForDevice, int InventoryStatus, int codeCompany, int isSelect) {
         AdminSQLOpenHelper admin = new AdminSQLOpenHelper(context);
         SQLiteDatabase db = admin.getWritableDatabase();
         Cursor readInventories=db.rawQuery("SELECT * FROM Inventory WHERE Id="+id, null);
@@ -30,7 +30,7 @@ public class InventaryRespository {
             reg.put("InventoryStatus", InventoryStatus);
             reg.put("DetailForDevice", detailForDevice);
             reg.put("CompanyId", codeCompany);
-            reg.put("IsSelect", 0);
+            reg.put("IsSelect", isSelect);
 
             if(readInventories.getCount()>0){
                 result = false;
@@ -38,14 +38,29 @@ public class InventaryRespository {
                 db.insert("Inventory", null, reg);
                 result = true;
             }
-
         } catch (Exception ex) {
             result = false;
         }
-
         db.close();
-
         return result;
+    }
+
+    public boolean DeleteInventory(int inventoryID){
+        AdminSQLOpenHelper admin=new AdminSQLOpenHelper(context);
+        SQLiteDatabase db=admin.getWritableDatabase();
+        final String MY_TABLE_NAME="Inventory";
+        final ContentValues cv=new ContentValues();
+            try {
+                db.beginTransaction();
+                boolean result=db.delete(MY_TABLE_NAME, "Id="+inventoryID, null )>0;
+                db.setTransactionSuccessful();
+                return result;
+            }catch (SQLException sqlex){
+                throw  sqlex;
+            }finally {
+                db.endTransaction();
+                db.close();
+            }
     }
 
     public int ViewInventory(String NameInventory){
@@ -77,6 +92,20 @@ public class InventaryRespository {
         }finally {
             db.endTransaction();
         }
+    }
+    public boolean inventoryDetailForDevice(int inventoryId){
+        AdminSQLOpenHelper admin=new AdminSQLOpenHelper(context);
+        SQLiteDatabase db=admin.getWritableDatabase();
+        boolean result=false;
+        try{
+            Cursor querydetail=db.rawQuery("SELECT DetailForDevice FROM Inventory WHERE InventoryStatus=0 AND DetailForDevice='true' AND Id="+inventoryId, null);
+            if(querydetail.getCount()>0){
+                result=true;
+            }
+        }catch (SQLException e){
+            throw e;
+        }
+        return result;
     }
 
 

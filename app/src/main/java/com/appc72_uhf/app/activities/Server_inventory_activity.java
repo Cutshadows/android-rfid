@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -35,6 +36,7 @@ public class Server_inventory_activity extends AppCompatActivity implements View
     public static final String PROTOCOL_URLRFID="http://";
     public static final String DOMAIN_URLRFID=".izyrfid.com";
     private Button btn_syncInventoryServer;
+    private RelativeLayout layout_server_inventory_load;
     ProgressDialog mypDialog;
     ArrayList<DatamodelInventories> dataArrayList;
     DataAdapterInventoryServer dataAdapterInventoryServer;
@@ -53,6 +55,7 @@ public class Server_inventory_activity extends AppCompatActivity implements View
 
     }
     private void initComponent(){
+        layout_server_inventory_load=(RelativeLayout)findViewById(R.id.layout_server_inventory_load);
         lv_server_inventories = (ListView) findViewById(R.id.lv_server_inventories);
         btn_syncInventoryServer=(Button) findViewById(R.id.btn_syncInventoryServer);
         btn_syncInventoryServer.setOnClickListener(this);
@@ -60,6 +63,8 @@ public class Server_inventory_activity extends AppCompatActivity implements View
         getData();
         dataAdapterInventoryServer=new DataAdapterInventoryServer(Server_inventory_activity.this, dataArrayList);
         lv_server_inventories.setAdapter(dataAdapterInventoryServer);
+        layout_server_inventory_load.setVisibility(View.VISIBLE);
+        lv_server_inventories.setVisibility(View.INVISIBLE);
         code_enterprise=getCompany();
         SharedPreferences preferencesAccess_token=getSharedPreferences("access_token", Context.MODE_PRIVATE);
         String access_token=preferencesAccess_token.getString("access_token", "");
@@ -69,12 +74,13 @@ public class Server_inventory_activity extends AppCompatActivity implements View
             token_access=access_token;
         }
 
+        sincronizar();
     }
 
     public void onClick(View v){
         switch (v.getId()){
             case R.id.btn_syncInventoryServer:
-                sincronizar();
+                UIHelper.ToastMessage(Server_inventory_activity.this, "Funcion descargar", 3);
                 break;
         }
     }
@@ -102,11 +108,11 @@ public class Server_inventory_activity extends AppCompatActivity implements View
             /**
              * Function to get inventories from web
              */
-            mypDialog = new ProgressDialog(Server_inventory_activity.this);
+            /*mypDialog = new ProgressDialog(Server_inventory_activity.this);
             mypDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
             mypDialog.setMessage("Sincronizando inventarios disponibles...");
             mypDialog.setCanceledOnTouchOutside(false);
-            mypDialog.show();
+            mypDialog.show();*/
                 String URL_COMPLETE=PROTOCOL_URLRFID+code_enterprise+DOMAIN_URLRFID;
                 final InventaryRespository inventoryRepo = new InventaryRespository(Server_inventory_activity.this);
                 dataArrayList.clear();
@@ -118,27 +124,33 @@ public class Server_inventory_activity extends AppCompatActivity implements View
                         try{
                             Gson gson = new Gson();
                             Application[] apps = gson.fromJson(response, Application[].class);
+                            layout_server_inventory_load.removeAllViews();
+                            //layout_server_inventory_load.setVisibility(View.INVISIBLE);
+                            lv_server_inventories.setVisibility(View.VISIBLE);
+                            dataArrayList.clear();
                             for( int i=0; i<=apps.length-1; i++){
-                                boolean res = inventoryRepo.InventoryInsert(apps[i].getId(), apps[i].getName(), apps[i].getInventoryStatus(), apps[i].getDetailForDevice(), codeCompany);
-                                Log.e("DATA FOR", ""+apps[i].getId()+""+apps[i].getName()+" "+Boolean.valueOf(apps[i].getDetailForDevice())+" INVENTORY STATUS: "+apps[i].getInventoryStatus()+" Respuesta SQLI :"+res);
+                                //boolean res = inventoryRepo.InventoryInsert(apps[i].getId(), apps[i].getName(), apps[i].getInventoryStatus(), apps[i].getDetailForDevice(), codeCompany);
+                                Log.e("DATA FOR", ""+apps[i].getId()+""+apps[i].getName()+" "+Boolean.valueOf(apps[i].getDetailForDevice())+" INVENTORY STATUS: "+apps[i].getInventoryStatus());
 
-                                if(res && apps[i].getInventoryStatus()==0) {
-                                    dataArrayList.add(new DatamodelInventories(apps[i].getId(), String.valueOf(apps[i].getName()), Boolean.parseBoolean(apps[i].getDetailForDevice()), apps[i].getIsSelect()));
+                                //if(res && apps[i].getInventoryStatus()==0) {
+                                if(apps[i].getInventoryStatus()==0){
+                                    dataArrayList.add(new DatamodelInventories(apps[i].getId(), String.valueOf(apps[i].getName()),  Boolean.parseBoolean(apps[i].getDetailForDevice()), apps[i].getInventoryStatus(), apps[i].getIsSelect(), codeCompany));
                                 }
+                                //}
                             }
                             shouldRequestOffline=true;
-                            mypDialog.dismiss();
+                            //mypDialog.dismiss();
                             dataAdapterInventoryServer.notifyDataSetChanged();
                         }catch (Exception e){
                             shouldRequestOffline=false;
-                            mypDialog.dismiss();
+                           // mypDialog.dismiss();
                             UIHelper.ToastMessage(Server_inventory_activity.this, "Error : "+e.getMessage(), 1);
                         }
                     }
                 }, new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        mypDialog.dismiss();
+                        //mypDialog.dismiss();
                         shouldRequestOffline=false;
                         UIHelper.ToastMessage(Server_inventory_activity.this, "Error en servidor, intente mas tarde", 1);
                     }
@@ -159,11 +171,11 @@ public class Server_inventory_activity extends AppCompatActivity implements View
                 String[] strs = recip.split("@");
                 if(strs[3].equals("0")){
                     Log.e("RECIP", recip);
-                   dataArrayList.add(new DatamodelInventories(Integer.parseInt(strs[0]), strs[1], Boolean.parseBoolean(strs[2]), Integer.parseInt(strs[4])));
+                   //dataArrayList.add(new DatamodelInventories(Integer.parseInt(strs[0]), strs[1], Boolean.parseBoolean(strs[2]), Integer.parseInt(strs[4])));
                 }
             }
 
-            mypDialog.dismiss();
+           // mypDialog.dismiss();
             shouldRequestOffline=true;
         }catch (Exception e){
             Log.e("Exception", ""+e.getMessage());

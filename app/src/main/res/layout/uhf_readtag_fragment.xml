@@ -5,35 +5,6 @@
     android:layout_height="fill_parent"
     android:orientation="vertical">
 
-    <RadioGroup
-        android:id="@+id/RgInventory"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:padding="5dp">
-
-        <!--RadioButton
-            android:id="@+id/RbInventorySingle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/rbInventorySingle"
-            android:textColor="@drawable/check_text_color2"
-            android:textSize="15sp" /-->
-
-        <RadioButton
-            android:id="@+id/RbInventoryLoop"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:checked="true"
-            android:text="@string/rbInventoryLoop"
-            android:textColor="@drawable/check_text_color2"
-            android:textSize="15sp" />
-
-
-    </RadioGroup>
-
     <View
         android:layout_width="match_parent"
         android:layout_height="1px"
@@ -69,25 +40,37 @@
                 android:textColor="@color/white"
                 android:textSize="11sp" />
             <Button
-            android:id="@+id/BtSync"
-            android:layout_width="74dp"
-            android:layout_height="37dp"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="5dp"
-            android:background="@drawable/button_bg"
-            android:text="@string/btSync"
-            android:textColor="@color/white"
-            android:textSize="11sp" />
+                android:id="@+id/BtClear"
+                android:layout_width="74dp"
+                android:layout_height="37dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="5dp"
+                android:background="@drawable/button_bg"
+                android:text="@string/btClear"
+                android:textColor="@color/white"
+                android:textSize="11sp" />
+            <Button
+                android:id="@+id/BtSync"
+                android:layout_width="74dp"
+                android:layout_height="37dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="5dp"
+                android:background="@drawable/button_bg"
+                android:text="@string/btSync"
+                android:textColor="@color/white"
+                android:textSize="11sp" />
+
+
 
         </LinearLayout>
 
-        <Spinner
+        <!--Spinner
             android:id="@+id/spInventories"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:spinnerMode="dialog"
-            android:prompt="@string/title_prompt_select"/>
+            android:prompt="@string/title_prompt_select"/-->
 
     </LinearLayout>
 
@@ -110,16 +93,7 @@
             android:textColor="@color/white"
             android:textSize="11sp" />
 
-        <Button
-            android:id="@+id/BtClear"
-            android:layout_width="wrap_content"
-            android:layout_height="33dp"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="5dp"
-            android:background="@drawable/button_bg"
-            android:text="@string/btClear"
-            android:textColor="@color/white"
-            android:textSize="11sp" />
+
 
 
     </LinearLayout>

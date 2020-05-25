@@ -49,7 +49,9 @@
         <activity
             android:name=".activities.LoginActivity"
             android:configChanges="orientation|screenSize"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar"></activity>
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar">
+
+        </activity>
         <activity
             android:name=".activities.HhSyncActivity"
             android:configChanges="orientation|screenSize"

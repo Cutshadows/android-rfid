@@ -7,7 +7,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 public class AdminSQLOpenHelper extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "IZYSEARCH";
-    private static final int DATABASE_VERSION=3;
+    private static final int DATABASE_VERSION=4;
 
 
     public AdminSQLOpenHelper( Context context) {
@@ -22,7 +22,7 @@ public class AdminSQLOpenHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         db.execSQL("CREATE TABLE IF  NOT EXISTS Tags(" +
                 "RFID TEXT UNIQUE, " +
-                "InventoryId TEXT, " +
+                "InventoryId INTEGER, " +
                 "IdHardware TEXT, " +
                 "TID TEXT, " +
                 "TagStatus INTEGER);"); //String, String, Float

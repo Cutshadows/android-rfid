@@ -9,27 +9,18 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.android.volley.Request;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
 import com.appc72_uhf.app.R;
 import com.appc72_uhf.app.adapter.AdapterProductDetails;
 import com.appc72_uhf.app.entities.DataModelProductDetails;
-import com.appc72_uhf.app.helpers.HttpHelpers;
 import com.appc72_uhf.app.repositories.DetailProductRepository;
-import com.google.gson.Gson;
 
 import java.util.ArrayList;
 
 public class Detail_product_activity extends AppCompatActivity {
     private TextView tv_detail_inventory;
     private ListView lv_detail_product;
-    public static final String PROTOCOL_URLRFID="http://";
-    public static final String DOMAIN_URLRFID=".izyrfid.com";
     ArrayList<DataModelProductDetails> dataArrayProducts;
     AdapterProductDetails adapterProductDetails;
-    String token_access;
-    String code_enterprise;
     String val_inventory;
     boolean chargeFirstTimeProduct;
     @Override
@@ -64,29 +55,23 @@ public class Detail_product_activity extends AppCompatActivity {
         dataArrayProducts=new ArrayList<DataModelProductDetails>();
         val_inventory="";
         val_inventory=getIntent().getStringExtra("Id");
-        code_enterprise=getCompany();
-        SharedPreferences preferencesAccess_token=getSharedPreferences("access_token", Context.MODE_PRIVATE);
-        String access_token=preferencesAccess_token.getString("access_token", "");
+        //code_enterprise=getCompany();
+        //SharedPreferences preferencesAccess_token=getSharedPreferences("access_token", Context.MODE_PRIVATE);
+        //String access_token=preferencesAccess_token.getString("access_token", "");
 
-        if(access_token.length()==0){
+        /*if(access_token.length()==0){
             Log.e("No data preferences", " Error data no empty "+access_token);
         }else{
             token_access=access_token;
-        }
-        loadProductDetail();
+        }*/
+        getDataProductMaster();
         adapterProductDetails=new AdapterProductDetails(Detail_product_activity.this, dataArrayProducts);
         lv_detail_product.setAdapter(adapterProductDetails);
         tv_detail_inventory.setText(getIntent().getStringExtra("Name"));
         adapterProductDetails.notifyDataSetChanged();
-
-        Log.e("Token", ""+token_access);
-        getDataProductMaster();
-
-        Log.e("chargeFirstTimeProduct", ""+chargeFirstTimeProduct);
-
     }
     private void loadProductDetail(){
-        if(chargeFirstTimeProduct){
+        /*if(chargeFirstTimeProduct){
             Log.e("chargeFirstTimeProduct", "ESTOY CARGANDO LOS DATOS DEL ENDPOINT");
 
             String URL_COMPLETE=PROTOCOL_URLRFID+code_enterprise+DOMAIN_URLRFID;
@@ -123,12 +108,10 @@ public class Detail_product_activity extends AppCompatActivity {
                     Log.e("onErrorResponse", ""+error.getLocalizedMessage());
                 }
             });
-        }else{
+        }else{*/
             dataArrayProducts.clear();
-            Log.e("chargeFirstTimeProduct", "ESTOY CARGANDO LOS DATOS LOCALMENTE");
-
             getDataProductMaster();
-        }
+        //}
 
     }
     public void getDataProductMaster(){
@@ -144,7 +127,6 @@ public class Detail_product_activity extends AppCompatActivity {
             Log.e("Exception", ""+e.getMessage());
         }
     }
-
     private String getCompany(){
         SharedPreferences preferenceCodeActive=getSharedPreferences("code_activate", Context.MODE_PRIVATE);
         String enterprises_code=preferenceCodeActive.getString("code_activate", "");

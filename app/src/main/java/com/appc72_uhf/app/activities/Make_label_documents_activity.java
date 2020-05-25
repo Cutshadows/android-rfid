@@ -11,12 +11,16 @@ import android.widget.ListView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
 import com.appc72_uhf.app.R;
 import com.appc72_uhf.app.adapter.AdapterMakeLabelDocuments;
 import com.appc72_uhf.app.entities.DatamodelDocumentsMakeLabel;
 import com.appc72_uhf.app.helpers.HttpHelpers;
 import com.appc72_uhf.app.repositories.CompanyRepository;
 import com.appc72_uhf.app.tools.UIHelper;
+import com.google.gson.Gson;
 
 import java.util.ArrayList;
 
@@ -80,8 +84,31 @@ public class Make_label_documents_activity extends AppCompatActivity implements 
         HttpHelpers http= new HttpHelpers(Make_label_documents_activity.this, URL_COMPLETE, "");
         http.addHeader("Authorization", "Bearer "+token_access);
         Log.e("INVENTARIO INT", "http://demo.izyrfid.com/api/devicedocument/GetAllDocumentsDeviceId?HardwareId="+android_id);
+        http.clientProductDetail(Request.Method.GET, "/api/devicedocument/GetAllDocumentsDeviceId?HardwareId="+android_id, null,  new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                Log.e("onRESPONSE PRODUCT", response);
+                try{
+                    Gson gson=new Gson();
+                    DatamodelDocumentsMakeLabel[] docsMakelabels=gson.fromJson(response, DatamodelDocumentsMakeLabel[].class);
+                    for(int index=0; index<=docsMakelabels.length-1; index++){
+                        Log.e("DATA FOR", "DocumentsId: "+docsMakelabels[index].getDocumentId()+" DeviceId:"+docsMakelabels[index].getDeviceId()+" FechaAsignacion:"+docsMakelabels[index].getFechaAsignacion());
+                        datamodelDocumentsMakeLabelArrayList.add(new DatamodelDocumentsMakeLabel(docsMakelabels[index].getDocumentId(), docsMakelabels[index].getDeviceId()));
+                    }
+                    adapterMakeLabelDocuments.notifyDataSetChanged();
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
 
+                }
+            }, new Response.ErrorListener(){
+                @Override
+                public void onErrorResponse(VolleyError error){
+                    Log.e("onErrorResponse", ""+error.getLocalizedMessage());
+                }
+            });
     }
+
     private String getCompany(){
         CompanyRepository companyRepository=new CompanyRepository(this);
         SharedPreferences preferenceCodeActive=getSharedPreferences("code_activate", Context.MODE_PRIVATE);

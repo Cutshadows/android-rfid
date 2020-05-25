@@ -24,17 +24,17 @@
         android:title="@string/uhf_msg_tab_write"/>
     -->
     <item
-        android:id="@+id/action_inventory"
-        android:title="@string/uhf_msg_tab_inventory"
+        android:id="@+id/action_scan"
+        android:title="@string/uhf_msg_tab_scan"
         app:showAsAction="never" />
-    <item
+    <!--item
         android:id="@+id/action_write"
         android:title="@string/uhf_msg_tab_write"
-        app:showAsAction="never" />
-    <item
+        app:showAsAction="never" /-->
+    <!--item
         android:id="@+id/action_lock"
         android:title="@string/uhf_msg_tab_lock"
-        app:showAsAction="never" />
+        app:showAsAction="never" /-->
     <item
         android:id="@+id/action_set"
         android:title="@string/uhf_msg_tab_set"
