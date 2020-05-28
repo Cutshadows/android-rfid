@@ -16,8 +16,14 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.NetworkError;
+import com.android.volley.NoConnectionError;
+import com.android.volley.ParseError;
 import com.android.volley.Request;
 import com.android.volley.Response;
+import com.android.volley.ServerError;
+import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
 import com.appc72_uhf.app.R;
 import com.appc72_uhf.app.entities.DataModelProductDetails;
@@ -34,7 +40,7 @@ public class DataAdapterInventoryServer extends ArrayAdapter<DatamodelInventorie
     Context mContext;
     ArrayList<DatamodelInventories> datalist;
     ProgressDialog mypDialog;
-    public static final String PROTOCOL_URLRFID="http://";
+    public static final String PROTOCOL_URLRFID="https://";
     public static final String DOMAIN_URLRFID=".izyrfid.com";
     String token_access;
     String code_enterprise;
@@ -65,11 +71,11 @@ public class DataAdapterInventoryServer extends ArrayAdapter<DatamodelInventorie
                                 mypDialog.setCanceledOnTouchOutside(false);
                                 mypDialog.show();
                                 UIHelper.ToastMessage(getContext(), "Obteniendo inventario '"+datamodelInventories.getName()+"' y los detalles para habilitar!!", 5);
-                                String URL_COMPLETE=PROTOCOL_URLRFID+code_enterprise+DOMAIN_URLRFID;
+                                String URL_COMPLETE=PROTOCOL_URLRFID+code_enterprise.toLowerCase()+DOMAIN_URLRFID;
                                 final DetailProductRepository detailProductRepository=new DetailProductRepository(getContext());
                                 HttpHelpers http = new HttpHelpers(getContext(), URL_COMPLETE, "");
                                 http.addHeader("Authorization", "Bearer "+token_access);
-                                Log.e("INVENTARIO INT", "/api/inventory/GetDetailForDevice?InventoryId="+datamodelInventories.getId());
+                                Log.e("INVENTARIO INT", URL_COMPLETE+"/api/inventory/GetDetailForDevice?InventoryId="+datamodelInventories.getId());
                                 http.clientProductDetail(Request.Method.GET, "/api/inventory/GetDetailForDevice?InventoryId="+datamodelInventories.getId(), null,  new Response.Listener<String>() {
                                     @Override
                                     public void onResponse(String response) {
@@ -82,7 +88,6 @@ public class DataAdapterInventoryServer extends ArrayAdapter<DatamodelInventorie
                                                 boolean resultInsertProduct=detailProductRepository.DetailProductInsert(products[index].getId(), products[index].getEPC(), products[index].getCode(), products[index].getName(), products[index].getFound(), products[index].getProductMasterId(), datamodelInventories.getId());
                                                 if(resultInsertProduct){
                                                     mypDialog.dismiss();
-
                                                 }
                                             }
                                         }catch (Exception e){
@@ -92,10 +97,17 @@ public class DataAdapterInventoryServer extends ArrayAdapter<DatamodelInventorie
                                 }, new Response.ErrorListener() {
                                     @Override
                                     public void onErrorResponse(VolleyError error) {
-                                        Log.e("onErrorResponse", ""+error.getLocalizedMessage());
+                                        if (error instanceof NetworkError) {
+                                        } else if (error instanceof ServerError) {
+                                        } else if (error instanceof AuthFailureError) {
+                                        } else if (error instanceof ParseError) {
+                                        } else if (error instanceof NoConnectionError) {
+                                        } else if (error instanceof TimeoutError) {
+                                            mypDialog.dismiss();
+                                            UIHelper.ToastMessage(getContext(), "Error con el servidor, intente mas tarde!!!", 3);
+                                        }
                                     }
                                 });
-
                         }
                     }else {
                         if(resultInventoryInsert){
@@ -104,57 +116,12 @@ public class DataAdapterInventoryServer extends ArrayAdapter<DatamodelInventorie
                     }
 
                 }else {
-                   boolean resultUpdateFalse=inventaryRespository.UpdateSelect(datamodelInventories.getId(), 0);
+                   boolean resultUpdateFalse=inventaryRespository.DeleteInventory(datamodelInventories.getId());
                     if(resultUpdateFalse){
                         UIHelper.ToastMessage(getContext(), "El inventario '"+datamodelInventories.getName()+"' esta deshabilitado!!", 5);
                     }
                 }
                 break;
-            /**case R.id.item_delete:
-                    try {
-                        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-                        builder.setTitle(R.string.ap_dialog_inventario_eliminar);
-                        builder.setMessage("Desea eliminar el inventario '"+datamodelInventories.getName()+"'?");
-                        builder.setIcon(R.drawable.button_bg_down2);
-
-                        builder.setNegativeButton(R.string.ap_dialog_acept, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                dialog.dismiss();
-                                mypDialog = new ProgressDialog((Activity) getContext());
-                                mypDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-                                mypDialog.setMessage("Eliminando inventario '"+datamodelInventories.getName()+"'...");
-                                mypDialog.setCanceledOnTouchOutside(false);
-                                mypDialog.show();
-                                try{
-                                    boolean deleteInventario=inventaryRespository.DeleteInventory(datamodelInventories.getId());
-                                    if(deleteInventario){
-                                        mypDialog.dismiss();
-                                        UIHelper.ToastMessage(getContext(), "Inventario elimado exitosamente!!", 10);
-                                        Intent goToMain=new Intent(getContext(), Server_inventory_activity.class);
-                                        mContext.startActivity(goToMain);
-                                    }
-
-                                }catch (Exception e){
-                                    e.printStackTrace();
-                                }
-                            }
-                        });
-
-                        builder.setNeutralButton(R.string.ap_dialog_cancel, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                dialog.dismiss();
-                            }
-                        });
-
-
-                        builder.create().show();
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-
-                break;**/
         }
     }
 
@@ -228,7 +195,7 @@ public class DataAdapterInventoryServer extends ArrayAdapter<DatamodelInventorie
         String enterprises_code=preferenceCodeActive.getString("code_activate", "");
         String code_result="";
         if(enterprises_code.isEmpty()){
-            Log.e("No data preferences", " Error data no empty "+enterprises_code);
+            Log.i("No data preferences", " Error data no empty "+enterprises_code);
 
         }else{
             code_result=enterprises_code;

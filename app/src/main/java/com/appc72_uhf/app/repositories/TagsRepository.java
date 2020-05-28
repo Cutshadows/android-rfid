@@ -33,6 +33,7 @@ public class TagsRepository {
             throw sqlex;
         }finally {
             db.endTransaction();
+            db.close();
         }
     }
     public boolean InsertTag(String RFID, int idInventory, String IdHardware, String TID, Integer TagStatus) {
@@ -86,7 +87,7 @@ public class TagsRepository {
 
             } while (read.moveToNext());
         }
-
+        db.close();
         return datos;
     }
 
@@ -95,13 +96,10 @@ public class TagsRepository {
         SQLiteDatabase db = admin.getWritableDatabase();
 
         boolean resp = false;
-
         try{
-            Cursor read= db.rawQuery("DELETE FROM DetailForDevice WHERE InventoryId="+inventoryId, null);
+            //Cursor read= db.rawQuery("DELETE FROM DetailForDevice WHERE InventoryId="+inventoryId, null);
             Cursor read2= db.rawQuery("DELETE FROM Tags WHERE InventoryId="+inventoryId, null);
-
-            if (read.moveToFirst() && read2.moveToFirst()) {
-
+            if (!read2.moveToFirst()) {
                 resp=true;
             }
         }catch (SQLException ex){
@@ -109,7 +107,7 @@ public class TagsRepository {
             resp=false;
         }
 
-
+        db.close();
         return resp;
     }
 

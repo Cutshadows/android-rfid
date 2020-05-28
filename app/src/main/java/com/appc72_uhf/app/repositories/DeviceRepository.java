@@ -46,6 +46,7 @@ public class DeviceRepository {
         } catch (Exception ex) {
             result = false;
         }
+        db.close();
         return result;
     }
     public boolean FindCode(int companyId){
@@ -58,6 +59,7 @@ public class DeviceRepository {
                 }else{
                     result_code=false;
                 }
+            db.close();
             return result_code;
     }
 

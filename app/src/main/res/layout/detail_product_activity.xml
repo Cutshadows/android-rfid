@@ -26,7 +26,9 @@
                 android:gravity="center_horizontal"
                 android:orientation="horizontal"
                 android:paddingTop="5dp"
-                android:paddingBottom="5dp">
+                android:paddingBottom="5dp"
+                android:paddingRight="20dp"
+                android:paddingEnd="20dp">
 
                 <TextView
                     android:id="@+id/tv_tittle_detail"
@@ -47,27 +49,51 @@
                     android:textStyle="bold" />
 
 
-                <!--Button
-                    android:id="@+id/btnFilter"
-                    android:layout_width="74dp"
-                    android:layout_height="37dp"
-                    android:layout_marginLeft="5dp"
-                    android:layout_weight="3"
-                    android:background="@drawable/button_bg"
-                    android:text="@string/uhf_title_filter"
-                    android:textColor="@color/white"
-                    android:textSize="11sp" />
-                <Button
-                    android:id="@+id/btnInventory"
-                    android:layout_width="74dp"
-                    android:layout_height="37dp"
-                    android:layout_marginLeft="@dimen/activity_vertical_margin"
-                    android:layout_marginRight="50dp"
-                    android:background="@drawable/button_bg"
-                    android:text="@string/btSync"
-                    android:textColor="@color/white"
-                    android:textSize="11sp" /-->
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="230dp"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
 
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="25dp"
+                    android:padding="2sp"
+                    android:text="@string/title_quantity"
+                    android:textColor="#ffffff"
+                    android:textSize="@dimen/text_size_12"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tv_minor_count"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:gravity="start"
+                    android:padding="5sp"
+                    android:text="@string/tv_minor_count_product"
+                    android:textSize="@dimen/text_size_12"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="@string/slach_count_product"
+                    android:textSize="@dimen/text_size_12"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tv_total_products"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginLeft="10dp"
+                    android:gravity="center_horizontal"
+                    android:text="@string/tv_total_products"
+                    android:textSize="@dimen/text_size_12"
+                    android:textStyle="bold" />
             </LinearLayout>
         </LinearLayout>
         <View

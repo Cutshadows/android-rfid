@@ -2,7 +2,7 @@
 <resources>
 
     <!--VIEW MAINACTIVITY-->
-    <string name="app_name">Tags</string>
+    <string name="app_name">IZYSEARCH</string>
     <string name="textEditCode" translatable="false">codigo</string>
     <string name="textEditDesc" translatable="false">Descripcion</string>
     <string name="textBtnSave" translatable="false">Guardar</string>
@@ -150,13 +150,13 @@
     <string name="rbInventoryLoop">Auto</string>
     <string name="rbInventoryAnti">Anti</string>
     <string name="tvQ">Q value：</string>
-    <string name="btInventory">Iniciar</string>
-    <string name="title_stop_Inventory">Parar</string>
+    <string name="btInventory">INICIAR INVENTARIO</string>
+    <string name="title_stop_Inventory">DETENER INVENTARIO</string>
     <string name="tvTagUii">EPC</string>
     <string name="tvTagLen">Length</string>
     <string name="tvTagCount">Count</string>
-    <string name="btClear">Limpiar</string>
-    <string name="btSync" translatable="false">Sincronizar</string>
+    <string name="btClear">LIMPIAR</string>
+    <string name="btSync" translatable="false">ENVIAR</string>
     <string name="tv_wellcome" translatable="false">Bienvenido:</string>
     <string name="tv_welkomen_user" translatable="false">admin@izysearch.com</string>
     <string name="tvTag">Tag</string>
@@ -228,7 +228,7 @@
     <string name="uhf_title_read">Read</string>
     <string name="uhf_title_write">Write</string>
 
-    <string name="uhf_title_filter">filtrar</string>
+    <string name="uhf_title_filter">FILTRAR</string>
 
 
     <string name="uhf_title_temp">Temporary mask</string>
@@ -1474,6 +1474,7 @@
     <string name="tv_inventaryofServer" translatable="false">Inventarios en Servidor</string>
     <string name="btn_syncronousInventary" translatable="false">Obtener \n Inventarios</string>
     <string name="txt_inventoryLoad" translatable="false">Obteniendo inventarios...</string>
+    <string name="txt_no_data_load" translatable="false">No hay inventarios nuevos</string>
 
 
     <!--LOGIN-->
@@ -1508,13 +1509,15 @@
     <string name="count_product">CANTIDAD:</string>
     <string name="id_master_product" translatable="false">ID Producto Maestro:</string>
     <string name="title_master_product" translatable="false">Nombre del Producto</string>
+    <string name="title_quantity" translatable="false">Cantidad: </string>
 
 
     <!--MAKE LABEL -->
     <string name="tv_titleMakeLabel" translatable="false">Documentos en Servidor</string>
     <string name="btn_syncDocumentsMakeLabel" translatable="false">Obtener \n Documentos</string>
-
-
+    <string name="tv_minor_count_product" translatable="false">0</string>
+    <string name="slach_count_product" translatable="false">/</string>
+    <string name="tv_total_products" translatable="false">105</string>
 
 
 </resources>

@@ -2,4 +2,5 @@
 <resources>
     <string name="name">Name</string>
     <string name="count_product">CANTIDAD:</string>
+    <string name="minor_count_product">0</string>
 </resources>

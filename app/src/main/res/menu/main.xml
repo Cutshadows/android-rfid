@@ -23,10 +23,6 @@
         android:showAsAction="always"
         android:title="@string/uhf_msg_tab_write"/>
     -->
-    <item
-        android:id="@+id/action_scan"
-        android:title="@string/uhf_msg_tab_scan"
-        app:showAsAction="never" />
     <!--item
         android:id="@+id/action_write"
         android:title="@string/uhf_msg_tab_write"

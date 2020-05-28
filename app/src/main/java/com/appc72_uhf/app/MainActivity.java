@@ -18,7 +18,8 @@ import java.util.HashMap;
 
 public class MainActivity extends BaseTabFragmentActivity {
     private final static String TAG ="MainActivity";
-
+    boolean takeInventory;
+    String inventaryName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,28 +27,43 @@ public class MainActivity extends BaseTabFragmentActivity {
         setContentView(R.layout.activity_main);
 
 
-        initSound();
-        initUHF();
-        initViewPageData();
-        initViewPager();
-        initTabs();
+        if(this.getIntent().hasExtra("inventoryBool")){
+            takeInventory=true;
+            inventaryName= this.getIntent().getStringExtra("inventoryName");
+            initSound();
+            initUHF();
+            initViewPageData();
+            initViewPager();
+            initTabs();
+        }else{
+            takeInventory=false;
+            initSound();
+            initUHF();
+            initViewPageData();
+            initViewPager();
+            initTabs();
+        }
     }
 
     @Override
     protected void initViewPageData() {
-        lstFrg.add(new inventoryList());
-        lstFrg.add(new UHFReadTagFragment());
-        lstFrg.add(new UHFSetFragment());
-
+        if(takeInventory){
+            lstFrg.add(new UHFReadTagFragment());
+            lstFrg.add(new UHFSetFragment());
+            lstTitles.add(getString(R.string.uhf_msg_tab_scan).toUpperCase()+": "+inventaryName.toUpperCase());
+            lstTitles.add(getString(R.string.uhf_msg_tab_set));
+        }else{
+            lstFrg.add(new inventoryList());
+            lstFrg.add(new UHFSetFragment());
+            lstTitles.add(getString(R.string.uhf_msg_tab_inventory));
+            lstTitles.add(getString(R.string.uhf_msg_tab_set));
+        }
         //lstFrg.add(new UHFReadFragment());
         //lstFrg.add(new UHFWriteFragment());
         //lstFrg.add(new UHFKillFragment());
         //lstFrg.add(new UHFLockFragment());
 
 
-        lstTitles.add(getString(R.string.uhf_msg_tab_inventory));
-        lstTitles.add(getString(R.string.uhf_msg_tab_scan));
-        lstTitles.add(getString(R.string.uhf_msg_tab_set));
 
         //lstTitles.add(getString(R.string.uhf_msg_tab_read));
         //lstTitles.add(getString(R.string.uhf_msg_tab_kill));

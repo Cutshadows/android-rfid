@@ -39,12 +39,12 @@ public class DetailProductRepository {
             reg.put("ProductMasterId", ProductMasterId);
             reg.put("InventoryId", InventoryId);
 
-            db.insert("DetailForDevice", null, reg);
+            result = db.insert("DetailForDevice", null, reg)>0;
 
-            result = true;
         } catch (Exception ex) {
             result = false;
         }
+        db.close();
         return result;
     }
     public ArrayList OrderProductMasterId(int inventoryId){
@@ -58,6 +58,7 @@ public class DetailProductRepository {
                 masterProductCount.add(queryProducts.getInt(queryProducts.getColumnIndex("contador"))+"@"+queryProducts.getInt(queryProducts.getColumnIndex("ProductMasterId"))+"@"+queryProducts.getString(queryProducts.getColumnIndex("Name"))+"@"+queryProducts.getString(queryProducts.getColumnIndex("Code")));
             }while (queryProducts.moveToNext());
         }
+        db.close();
         return masterProductCount;
     }
 
@@ -69,6 +70,7 @@ public class DetailProductRepository {
         if(queryCountProduct.moveToFirst()){
             ProductFoundTrue=queryCountProduct.getInt(queryCountProduct.getColumnIndex("product"));
         }
+        db.close();
         return ProductFoundTrue;
     }
 
@@ -83,6 +85,33 @@ public class DetailProductRepository {
                 productFields.add(queryProducts.getString(queryProducts.getColumnIndex("EPC"))+"@"+queryProducts.getString(queryProducts.getColumnIndex("Found"))+"@"+queryProducts.getString(queryProducts.getColumnIndex("Name"))+"@"+queryProducts.getString(queryProducts.getColumnIndex("Code")));
             }while (queryProducts.moveToNext());
         }
+        db.close();
         return productFields;
+    }
+
+    public int OrderProductTotalEPC(int inventoryId){
+        int productCount=0;
+        AdminSQLOpenHelper admin=new AdminSQLOpenHelper(context);
+        SQLiteDatabase db=admin.getWritableDatabase();
+
+        Cursor queryProducts=db.rawQuery("SELECT COUNT(EPC) as contadorEPC, EPC FROM DetailForDevice WHERE InventoryId="+inventoryId, null);
+        if(queryProducts.moveToFirst()){
+            productCount=queryProducts.getInt(queryProducts.getColumnIndex("contadorEPC"));
+        }
+        db.close();
+        return productCount;
+    }
+
+    public int OrderProductTotalEPCFOUND(int inventoryId){
+        int productCountFound=0;
+        AdminSQLOpenHelper admin=new AdminSQLOpenHelper(context);
+        SQLiteDatabase db=admin.getWritableDatabase();
+
+        Cursor queryProducts=db.rawQuery("SELECT COUNT(EPC) as contadorFound, EPC FROM DetailForDevice WHERE InventoryId="+inventoryId+" AND Found='true'", null);
+        if(queryProducts.moveToFirst()){
+            productCountFound=queryProducts.getInt(queryProducts.getColumnIndex("contadorFound"));
+        }
+        db.close();
+        return productCountFound;
     }
 }

@@ -242,13 +242,14 @@ public class UHFSetFragment extends KeyDwonFragment implements OnClickListener {
 
         if (idx != -1) {
             int count = spMode.getCount();
-            spMode.setSelection(idx > count - 1 ? count - 1 : idx);
+            //spMode.setSelection(idx > count - 1 ? count - 1 : idx);
+            spMode.setSelection(Math.min(idx, count - 1));
 
             // UIHelper.ToastMessage(mContext,
             // R.string.uhf_msg_read_frequency_succ);
         } else {
-            UIHelper.ToastMessage(mContext,
-                    R.string.uhf_msg_read_frequency_fail);
+            //UIHelper.ToastMessage(mContext,
+            //        R.string.uhf_msg_read_frequency_fail);
         }
     }
 
@@ -256,7 +257,7 @@ public class UHFSetFragment extends KeyDwonFragment implements OnClickListener {
         int[] pwm = mContext.mReader.getPwm();
 
         if (pwm == null || pwm.length < 2) {
-            UIHelper.ToastMessage(mContext, R.string.uhf_msg_read_pwm_fail);
+            //UIHelper.ToastMessage(mContext, R.string.uhf_msg_read_pwm_fail);
             return;
         }
 

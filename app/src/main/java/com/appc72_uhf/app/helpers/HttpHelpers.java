@@ -5,11 +5,11 @@ import android.content.Context;
 import androidx.annotation.Nullable;
 
 import com.android.volley.AuthFailureError;
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.RetryPolicy;
-import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
@@ -54,22 +54,9 @@ public class HttpHelpers {
                 return headers;
             }
         };
-        jsonRequest.setRetryPolicy(new RetryPolicy() {
-            @Override
-            public int getCurrentTimeout() {
-                return 30000;
-            }
-
-            @Override
-            public int getCurrentRetryCount() {
-                return 30000;
-            }
-
-            @Override
-            public void retry(VolleyError error) throws VolleyError {
-
-            }
-        });
+        int socketTimeout = 20000;
+        RetryPolicy policy = new DefaultRetryPolicy(socketTimeout, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
+        jsonRequest.setRetryPolicy(policy);
         request.add(jsonRequest);
 
         request.addRequestFinishedListener(new RequestQueue.RequestFinishedListener<Object>() {
@@ -106,24 +93,10 @@ public class HttpHelpers {
                 //return headers;
             }
         };
-        jsonRequest.setRetryPolicy(new RetryPolicy() {
-            @Override
-            public int getCurrentTimeout() {
-                return 30000;
-            }
-
-            @Override
-            public int getCurrentRetryCount() {
-                return 30000;
-            }
-
-            @Override
-            public void retry(VolleyError error) throws VolleyError {
-
-            }
-        });
+        int socketTimeout = 20000;
+        RetryPolicy policy = new DefaultRetryPolicy(socketTimeout, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
+        jsonRequest.setRetryPolicy(policy);
         request.add(jsonRequest);
-
 
         request.addRequestFinishedListener(new RequestQueue.RequestFinishedListener<Object>() {
             @Override
@@ -159,22 +132,9 @@ public class HttpHelpers {
                 return headers;
             }
         };
-        jsonRequest.setRetryPolicy(new RetryPolicy() {
-            @Override
-            public int getCurrentTimeout() {
-                return 30000;
-            }
-
-            @Override
-            public int getCurrentRetryCount() {
-                return 30000;
-            }
-
-            @Override
-            public void retry(VolleyError error) throws VolleyError {
-
-            }
-        });
+        int socketTimeout = 20000;
+        RetryPolicy policy = new DefaultRetryPolicy(socketTimeout, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
+        jsonRequest.setRetryPolicy(policy);
         request.add(jsonRequest);
 
 
@@ -193,6 +153,7 @@ public class HttpHelpers {
     public void AjaxCancel() {
         request.cancelAll(jsonRequest);
     }
+
     private byte[] encodeParameters(Map<String, String> params, String paramsEncoding) {
         StringBuilder encodedParams = new StringBuilder();
         try {

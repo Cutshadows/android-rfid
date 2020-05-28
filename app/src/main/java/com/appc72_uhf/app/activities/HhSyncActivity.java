@@ -15,8 +15,14 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.NetworkError;
+import com.android.volley.NoConnectionError;
+import com.android.volley.ParseError;
 import com.android.volley.Request;
 import com.android.volley.Response;
+import com.android.volley.ServerError;
+import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
 import com.appc72_uhf.app.R;
 import com.appc72_uhf.app.domain.Application;
@@ -35,7 +41,7 @@ public class HhSyncActivity extends AppCompatActivity implements View.OnClickLis
     private EditText et_syncCode;
     private Button btn_syncronousDevice, btn_asynDevice_back_login;
     ProgressDialog mypDialog;
-    public static final String PROTOCOL="http://";
+    public static final String PROTOCOL="https://";
     public static final String URL=".izyrfid.com";
     private static final String TAG="HhSyncActivity";
     int codeCompany;
@@ -84,7 +90,7 @@ public class HhSyncActivity extends AppCompatActivity implements View.OnClickLis
                  * primero consulta el id del codigo que estoy enviando al endpoint getcompanies
                  * CONSULTA AL ENDPOINT /api/document/GetCompanies
                  */
-                String URL_COMPLETE = PROTOCOL + code + URL;
+                String URL_COMPLETE = PROTOCOL + code.toLowerCase() + URL;
                 mypDialog = new ProgressDialog(HhSyncActivity.this);
                 mypDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
                 mypDialog.setMessage("Sincronizando...");
@@ -110,6 +116,7 @@ public class HhSyncActivity extends AppCompatActivity implements View.OnClickLis
                             }
                             setViewEnabled(false);
                             if(codeCompany>0){
+                                Log.e("obtainAuthorizationHH", ""+codeCompany);
                                 obtainAuthorizationHH(codeCompany);
                             }
 
@@ -122,7 +129,15 @@ public class HhSyncActivity extends AppCompatActivity implements View.OnClickLis
                 }, new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Log.d(TAG, "onErrorResponse " + error.networkResponse);
+                        if (error instanceof NetworkError) {
+                        } else if (error instanceof ServerError) {
+                        } else if (error instanceof AuthFailureError) {
+                        } else if (error instanceof ParseError) {
+                        } else if (error instanceof NoConnectionError) {
+                        } else if (error instanceof TimeoutError) {
+                            mypDialog.dismiss();
+                            UIHelper.ToastMessage(HhSyncActivity.this, "Error con el servidor, intente mas tarde!!!", 3);
+                        }
                     }
                 });
             }else{
@@ -147,9 +162,8 @@ public class HhSyncActivity extends AppCompatActivity implements View.OnClickLis
                 jsonBody.put("HardwareId", android_id);
                 jsonBody.put("CompanyId", codeCompany);
 
-                //jsonBody.put("", "{´HardwareId´:´f2e47736ce53306c´, ´CompanyId´:1}");
                 String code = et_syncCode.getText().toString().toLowerCase();
-                String URL_COMPLETE = PROTOCOL + code + URL;
+                String URL_COMPLETE = PROTOCOL + code.toLowerCase() + URL;
 
                 HttpHelpers http2 = new HttpHelpers(HhSyncActivity.this, URL_COMPLETE, "");
                 http2.client(Request.Method.POST, "/api/devices/GetInfoDevice", "application/json; charset=utf-8", jsonBody, new Response.Listener<String>() {
@@ -172,10 +186,12 @@ public class HhSyncActivity extends AppCompatActivity implements View.OnClickLis
                                     apps.getTakingInventory(),
                                     apps.getMakeLabel()
                             );
-                            if(inserT){
+                            if(inserT && apps.getIsAssigned().equals("true")){
                                 Toast.makeText(HhSyncActivity.this, "Dispositivo Sincronizado", Toast.LENGTH_SHORT).show();
                                 Intent goToLogin=new Intent(HhSyncActivity.this, LoginActivity.class);
                                 startActivity(goToLogin);
+                            }else if(apps.getIsAssigned().equals("false")){
+                                Toast.makeText(HhSyncActivity.this, "Dispositivo deshabilitado", Toast.LENGTH_SHORT).show();
                             }
                         }catch (Exception ehttp){
                             mypDialog.dismiss();
@@ -187,7 +203,14 @@ public class HhSyncActivity extends AppCompatActivity implements View.OnClickLis
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         setViewEnabled(true);
-                        UIHelper.ToastMessage(HhSyncActivity.this, "Error al sincronizar intente mas tarde", 3);
+                        if (error instanceof NetworkError) {
+                        } else if (error instanceof ServerError) {
+                        } else if (error instanceof AuthFailureError) {
+                        } else if (error instanceof ParseError) {
+                        } else if (error instanceof NoConnectionError) {
+                        } else if (error instanceof TimeoutError) {
+                            UIHelper.ToastMessage(HhSyncActivity.this, "Error con el servidor al sincronizar, intente mas tarde!!!", 3);
+                        }
                         finish();
                     }
                 });

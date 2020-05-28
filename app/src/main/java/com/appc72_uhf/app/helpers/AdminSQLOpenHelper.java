@@ -1,21 +1,22 @@
 package com.appc72_uhf.app.helpers;
 
 import android.content.Context;
+import android.database.DatabaseErrorHandler;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 public class AdminSQLOpenHelper extends SQLiteOpenHelper {
 
-    private static final String DATABASE_NAME = "IZYSEARCH";
-    private static final int DATABASE_VERSION=4;
+    public static final String DATABASE_NAME="IZYRFID.db";
+    public static final int DATABASE_VERSION=2;
 
 
     public AdminSQLOpenHelper( Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
-
-    public AdminSQLOpenHelper(Context context, int version) {
-        super(context, DATABASE_NAME, null, version);
+    public AdminSQLOpenHelper(Context context, SQLiteDatabase.CursorFactory factory, DatabaseErrorHandler errorHandler){
+        //public AdminSQLOpenHelper(Context context, int version) {
+        super(context, DATABASE_NAME, factory, DATABASE_VERSION, errorHandler);
     }
 
     @Override

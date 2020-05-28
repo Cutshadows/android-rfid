@@ -107,15 +107,15 @@ public class BaseTabFragmentActivity extends FragmentActivity {
 	}
 
 	protected void initTabs() {
-		for (int i = 0; i < mViewPagerAdapter.getCount() - 2; ++i) {
+		for (int i = 0; i < mViewPagerAdapter.getCount() - 1; ++i) {
 			mActionBar.addTab(mActionBar.newTab()
 					.setText(mViewPagerAdapter.getPageTitle(i)).setTabListener(mTabListener));
 		}
-		tab_inventory=mActionBar.newTab().setText(mViewPagerAdapter.getPageTitle(1)).setTabListener(mTabListener);
+		tab_inventory=mActionBar.newTab().setText(mViewPagerAdapter.getPageTitle(0)).setTabListener(mTabListener);
 		//tab_inventory = mActionBar.newTab().setText(mViewPagerAdapter.getPageTitle(1)).setTabListener(mTabListener);
 		//tab_write = mActionBar.newTab().setText(mViewPagerAdapter.getPageTitle(2)).setTabListener(mTabListener);
 		//tab_lock = mActionBar.newTab().setText(mViewPagerAdapter.getPageTitle(2)).setTabListener(mTabListener);
-		tab_set = mActionBar.newTab().setText(mViewPagerAdapter.getPageTitle(2)).setTabListener(mTabListener);
+		tab_set = mActionBar.newTab().setText(mViewPagerAdapter.getPageTitle(1)).setTabListener(mTabListener);
 
 		//��Ӳ˵�
 //        mActionBar.addTab(mActionBar.newTab().setText(getString(R.string.myMenu)).setTabListener(mTabListener));
@@ -159,10 +159,6 @@ public class BaseTabFragmentActivity extends FragmentActivity {
 		switch (item.getItemId()) {
 			case android.R.id.home:
 				finish();
-				break;
-			case R.id.action_scan:
-				index = 1;
-				mActionBar.addTab(tab_inventory, true);
 				break;
 			/*case R.id.action_write:
 				index = 2;

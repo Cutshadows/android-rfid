@@ -63,14 +63,14 @@ public class InventaryRespository {
             }
     }
 
-    public int ViewInventory(String NameInventory){
+    public int ViewInventory(int InventoryID){
         AdminSQLOpenHelper admin = new AdminSQLOpenHelper(context);
         SQLiteDatabase db = admin.getWritableDatabase();
 
-        Cursor read= db.rawQuery("SELECT Id FROM Inventory WHERE Name=\""+NameInventory+"\"", null);
+        Cursor read= db.rawQuery("SELECT * FROM Inventory WHERE Id="+InventoryID, null);
         int datos=0;
         if (read.moveToFirst()) {
-                datos = read.getInt(read.getColumnIndex("Id"));
+                datos = 1;
         }
         db.close();
         return datos;
@@ -91,8 +91,11 @@ public class InventaryRespository {
             throw e;
         }finally {
             db.endTransaction();
+            db.close();
         }
     }
+
+
     public boolean inventoryDetailForDevice(int inventoryId){
         AdminSQLOpenHelper admin=new AdminSQLOpenHelper(context);
         SQLiteDatabase db=admin.getWritableDatabase();
@@ -105,6 +108,7 @@ public class InventaryRespository {
         }catch (SQLException e){
             throw e;
         }
+        db.close();
         return result;
     }
 
@@ -121,6 +125,7 @@ public class InventaryRespository {
                 datos.add(read.getString(read.getColumnIndex("Id"))+"@"+read.getString(read.getColumnIndex("Name"))+"@"+read.getString(read.getColumnIndex("DetailForDevice"))+"@"+read.getInt(read.getColumnIndex("InventoryStatus"))+"@"+read.getInt(read.getColumnIndex("IsSelect")));
             } while (read.moveToNext());
         }
+        db.close();
         return datos;
     }
 
@@ -128,12 +133,14 @@ public class InventaryRespository {
         ArrayList<String> datosInventory=new ArrayList<>();
         AdminSQLOpenHelper admin = new AdminSQLOpenHelper(context);
         SQLiteDatabase db = admin.getWritableDatabase();
-        Cursor read= db.rawQuery("SELECT Id, CompanyId, Name, DetailForDevice, InventoryStatus, IsSelect FROM Inventory WHERE CompanyId="+CompanyId+" AND IsSelect=1 ORDER BY DetailForDevice  DESC", null);
+        Cursor read=db.rawQuery("SELECT Id, Name, DetailForDevice, InventoryStatus, IsSelect FROM Inventory WHERE CompanyId="+CompanyId+" AND IsSelect=1", null);
         if (read.moveToFirst()) {
             do {
                 datosInventory.add(read.getString(read.getColumnIndex("Id"))+"@"+read.getString(read.getColumnIndex("Name"))+"@"+read.getString(read.getColumnIndex("DetailForDevice"))+"@"+read.getInt(read.getColumnIndex("InventoryStatus"))+"@"+read.getInt(read.getColumnIndex("IsSelect")));
             } while (read.moveToNext());
         }
+        db.close();
         return datosInventory;
+
     }
 }

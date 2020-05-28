@@ -11,8 +11,14 @@ import android.widget.ListView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.NetworkError;
+import com.android.volley.NoConnectionError;
+import com.android.volley.ParseError;
 import com.android.volley.Request;
 import com.android.volley.Response;
+import com.android.volley.ServerError;
+import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
 import com.appc72_uhf.app.R;
 import com.appc72_uhf.app.adapter.AdapterMakeLabelDocuments;
@@ -79,7 +85,7 @@ public class Make_label_documents_activity extends AppCompatActivity implements 
     public void syncronizedDocuments(){
         UIHelper.ToastMessage(this, "CARGANDO INFORMACION DE DOCUMENTOS CON ESTE ANDROID ID "+android_id+" access_token:"+token_access+" COMPANYID"+code_enterprise+" ID ENTERPRISE"+codeCompany);
 
-        final String URL_COMPLETE=PROTOCOL_URLRFID+code_enterprise+DOMAIN_URLRFID;
+        final String URL_COMPLETE=PROTOCOL_URLRFID+code_enterprise.toLowerCase()+DOMAIN_URLRFID;
 
         HttpHelpers http= new HttpHelpers(Make_label_documents_activity.this, URL_COMPLETE, "");
         http.addHeader("Authorization", "Bearer "+token_access);
@@ -104,6 +110,14 @@ public class Make_label_documents_activity extends AppCompatActivity implements 
             }, new Response.ErrorListener(){
                 @Override
                 public void onErrorResponse(VolleyError error){
+                    if (error instanceof NetworkError) {
+                    } else if (error instanceof ServerError) {
+                    } else if (error instanceof AuthFailureError) {
+                    } else if (error instanceof ParseError) {
+                    } else if (error instanceof NoConnectionError) {
+                    } else if (error instanceof TimeoutError) {
+                        UIHelper.ToastMessage(Make_label_documents_activity.this, "Error con el servidor, intente mas tarde!!!", 3);
+                    }
                     Log.e("onErrorResponse", ""+error.getLocalizedMessage());
                 }
             });

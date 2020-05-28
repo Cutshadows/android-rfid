@@ -39,6 +39,7 @@ public class CompanyRepository {
         } catch (Exception ex) {
             result = false;
         }
+        db.close();
         return result;
     }
 
@@ -50,10 +51,11 @@ public class CompanyRepository {
         Cursor read= db.rawQuery("SELECT Code FROM Company WHERE IsActive='true' ORDER BY Id ASC", null);
         if (read.moveToFirst()) {
             do {
-                datos.add(read.getString(read.getColumnIndex("Code")));
+                datos.add(read.getString(read.getColumnIndex("Code")).toUpperCase());
 
             } while (read.moveToNext());
         }
+        db.close();
         return datos;
 
     }
@@ -67,6 +69,7 @@ public class CompanyRepository {
         if (read.moveToFirst()) {
             datos=read.getInt(read.getColumnIndex("Id"));
         }
+        db.close();
         return datos;
 
     }

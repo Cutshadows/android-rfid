@@ -51,27 +51,37 @@
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical"
                 android:orientation="horizontal"
-                android:layout_marginTop="50dp">
-
+                android:layout_marginTop="50dp"
+                android:layout_marginLeft="20dp">
                 <TextView
                     android:id="@+id/tv_wellcome"
                     android:layout_width="10dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:layout_gravity="start"
-                    android:gravity="end"
+                    android:layout_gravity="center_vertical"
+                    android:gravity="center"
                     android:text="@string/tv_wellcome"
                     android:textSize="16dp"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    />
 
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:layout_marginTop="5dp"
+                android:layout_marginLeft="20dp">
                 <TextView
                     android:id="@+id/tv_welkomen_user"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:layout_gravity="end"
-                    android:gravity="start"
-                    android:textSize="16dp" />
+                    android:layout_gravity="center"
+                    android:textStyle="bold"
+                    android:gravity="center"
+                    android:textSize="18dp" />
             </LinearLayout>
 
             <LinearLayout
@@ -85,7 +95,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical">
                     <ImageButton
-                        android:id="@+id/ibtn_takeInventory"
+                        android:id="@+id/ibtn_Labelled"
                         android:layout_width="150dp"
                         android:layout_height="141dp"
                         android:layout_margin="15dp"
@@ -98,7 +108,7 @@
                         android:id="@+id/tv_makeLabel"
                         android:layout_width="150dp"
                         android:layout_height="wrap_content"
-                        android:layout_below="@+id/ibtn_takeInventory"
+                        android:layout_below="@+id/ibtn_Labelled"
                         android:layout_weight="2"
                         android:layout_gravity="center"
                         android:paddingLeft="10dp"
@@ -118,12 +128,11 @@
                     android:layout_gravity="center_vertical">
 
                     <ImageButton
-                        android:id="@+id/ibtn_Labelled"
+                        android:id="@+id/ibtn_takeInventory"
                         android:layout_width="150dp"
                         android:layout_height="140dp"
                         android:layout_marginStart="15dp"
                         android:layout_marginLeft="15dp"
-
                         android:layout_marginTop="15dp"
                         android:layout_marginEnd="15dp"
                         android:layout_marginRight="15dp"
@@ -136,7 +145,7 @@
                         android:id="@+id/tv_take_inventory"
                         android:layout_width="150dp"
                         android:layout_height="wrap_content"
-                        android:layout_below="@+id/ibtn_Labelled"
+                        android:layout_below="@+id/ibtn_takeInventory"
                         android:layout_weight="2"
                         android:layout_gravity="center"
                         android:paddingLeft="10dp"

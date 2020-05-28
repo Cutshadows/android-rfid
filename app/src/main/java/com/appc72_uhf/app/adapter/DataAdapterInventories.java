@@ -7,6 +7,10 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
+import android.net.Network;
+import android.net.NetworkInfo;
+import android.os.Build;
 import android.provider.Settings;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -22,15 +26,22 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.android.volley.AuthFailureError;
+import com.android.volley.DefaultRetryPolicy;
+import com.android.volley.NetworkError;
 import com.android.volley.NetworkResponse;
+import com.android.volley.NoConnectionError;
+import com.android.volley.ParseError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.RetryPolicy;
+import com.android.volley.ServerError;
+import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.HttpHeaderParser;
 import com.android.volley.toolbox.Volley;
+import com.appc72_uhf.app.MainActivity;
 import com.appc72_uhf.app.R;
 import com.appc72_uhf.app.activities.Detail_product_activity;
 import com.appc72_uhf.app.entities.DatamodelInventories;
@@ -50,7 +61,7 @@ public class DataAdapterInventories extends ArrayAdapter<DatamodelInventories> i
     Context mContext;
     ArrayList<DatamodelInventories> datalist;
     ProgressDialog mypDialog;
-    public static final String PROTOCOL_URLRFID="http://";
+    public static final String PROTOCOL_URLRFID="https://";
     public static final String DOMAIN_URLRFID=".izyrfid.com/";
     String code_enterprise;
     private String android_id;
@@ -77,81 +88,92 @@ public class DataAdapterInventories extends ArrayAdapter<DatamodelInventories> i
         {
             case R.id.item_info:
                 Intent goToMain=new Intent(getContext(), Detail_product_activity.class);
-                goToMain.putExtra("Id",  String.valueOf(datamodelInventories.getId()));
+                goToMain.putExtra("Id",  datamodelInventories.getId());
                 goToMain.putExtra("Name",  datamodelInventories.getName());
                 mContext.startActivity(goToMain);
                 break;
 
             case R.id.item_sync:
-                UIHelper.ToastMessage(getContext(), "ESTOY EN SINCRONIZAR"+datamodelInventories.getId()+" URL:"+PROTOCOL_URLRFID+code_enterprise+DOMAIN_URLRFID+"api/inventory/SaveTagReaded", 3);
-                try{
-                    TagsRepository tagRepo= new TagsRepository(getContext());
-                    ArrayList Tags=tagRepo.ViewAllTags(datamodelInventories.getId());
-                    RequestQueue requestQueue= Volley.newRequestQueue(getContext());
-                    JSONObject jsonBody;
-                    jsonBody = new JSONObject();
-                    String URL = PROTOCOL_URLRFID+code_enterprise+DOMAIN_URLRFID+"api/inventory/SaveTagReaded";
-                    JSONArray data=new JSONArray();
-                    mypDialog = new ProgressDialog((Activity) getContext());
-                    mypDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-                    mypDialog.setMessage("Enviando codigos leidos del inventario '"+datamodelInventories.getName()+"'...");
-                    mypDialog.setCanceledOnTouchOutside(false);
-                    mypDialog.show();
-
-                    if(Tags.size()>0){
-                        for(int i=0; i <= Tags.size()-1;i++){
-                            String etags=String.valueOf(Tags.get(i));
-                            String[] spliTags=etags.split("@");
-                            String RFIDtagsString=spliTags[0];
-                            String TIDtagsString=spliTags[1];
-
-                            jsonBody.put("InventoryId",String.valueOf(datamodelInventories.getId()));
-                            jsonBody.put("TId", TIDtagsString);
-                            jsonBody.put("IdHardware", android_id);
-                            jsonBody.put("RFID", RFIDtagsString);
-                            data.put(jsonBody);
+                ConnectivityManager connMgr=(ConnectivityManager) getContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+                boolean isWifiConn = false;
+                boolean isMobileConn = false;
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    for (Network network : connMgr.getAllNetworks()) {
+                        NetworkInfo networkInfo = connMgr.getNetworkInfo(network);
+                        if (networkInfo.getType() == ConnectivityManager.TYPE_WIFI) {
+                            isWifiConn |= networkInfo.isConnected();
                         }
-                        Log.e("JSONBODY", ""+data.toString());
-                        Log.e("URL", ""+URL);
-                        BooleanRequest booleanRequest = new BooleanRequest(1, URL, data, new Response.Listener<Boolean>() {
-                            @Override
-                            public void onResponse(Boolean response) {
-                                mypDialog.dismiss();
-                                UIHelper.ToastMessage(getContext(), "Envio de tags con exito!!", 3);
-                            }
-                        }, new Response.ErrorListener() {
-                            @Override
-                            public void onErrorResponse(VolleyError error) {
-                                mypDialog.dismiss();
-                                UIHelper.ToastMessage(getContext(), "Error con el servidor, intente mas tarde!!!", 3);
-                            }
-                        });
-                        booleanRequest.setRetryPolicy(new RetryPolicy() {
-                            @Override
-                            public int getCurrentTimeout() {
-                                return 30000;
-                            }
-
-                            @Override
-                            public int getCurrentRetryCount() {
-                                return 30000;
-                            }
-
-                            @Override
-                            public void retry(VolleyError error) throws VolleyError {
-
-                            }
-                        });
-                        mypDialog.dismiss();
-                        requestQueue.add(booleanRequest);
-
-                    }else{
-                        UIHelper.ToastMessage(getContext(), "No tiene codigos leidos este inventario!!!");
+                        if (networkInfo.getType() == ConnectivityManager.TYPE_MOBILE) {
+                            isMobileConn |= networkInfo.isConnected();
+                        }
                     }
-                }catch (Exception ex){
-                    Log.e("Error Exception", ""+ex.getLocalizedMessage());
                 }
+                if(isMobileConn || isWifiConn) {
+                    try {
+                        TagsRepository tagRepo = new TagsRepository(getContext());
+                        ArrayList Tags = tagRepo.ViewAllTags(datamodelInventories.getId());
+                        RequestQueue requestQueue = Volley.newRequestQueue(getContext());
+                        JSONObject jsonBody;
+                        String URL = PROTOCOL_URLRFID + code_enterprise.toLowerCase()+ DOMAIN_URLRFID + "api/inventory/SaveTagReaded";
+                        JSONArray data = new JSONArray();
+                        mypDialog = new ProgressDialog((Activity) getContext());
+                        mypDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+                        mypDialog.setMessage("Enviando codigos leidos del inventario '" + datamodelInventories.getName() + "'...");
+                        mypDialog.setCanceledOnTouchOutside(false);
+                        mypDialog.show();
 
+                        if (Tags.size() > 0) {
+                            for (int i = 0; i <= Tags.size() - 1; i++) {
+                                jsonBody = new JSONObject();
+                                String etags = String.valueOf(Tags.get(i));
+                                String[] spliTags = etags.split("@");
+                                String RFIDtagsString = spliTags[0];
+                                String TIDtagsString = spliTags[1];
+
+                                jsonBody.put("InventoryId", String.valueOf(datamodelInventories.getId()));
+                                jsonBody.put("TId", TIDtagsString);
+                                jsonBody.put("IdHardware", android_id);
+                                jsonBody.put("RFID", RFIDtagsString);
+                                data.put(jsonBody);
+                            }
+                            Log.e("JSONBODY", "" + data.toString());
+                            Log.e("URL", "" + URL);
+
+                            BooleanRequest booleanRequest = new BooleanRequest(1, URL, data, new Response.Listener<Boolean>() {
+                                @Override
+                                public void onResponse(Boolean response) {
+                                    mypDialog.dismiss();
+                                    UIHelper.ToastMessage(getContext(), "Envio de tags con exito!!", 3);
+                                }
+                            }, new Response.ErrorListener() {
+                                @Override
+                                public void onErrorResponse(VolleyError error) {
+                                    if (error instanceof NetworkError) {
+                                    } else if (error instanceof ServerError) {
+                                    } else if (error instanceof AuthFailureError) {
+                                    } else if (error instanceof ParseError) {
+                                    } else if (error instanceof NoConnectionError) {
+                                    } else if (error instanceof TimeoutError) {
+                                        mypDialog.dismiss();
+                                        UIHelper.ToastMessage(getContext(), "Error con el servidor, intente mas tarde!!!", 3);
+                                    }
+                                    //UIHelper.ToastMessage(getContext(), "Error con el servidor, intente mas tarde!!!", 3);
+                                }
+                            });
+                            int socketTimeout = 30000;//30 seconds - change to what you want
+                            RetryPolicy policy = new DefaultRetryPolicy(socketTimeout, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
+                            booleanRequest.setRetryPolicy(policy);
+                            requestQueue.add(booleanRequest);
+                        } else {
+                            mypDialog.dismiss();
+                            UIHelper.ToastMessage(getContext(), "No tiene codigos en este inventario!!!");
+                        }
+                    } catch (Exception ex) {
+                        Log.e("Error Exception", "" + ex.getLocalizedMessage());
+                    }
+                }else{
+                    UIHelper.ToastMessage(getContext(), "No esta conectado a una red en estos momentos!!!");
+                }
                 break;
             case R.id.item_void:
                 try {
@@ -183,6 +205,8 @@ public class DataAdapterInventories extends ArrayAdapter<DatamodelInventories> i
                                     UIHelper.ToastMessage(getContext(), "Codigos elimandos exitosamente!!", 10);
                                 }
                             }catch (Exception e){
+                                mypDialog.dismiss();
+                                UIHelper.ToastMessage(getContext(), "Error al eliminar codigos!!", 10);
                                 e.printStackTrace();
                             }
                         }
@@ -193,21 +217,25 @@ public class DataAdapterInventories extends ArrayAdapter<DatamodelInventories> i
                     e.printStackTrace();
                 }
                 break;
+            case R.id.item_take_inventory:
+                Intent fragment=new Intent(getContext(), MainActivity.class);
+                fragment.putExtra("inventoryBool", true);
+                fragment.putExtra("inventoryID", datamodelInventories.getId());
+                fragment.putExtra("inventoryName", datamodelInventories.getName());
+                mContext.startActivity(fragment);
+                break;
         }
     }
     private class ViewHolder{
         TextView title;
-        ImageView info, item_sync, item_void;
+        ImageView info, item_sync, item_void, item_take_inventory;
     }
     private int lastPosition = -1;
     @NonNull
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
-        //Get the data item for this position
         DatamodelInventories datamodelInventories=getItem(position);
-
         ViewHolder holder;
-
         final View result;
 
         if(convertView==null){
@@ -220,6 +248,7 @@ public class DataAdapterInventories extends ArrayAdapter<DatamodelInventories> i
             holder.info=(ImageView)convertView.findViewById(R.id.item_info);
             holder.item_sync=(ImageView)convertView.findViewById(R.id.item_sync);
             holder.item_void=(ImageView)convertView.findViewById(R.id.item_void);
+            holder.item_take_inventory=(ImageView) convertView.findViewById(R.id.item_take_inventory);
 
             result=convertView;
             convertView.setTag(holder);
@@ -231,9 +260,11 @@ public class DataAdapterInventories extends ArrayAdapter<DatamodelInventories> i
         result.startAnimation(animation);
         lastPosition = position;
         holder.title.setText(datamodelInventories.getName());
+        holder.item_take_inventory.setOnClickListener(this);
         holder.item_void.setOnClickListener(this);
         holder.item_sync.setOnClickListener(this);
         holder.info.setOnClickListener(this);
+        holder.item_take_inventory.setTag(position);
         holder.item_void.setTag(position);
         holder.item_sync.setTag(position);
         holder.info.setTag(position);

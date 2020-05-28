@@ -28,8 +28,6 @@ public class inventoryList extends KeyDwonFragment implements View.OnClickListen
     ImageButton btnInventory;
     private static final String TAG="Inventory_list";
 
-    public static final String PROTOCOL_URLRFID="http://";
-    public static final String DOMAIN_URLRFID=".izyrfid.com";
 
     ArrayList<DatamodelInventories> dataArrayList;
     DataAdapterInventories dataAdapterInventories;
@@ -85,20 +83,19 @@ public class inventoryList extends KeyDwonFragment implements View.OnClickListen
         btnInventory.setOnClickListener(this);
 
 
-
         //adapter = new ArrayAdapter<>(this.mContext, R.layout.simple_list_inventories_1, data);
         /*
        lstData.setAdapter(adapter);
         adapter.notifyDataSetChanged();*/
 
-        SharedPreferences preferencesAccess_token=this.getActivity().getSharedPreferences("access_token", Context.MODE_PRIVATE);
+        /*SharedPreferences preferencesAccess_token=this.getActivity().getSharedPreferences("access_token", Context.MODE_PRIVATE);
         String access_token=preferencesAccess_token.getString("access_token", "");
 
         if(access_token.length()==0){
             Log.e("No data preferences", " Error data no empty "+access_token);
         }else{
             token_access=access_token;
-        }
+        }*/
     }
 
     @Override
@@ -152,12 +149,10 @@ public class inventoryList extends KeyDwonFragment implements View.OnClickListen
         int companyId;
         if(enterprises_code.isEmpty()){
             Log.e("No data preferences", " Error data no empty "+enterprises_code);
-
         }else{
             code_result=enterprises_code;
             companyId=companyRepository.getCompanieId(code_result);
             codeCompany=companyId;
-
         }
         return code_result;
     }

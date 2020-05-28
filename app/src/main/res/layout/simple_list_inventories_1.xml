@@ -51,6 +51,15 @@
                 android:layout_marginRight="74dp"
                 android:layout_centerVertical="true"
                 android:src="@drawable/ic_clear" />
+            <ImageView
+                android:id="@+id/item_take_inventory"
+                android:layout_width="30sp"
+                android:layout_height="30sp"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="114dp"
+                android:layout_centerVertical="true"
+                android:src="@drawable/tomar_inventario"/>
         </RelativeLayout>
 </LinearLayout>
 </ScrollView>

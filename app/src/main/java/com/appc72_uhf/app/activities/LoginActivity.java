@@ -15,14 +15,21 @@ import android.widget.Spinner;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.NetworkError;
+import com.android.volley.NoConnectionError;
+import com.android.volley.ParseError;
 import com.android.volley.Request;
 import com.android.volley.Response;
+import com.android.volley.ServerError;
+import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
 import com.appc72_uhf.app.R;
 import com.appc72_uhf.app.helpers.HttpHelpers;
 import com.appc72_uhf.app.repositories.CompanyRepository;
 import com.appc72_uhf.app.tools.UIHelper;
 
+import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -64,7 +71,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 final CompanyRepository deviceRepository=new CompanyRepository(LoginActivity.this);
                 try{
-                    codeCompany=deviceRepository.getCompanieId(parent.getItemAtPosition(position).toString());
+                    codeCompany=deviceRepository.getCompanieId(parent.getItemAtPosition(position).toString().toLowerCase());
                     et_code=parent.getItemAtPosition(position).toString();
 
                 }catch (Exception e){
@@ -147,7 +154,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 setViewEnabled(false);
                 final String code=et_code;
 
-                String URL_COMPLETE=PROTOCOL+code+URL;
+                String URL_COMPLETE=PROTOCOL+code.toLowerCase()+URL;
                 Map<String, String> params = new HashMap<>();
                // params.put("username", "admin@izysearch.cl");
                 params.put("username", username);
@@ -156,8 +163,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 params.put("CompanyId", String.valueOf(companyId));
 
 
-                Log.e("valor 2", password);
-                Log.e("valor 3", code);
+                Log.e("valor 2", URLDecoder.decode(URL_COMPLETE));
+                Log.e("valor 3", password);
                 Log.e("valor 4", String.valueOf(companyId));
 
                 mypDialog = new ProgressDialog(LoginActivity.this);
@@ -202,7 +209,15 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 public void onErrorResponse(VolleyError error) {
                     Log.d(TAG, "onErrorResponse " + error.getMessage());
                     setViewEnabled(true);
-                    mypDialog.dismiss();
+                    if (error instanceof NetworkError) {
+                    } else if (error instanceof ServerError) {
+                    } else if (error instanceof AuthFailureError) {
+                    } else if (error instanceof ParseError) {
+                    } else if (error instanceof NoConnectionError) {
+                    } else if (error instanceof TimeoutError) {
+                        mypDialog.dismiss();
+                        UIHelper.ToastMessage(LoginActivity.this, "Error con el servidor, intente mas tarde!!!", 3);
+                    }
                 }
             });
             }catch (Exception ex){

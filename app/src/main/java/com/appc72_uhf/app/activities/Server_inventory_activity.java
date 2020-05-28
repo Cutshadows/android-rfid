@@ -1,6 +1,5 @@
 package com.appc72_uhf.app.activities;
 
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
@@ -10,14 +9,19 @@ import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.NetworkError;
+import com.android.volley.NoConnectionError;
+import com.android.volley.ParseError;
 import com.android.volley.Request;
 import com.android.volley.Response;
+import com.android.volley.ServerError;
+import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
 import com.appc72_uhf.app.R;
 import com.appc72_uhf.app.adapter.DataAdapterInventoryServer;
@@ -31,19 +35,15 @@ import com.google.gson.Gson;
 
 import java.util.ArrayList;
 
-public class Server_inventory_activity extends AppCompatActivity implements View.OnClickListener {
+public class Server_inventory_activity extends AppCompatActivity {
     private ListView lv_server_inventories;
-    public static final String PROTOCOL_URLRFID="http://";
+    public static final String PROTOCOL_URLRFID="https://";
     public static final String DOMAIN_URLRFID=".izyrfid.com";
-    private Button btn_syncInventoryServer;
-    private RelativeLayout layout_server_inventory_load;
-    ProgressDialog mypDialog;
+    private RelativeLayout layout_server_inventory_load, layout_no_data;
     ArrayList<DatamodelInventories> dataArrayList;
     DataAdapterInventoryServer dataAdapterInventoryServer;
     String token_access;
     String code_enterprise;
-    DatamodelInventories datamodelInventories;
-    private boolean shouldRequestOffline =false;
     int codeCompany;
     private static final String DEBUG_TAG="NetworkStatusExample";
 
@@ -56,15 +56,15 @@ public class Server_inventory_activity extends AppCompatActivity implements View
     }
     private void initComponent(){
         layout_server_inventory_load=(RelativeLayout)findViewById(R.id.layout_server_inventory_load);
+        layout_no_data=(RelativeLayout)findViewById(R.id.layout_no_data);
         lv_server_inventories = (ListView) findViewById(R.id.lv_server_inventories);
-        btn_syncInventoryServer=(Button) findViewById(R.id.btn_syncInventoryServer);
-        btn_syncInventoryServer.setOnClickListener(this);
         dataArrayList=new ArrayList<DatamodelInventories>();
-        getData();
         dataAdapterInventoryServer=new DataAdapterInventoryServer(Server_inventory_activity.this, dataArrayList);
         lv_server_inventories.setAdapter(dataAdapterInventoryServer);
         layout_server_inventory_load.setVisibility(View.VISIBLE);
         lv_server_inventories.setVisibility(View.INVISIBLE);
+        layout_no_data.setVisibility(View.INVISIBLE);
+
         code_enterprise=getCompany();
         SharedPreferences preferencesAccess_token=getSharedPreferences("access_token", Context.MODE_PRIVATE);
         String access_token=preferencesAccess_token.getString("access_token", "");
@@ -75,14 +75,6 @@ public class Server_inventory_activity extends AppCompatActivity implements View
         }
 
         sincronizar();
-    }
-
-    public void onClick(View v){
-        switch (v.getId()){
-            case R.id.btn_syncInventoryServer:
-                UIHelper.ToastMessage(Server_inventory_activity.this, "Funcion descargar", 3);
-                break;
-        }
     }
 
     public void sincronizar() {
@@ -108,12 +100,7 @@ public class Server_inventory_activity extends AppCompatActivity implements View
             /**
              * Function to get inventories from web
              */
-            /*mypDialog = new ProgressDialog(Server_inventory_activity.this);
-            mypDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-            mypDialog.setMessage("Sincronizando inventarios disponibles...");
-            mypDialog.setCanceledOnTouchOutside(false);
-            mypDialog.show();*/
-                String URL_COMPLETE=PROTOCOL_URLRFID+code_enterprise+DOMAIN_URLRFID;
+                String URL_COMPLETE=PROTOCOL_URLRFID+code_enterprise.toLowerCase()+DOMAIN_URLRFID;
                 final InventaryRespository inventoryRepo = new InventaryRespository(Server_inventory_activity.this);
                 dataArrayList.clear();
                 HttpHelpers http = new HttpHelpers(Server_inventory_activity.this, URL_COMPLETE, "");
@@ -125,34 +112,38 @@ public class Server_inventory_activity extends AppCompatActivity implements View
                             Gson gson = new Gson();
                             Application[] apps = gson.fromJson(response, Application[].class);
                             layout_server_inventory_load.removeAllViews();
-                            //layout_server_inventory_load.setVisibility(View.INVISIBLE);
+                            layout_no_data.removeAllViews();
                             lv_server_inventories.setVisibility(View.VISIBLE);
                             dataArrayList.clear();
-                            for( int i=0; i<=apps.length-1; i++){
-                                //boolean res = inventoryRepo.InventoryInsert(apps[i].getId(), apps[i].getName(), apps[i].getInventoryStatus(), apps[i].getDetailForDevice(), codeCompany);
+                            for( int i=0; i< apps.length; i++){
                                 Log.e("DATA FOR", ""+apps[i].getId()+""+apps[i].getName()+" "+Boolean.valueOf(apps[i].getDetailForDevice())+" INVENTORY STATUS: "+apps[i].getInventoryStatus());
-
-                                //if(res && apps[i].getInventoryStatus()==0) {
-                                if(apps[i].getInventoryStatus()==0){
+                                int inventoryFound=inventoryRepo.ViewInventory(apps[i].getId());
+                                if(apps[i].getInventoryStatus()==0 && inventoryFound==0){
                                     dataArrayList.add(new DatamodelInventories(apps[i].getId(), String.valueOf(apps[i].getName()),  Boolean.parseBoolean(apps[i].getDetailForDevice()), apps[i].getInventoryStatus(), apps[i].getIsSelect(), codeCompany));
-                                }
-                                //}
+                                }/*else{
+                                    UIHelper.ToastMessage(Server_inventory_activity.this, "No se encontraron inventarios disponibles", 5);
+                                    lv_server_inventories.setVisibility(View.INVISIBLE);
+                                    layout_no_data.setVisibility(View.VISIBLE);
+                                    Server_inventory_activity.super.onBackPressed();
+                                }*/
                             }
-                            shouldRequestOffline=true;
-                            //mypDialog.dismiss();
                             dataAdapterInventoryServer.notifyDataSetChanged();
                         }catch (Exception e){
-                            shouldRequestOffline=false;
-                           // mypDialog.dismiss();
                             UIHelper.ToastMessage(Server_inventory_activity.this, "Error : "+e.getMessage(), 1);
                         }
                     }
                 }, new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        //mypDialog.dismiss();
-                        shouldRequestOffline=false;
-                        UIHelper.ToastMessage(Server_inventory_activity.this, "Error en servidor, intente mas tarde", 1);
+                        if (error instanceof NetworkError) {
+                        } else if (error instanceof ServerError) {
+                        } else if (error instanceof AuthFailureError) {
+                        } else if (error instanceof ParseError) {
+                        } else if (error instanceof NoConnectionError) {
+                        } else if (error instanceof TimeoutError) {
+                            UIHelper.ToastMessage(Server_inventory_activity.this, "Error con el servidor, intente mas tarde!!!", 3);
+                            Server_inventory_activity.super.onBackPressed();
+                        }
                     }
                 });
 
@@ -161,29 +152,6 @@ public class Server_inventory_activity extends AppCompatActivity implements View
         }
 
     }
-    public void getData() {
-        try{
-            InventaryRespository inv = new InventaryRespository(Server_inventory_activity.this);
-            ArrayList<String> invs = inv.ViewAllInventories();
-            Log.e("INVS", invs.toString());
-            for (int index=0; index<=invs.size()-1;index++){
-                String recip=invs.get(index);
-                String[] strs = recip.split("@");
-                if(strs[3].equals("0")){
-                    Log.e("RECIP", recip);
-                   //dataArrayList.add(new DatamodelInventories(Integer.parseInt(strs[0]), strs[1], Boolean.parseBoolean(strs[2]), Integer.parseInt(strs[4])));
-                }
-            }
-
-           // mypDialog.dismiss();
-            shouldRequestOffline=true;
-        }catch (Exception e){
-            Log.e("Exception", ""+e.getMessage());
-            shouldRequestOffline=false;
-        }
-
-     }
-
     private String getCompany(){
         CompanyRepository companyRepository=new CompanyRepository(this);
         SharedPreferences preferenceCodeActive=getSharedPreferences("code_activate", Context.MODE_PRIVATE);
