@@ -22,6 +22,7 @@ public class DeviceRepository {
             int CompanyId,
             String  HardwareId,
             String TakingInventory,
+            String AssignedResponse,
             String MakeLabel
     ){
         AdminSQLOpenHelper admin = new AdminSQLOpenHelper(context);
@@ -38,6 +39,7 @@ public class DeviceRepository {
             reg.put("CompanyId", CompanyId);
             reg.put("HardwareId", HardwareId);
             reg.put("TakingInventory", TakingInventory);
+            reg.put("AssignedResponse", AssignedResponse);
             reg.put("MakeLabel", MakeLabel);
 
             db.insert("Device", null, reg);
@@ -54,7 +56,7 @@ public class DeviceRepository {
             SQLiteDatabase db = admin.getWritableDatabase();
             boolean result_code;
                 Cursor selectCode=db.rawQuery("SELECT CompanyId FROM Device WHERE CompanyId="+companyId, null);
-                if(selectCode.moveToFirst()){
+                if(!selectCode.moveToLast()){
                     result_code=true;
                 }else{
                     result_code=false;

@@ -1,11 +1,15 @@
 package com.appc72_uhf.app.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.appc72_uhf.app.MainActivity;
 import com.appc72_uhf.app.R;
 import com.appc72_uhf.app.adapter.AdapterProductDetails;
 import com.appc72_uhf.app.entities.DataModelProductDetails;
@@ -14,13 +18,15 @@ import com.appc72_uhf.app.tools.UIHelper;
 
 import java.util.ArrayList;
 
-public class Detail_product_activity extends AppCompatActivity {
+public class Detail_product_activity extends AppCompatActivity implements View.OnClickListener {
     private TextView tv_detail_inventory, tv_minor_count, tv_total_products;
     private ListView lv_detail_product;
+    private Button btn_take_inventory;
     ArrayList<DataModelProductDetails> dataArrayProducts;
     AdapterProductDetails adapterProductDetails;
     int val_inventory, totalFoundEPC, totalFoundEPCFOUND;
-    boolean chargeFirstTimeProduct;
+    boolean chargeFirstTimeProduct, inventory_type;
+    String inventory_name_detail;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -32,14 +38,23 @@ public class Detail_product_activity extends AppCompatActivity {
         tv_detail_inventory=(TextView)findViewById(R.id.tv_detail_inventory);
         tv_minor_count=(TextView)findViewById(R.id.tv_minor_count);
         tv_total_products=(TextView)findViewById(R.id.tv_total_products);
-
+        btn_take_inventory=(Button) findViewById(R.id.btn_take_inventory);
         lv_detail_product=(ListView) findViewById(R.id.lv_detail_product);
+
         dataArrayProducts=new ArrayList<DataModelProductDetails>();
+
         val_inventory=getIntent().getIntExtra("Id", 0);
+        inventory_name_detail=getIntent().getStringExtra("Name");
+        inventory_type=getIntent().getBooleanExtra("inventoryType", false);
+
         getDataProductMaster();
         adapterProductDetails=new AdapterProductDetails(Detail_product_activity.this, dataArrayProducts);
         lv_detail_product.setAdapter(adapterProductDetails);
-        tv_detail_inventory.setText(getIntent().getStringExtra("Name"));
+
+
+
+        tv_detail_inventory.setText(inventory_name_detail);
+        //inventory_type=getIntent().getBooleanExtra("inventoryType", false);
         adapterProductDetails.notifyDataSetChanged();
 
         totalFoundEPCFOUND=getCountFoundProductTotal();
@@ -47,10 +62,7 @@ public class Detail_product_activity extends AppCompatActivity {
 
         totalFoundEPC=getCountTotalProduct();
         tv_total_products.setText(String.valueOf(totalFoundEPC));
-
-
-
-
+        btn_take_inventory.setOnClickListener(this);
     }
 
     public int getCountFoundProductTotal(){
@@ -89,6 +101,23 @@ public class Detail_product_activity extends AppCompatActivity {
             }
         }else{
             UIHelper.ToastMessage(Detail_product_activity.this , "Inventario 0 no existe", 3);
+        }
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()){
+            case R.id.btn_take_inventory:
+                Intent fragment=new Intent(Detail_product_activity.this, MainActivity.class);
+                fragment.putExtra("inventoryBool", true);
+                fragment.putExtra("inventoryID", val_inventory);
+                fragment.putExtra("inventoryName", inventory_name_detail);
+                fragment.putExtra("Id",  val_inventory);
+                fragment.putExtra("Name",  inventory_name_detail);
+                fragment.putExtra("inventoryType", inventory_type);
+                Detail_product_activity.this.startActivity(fragment);
+                Detail_product_activity.this.onBackPressed();
+                break;
         }
     }
 }

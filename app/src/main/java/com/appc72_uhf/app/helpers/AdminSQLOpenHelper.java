@@ -8,7 +8,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 public class AdminSQLOpenHelper extends SQLiteOpenHelper {
 
     public static final String DATABASE_NAME="IZYRFID.db";
-    public static final int DATABASE_VERSION=2;
+    public static final int DATABASE_VERSION=3;
 
 
     public AdminSQLOpenHelper( Context context) {
@@ -16,7 +16,7 @@ public class AdminSQLOpenHelper extends SQLiteOpenHelper {
     }
     public AdminSQLOpenHelper(Context context, SQLiteDatabase.CursorFactory factory, DatabaseErrorHandler errorHandler){
         //public AdminSQLOpenHelper(Context context, int version) {
-        super(context, DATABASE_NAME, factory, DATABASE_VERSION, errorHandler);
+        super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 
     @Override
@@ -45,6 +45,7 @@ public class AdminSQLOpenHelper extends SQLiteOpenHelper {
                 "CompanyId INTEGER, " +
                 "HardwareId TEXT, " +
                 "TakingInventory TEXT, " +
+                "AssignedResponse TEXT, " +
                 "MakeLabel TEXT);");
 
         db.execSQL("CREATE TABLE IF  NOT EXISTS Company(" +

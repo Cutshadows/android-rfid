@@ -40,7 +40,7 @@ public class DataAdapterInventoryServer extends ArrayAdapter<DatamodelInventorie
     Context mContext;
     ArrayList<DatamodelInventories> datalist;
     ProgressDialog mypDialog;
-    public static final String PROTOCOL_URLRFID="https://";
+    public static final String PROTOCOL_URLRFID="http://";
     public static final String DOMAIN_URLRFID=".izyrfid.com";
     String token_access;
     String code_enterprise;
@@ -67,10 +67,10 @@ public class DataAdapterInventoryServer extends ArrayAdapter<DatamodelInventorie
                         if(resultInventoryInsert){
                                 mypDialog = new ProgressDialog(getContext());
                                 mypDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-                                mypDialog.setMessage("Habilitando inventario...");
+                                mypDialog.setMessage("Habilitando inventario '"+datamodelInventories.getName()+"'...");
                                 mypDialog.setCanceledOnTouchOutside(false);
                                 mypDialog.show();
-                                UIHelper.ToastMessage(getContext(), "Obteniendo inventario '"+datamodelInventories.getName()+"' y los detalles para habilitar!!", 5);
+                                //UIHelper.ToastMessage(getContext(), "Obteniendo inventario '"+datamodelInventories.getName()+"' y los detalles para habilitar!!", 5);
                                 String URL_COMPLETE=PROTOCOL_URLRFID+code_enterprise.toLowerCase()+DOMAIN_URLRFID;
                                 final DetailProductRepository detailProductRepository=new DetailProductRepository(getContext());
                                 HttpHelpers http = new HttpHelpers(getContext(), URL_COMPLETE, "");
@@ -87,24 +87,34 @@ public class DataAdapterInventoryServer extends ArrayAdapter<DatamodelInventorie
                                                 Log.e("DATA FOR", "ID: "+products[index].getId()+" NAME:"+products[index].getName()+" ProductMaster:"+products[index].getProductMasterId()+" FOUNG:"+Boolean.valueOf(products[index].getFound())+ "INTEGER INVENTARIO: "+datamodelInventories.getId());
                                                 boolean resultInsertProduct=detailProductRepository.DetailProductInsert(products[index].getId(), products[index].getEPC(), products[index].getCode(), products[index].getName(), products[index].getFound(), products[index].getProductMasterId(), datamodelInventories.getId());
                                                 if(resultInsertProduct){
-                                                    mypDialog.dismiss();
+
                                                 }
                                             }
+                                            mypDialog.dismiss();
+                                            UIHelper.ToastMessage(getContext(), "Inventario habilitado exitosamente", 5);
                                         }catch (Exception e){
                                             e.printStackTrace();
                                         }
+
                                     }
                                 }, new Response.ErrorListener() {
                                     @Override
                                     public void onErrorResponse(VolleyError error) {
                                         if (error instanceof NetworkError) {
-                                        } else if (error instanceof ServerError) {
-                                        } else if (error instanceof AuthFailureError) {
-                                        } else if (error instanceof ParseError) {
-                                        } else if (error instanceof NoConnectionError) {
-                                        } else if (error instanceof TimeoutError) {
                                             mypDialog.dismiss();
-                                            UIHelper.ToastMessage(getContext(), "Error con el servidor, intente mas tarde!!!", 3);
+                                            UIHelper.ToastMessage(mContext, "Error de conexion, no hay conexion a internet", 3);
+                                        } else if (error instanceof ServerError) {
+                                            mypDialog.dismiss();
+                                            UIHelper.ToastMessage(mContext, "Error de conexion, credenciales invalidas", 3);
+                                        } else if (error instanceof AuthFailureError) {
+                                            mypDialog.dismiss();
+                                            UIHelper.ToastMessage(mContext, "Error de conexion, intente mas tarde.", 3);
+                                        } else if (error instanceof ParseError) {
+                                            mypDialog.dismiss();
+                                            UIHelper.ToastMessage(mContext, "Error desconocido, intente mas tarde", 3);
+                                        } else if (error instanceof TimeoutError || error instanceof NoConnectionError) {
+                                            mypDialog.dismiss();
+                                            UIHelper.ToastMessage(mContext, "Tiempo agotado, intente mas tarde!!!", 3);
                                         }
                                     }
                                 });
@@ -196,7 +206,6 @@ public class DataAdapterInventoryServer extends ArrayAdapter<DatamodelInventorie
         String code_result="";
         if(enterprises_code.isEmpty()){
             Log.i("No data preferences", " Error data no empty "+enterprises_code);
-
         }else{
             code_result=enterprises_code;
         }

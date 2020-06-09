@@ -37,7 +37,7 @@ import java.util.ArrayList;
 
 public class Server_inventory_activity extends AppCompatActivity {
     private ListView lv_server_inventories;
-    public static final String PROTOCOL_URLRFID="https://";
+    public static final String PROTOCOL_URLRFID="http://";
     public static final String DOMAIN_URLRFID=".izyrfid.com";
     private RelativeLayout layout_server_inventory_load, layout_no_data;
     ArrayList<DatamodelInventories> dataArrayList;
@@ -64,6 +64,7 @@ public class Server_inventory_activity extends AppCompatActivity {
         layout_server_inventory_load.setVisibility(View.VISIBLE);
         lv_server_inventories.setVisibility(View.INVISIBLE);
         layout_no_data.setVisibility(View.INVISIBLE);
+
 
         code_enterprise=getCompany();
         SharedPreferences preferencesAccess_token=getSharedPreferences("access_token", Context.MODE_PRIVATE);
@@ -108,6 +109,7 @@ public class Server_inventory_activity extends AppCompatActivity {
                 http.client(Request.Method.GET, "/api/inventory/GetAllInventories", "application/json; charset=utf-8", null, new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
+                        Log.e("onResponse", ""+response);
                         try{
                             Gson gson = new Gson();
                             Application[] apps = gson.fromJson(response, Application[].class);
@@ -136,11 +138,14 @@ public class Server_inventory_activity extends AppCompatActivity {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         if (error instanceof NetworkError) {
+                            UIHelper.ToastMessage(Server_inventory_activity.this, "Error de conexion, no hay conexion a internet", 3);
                         } else if (error instanceof ServerError) {
+                            UIHelper.ToastMessage(Server_inventory_activity.this, "Error de conexion, credenciales invalidas", 3);
                         } else if (error instanceof AuthFailureError) {
+                            UIHelper.ToastMessage(Server_inventory_activity.this, "Error de conexion, intente mas tarde.", 3);
                         } else if (error instanceof ParseError) {
-                        } else if (error instanceof NoConnectionError) {
-                        } else if (error instanceof TimeoutError) {
+                            UIHelper.ToastMessage(Server_inventory_activity.this, "Error desconocido, intente mas tarde", 3);
+                        } else if (error instanceof TimeoutError || error instanceof NoConnectionError) {
                             UIHelper.ToastMessage(Server_inventory_activity.this, "Error con el servidor, intente mas tarde!!!", 3);
                             Server_inventory_activity.super.onBackPressed();
                         }

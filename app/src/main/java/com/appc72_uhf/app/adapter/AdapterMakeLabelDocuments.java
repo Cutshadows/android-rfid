@@ -54,7 +54,7 @@ public class AdapterMakeLabelDocuments extends ArrayAdapter<DatamodelDocumentsMa
         result.startAnimation(animation);
 
         lastPosition = position;
-        holder.tv_name_document.setText("Aqui Documentos "+datamodelDocumentsMakeLabel.getDocumentId());
+        holder.tv_name_document.setText("Documento: "+datamodelDocumentsMakeLabel.getDocumentId());
         holder.tv_name_document.setTag(position);
         return convertView;
     }

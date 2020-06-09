@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.appc72_uhf.app"
     android:versionCode="1"
     android:versionName="1.0">
@@ -23,33 +24,39 @@
         <activity
             android:name=".activities.Make_label_documents_activity"
             android:configChanges="orientation|screenSize"
-            android:theme="@style/Theme.AppCompat" />
+            android:theme="@style/Theme.AppCompat"
+            android:parentActivityName=".activities.Dashboard_activity"/>
         <activity
             android:name=".activities.ProductMasterDetailActivity"
             android:configChanges="orientation|screenSize"
-            android:theme="@style/Theme.AppCompat" />
+            android:icon="@mipmap/ic_launcher"
+            android:theme="@style/Theme.AppCompat.NoActionBar"
+            android:parentActivityName=".activities.Detail_product_activity"/>
         <activity
             android:name=".activities.Server_inventory_activity"
             android:configChanges="orientation|screenSize"
-            android:theme="@style/Theme.AppCompat" />
+            android:theme="@style/Theme.AppCompat"
+            android:parentActivityName=".MainActivity"/>
         <activity
             android:name=".activities.Detail_product_activity"
             android:configChanges="orientation|screenSize"
-            android:theme="@style/Theme.AppCompat" />
+            android:theme="@style/Theme.AppCompat.NoActionBar"
+            android:parentActivityName=".MainActivity"/>
         <activity
             android:name=".activities.Dashboard_activity"
             android:configChanges="orientation|screenSize"
-            android:theme="@style/Theme.AppCompat">
-
+            android:theme="@style/Theme.AppCompat.NoActionBar"
+            android:parentActivityName=".activities.Dashboard_activity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
         <activity
             android:name=".activities.LoginActivity"
             android:configChanges="orientation|screenSize"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+
         </activity>
         <activity
             android:name=".activities.HhSyncActivity"
@@ -57,7 +64,8 @@
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
         <activity
             android:name=".MainActivity"
-            android:configChanges="orientation|screenSize" />
+            android:configChanges="orientation|screenSize"
+            android:parentActivityName=".activities.Dashboard_activity"/>
     </application>
 
 </manifest>

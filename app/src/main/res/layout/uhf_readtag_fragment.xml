@@ -14,7 +14,7 @@
         android:id="@+id/layout2"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:gravity="center_vertical"
+        android:gravity="center"
         android:orientation="horizontal"
         android:paddingLeft="10dp"
         android:paddingRight="10dp">
@@ -25,40 +25,66 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center"
+            android:layout_gravity="center_horizontal"
             android:orientation="horizontal"
-            android:paddingTop="5dp"
-            android:layout_marginHorizontal="30dp"
+            android:paddingTop="10dp"
             android:paddingBottom="5dp">
 
-            <Button
-                android:id="@+id/btnFilter"
-                android:layout_width="74dp"
-                android:layout_height="37dp"
-                android:layout_weight="3"
-                android:background="@drawable/button_bg"
-                android:text="@string/uhf_title_filter"
-                android:textColor="@color/white"
-                android:textSize="11sp" />
+            <RelativeLayout
+                android:id="@+id/relative_layout_filter"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <Button
+                    android:id="@+id/btnFilter"
+                    android:layout_width="85dp"
+                    android:layout_height="53dp"
+                    android:layout_marginRight="5dp"
+                    android:background="@drawable/button_bg"
+                    android:text="@string/uhf_title_filter"
+                    android:textColor="@color/white"
+                    android:textSize="11sp" />
+
+            </RelativeLayout>
+
             <Button
                 android:id="@+id/BtClear"
-                android:layout_width="74dp"
-                android:layout_height="37dp"
-                android:layout_marginLeft="30dp"
+                android:layout_width="85dp"
+                android:layout_height="53dp"
+                android:layout_marginLeft="5dp"
                 android:layout_marginRight="5dp"
                 android:background="@drawable/button_bg"
                 android:text="@string/btClear"
                 android:textColor="@color/white"
                 android:textSize="11sp" />
+
             <Button
                 android:id="@+id/BtSync"
-                android:layout_width="74dp"
-                android:layout_height="37dp"
-                android:layout_marginLeft="30dp"
+                android:layout_width="85dp"
+                android:layout_height="53dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
                 android:background="@drawable/button_bg"
                 android:text="@string/btSync"
                 android:textColor="@color/white"
                 android:textSize="11sp" />
 
+            <RelativeLayout
+                android:id="@+id/relative_layout_backButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <Button
+                    android:id="@+id/btn_back_product_list"
+                    android:layout_width="85dp"
+                    android:layout_height="53dp"
+                    android:layout_marginLeft="5dp"
+                    android:background="@drawable/button_bg"
+                    android:text="@string/btn_back_product_list"
+                    android:textColor="@color/white"
+                    android:gravity="center_horizontal"
+                    android:textSize="11sp" />
+            </RelativeLayout>
 
 
         </LinearLayout>
@@ -76,24 +102,22 @@
     <LinearLayout
         android:id="@+id/layout12"
         android:layout_width="fill_parent"
-        android:layout_height="50dp"
+        android:layout_height="20dp"
         android:orientation="horizontal"
         android:padding="5dp">
 
         <Button
             android:id="@+id/BtInventory"
             android:layout_width="0dp"
-            android:layout_height="39dp"
+            android:layout_height="10dp"
             android:layout_marginLeft="5dp"
             android:layout_marginRight="5dp"
             android:layout_weight="1"
             android:background="@drawable/button_bg"
             android:text="@string/btInventory"
             android:textColor="@color/white"
-            android:textSize="18dp" />
-
-
-
+            android:textSize="18dp"
+            android:visibility="invisible" />
 
     </LinearLayout>
 
@@ -155,6 +179,7 @@
             android:gravity="center"
             android:text="@string/tvTagUii"
             android:textSize="15sp" />
+
         <TextView
             android:layout_width="0dip"
             android:layout_height="wrap_content"
@@ -162,16 +187,17 @@
             android:gravity="center"
             android:text="TID"
             android:textSize="15sp" />
+
         <TextView
             android:id="@+id/tv_count"
             android:layout_width="0dip"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:gravity="center"
             android:text="0"
             android:textColor="@color/red1"
             android:textSize="16sp"
-            android:textStyle="bold"
-            android:gravity="center"/>
+            android:textStyle="bold" />
 
         <TextView
             android:layout_width="0dip"
@@ -193,9 +219,9 @@
 
     <View
         android:layout_width="fill_parent"
-        android:orientation="horizontal"
         android:layout_height="1px"
-        android:background="@color/gray1" />
+        android:background="@color/gray1"
+        android:orientation="horizontal" />
     <!-- android:layout_width="match_parent"
  -->
     <!--LinearLayout
@@ -215,9 +241,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:scrollingCache="true"
-        android:smoothScrollbar="true"/>
+        android:smoothScrollbar="true" />
 
-        <!--ListView
+    <!--ListView
             android:id="@+id/LvTags2"
             android:layout_width="198dp"
             android:layout_height="423dp"

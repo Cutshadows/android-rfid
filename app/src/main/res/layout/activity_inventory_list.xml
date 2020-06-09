@@ -22,9 +22,10 @@
 
         <LinearLayout
             android:id="@+id/llContinuous"
-            android:layout_gravity="end"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:clickable="false"
             android:gravity="center_vertical"
             android:orientation="horizontal"
             android:paddingTop="5dp"
@@ -43,18 +44,21 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginEnd="60dp"
+                android:layout_marginRight="60dp"
                 android:text="@string/title_inventory_status"
-                android:textStyle="bold"
                 android:textSize="@dimen/text_size_19"
-                android:layout_marginRight="60dp" />
+                android:textStyle="bold" />
+
             <LinearLayout
                 android:id="@+id/llPlusInventoryServer"
-                android:layout_gravity="end"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:layout_marginStart="60dp"
+                android:layout_marginLeft="60dp"
                 android:gravity="end"
                 android:orientation="horizontal"
-                android:layout_marginLeft="60dp"
                 android:paddingTop="5dp"
                 android:paddingBottom="5dp">
 
@@ -63,6 +67,7 @@
                     android:layout_width="40dp"
                     android:layout_height="37dp"
                     android:background="@color/full_transparent"
+                    android:contentDescription="@string/btn_add_inventory"
                     android:focusableInTouchMode="false"
                     android:paddingLeft="0dp"
                     android:paddingRight="0dp"
@@ -85,20 +90,14 @@
 
         </LinearLayout>
     </LinearLayout>
-
-
-
         <View
             android:layout_width="fill_parent"
             android:layout_height="1px"
             android:background="@color/gray1"
             android:orientation="horizontal" />
 
-
     <ListView
         android:id="@+id/lstData"
         android:layout_width="match_parent"
-        android:layout_height="520dp"
-        android:scrollingCache="true"
-        android:smoothScrollbar="true"></ListView>
+        android:layout_height="520dp"/>
 </LinearLayout>

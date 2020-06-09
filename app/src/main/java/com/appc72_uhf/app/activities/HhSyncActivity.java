@@ -41,7 +41,7 @@ public class HhSyncActivity extends AppCompatActivity implements View.OnClickLis
     private EditText et_syncCode;
     private Button btn_syncronousDevice, btn_asynDevice_back_login;
     ProgressDialog mypDialog;
-    public static final String PROTOCOL="https://";
+    public static final String PROTOCOL_URLRFID="http://";
     public static final String URL=".izyrfid.com";
     private static final String TAG="HhSyncActivity";
     int codeCompany;
@@ -90,21 +90,22 @@ public class HhSyncActivity extends AppCompatActivity implements View.OnClickLis
                  * primero consulta el id del codigo que estoy enviando al endpoint getcompanies
                  * CONSULTA AL ENDPOINT /api/document/GetCompanies
                  */
-                String URL_COMPLETE = PROTOCOL + code.toLowerCase() + URL;
+                String URL_COMPLETE = PROTOCOL_URLRFID + code + URL;
                 mypDialog = new ProgressDialog(HhSyncActivity.this);
                 mypDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
                 mypDialog.setMessage("Sincronizando...");
                 mypDialog.setCanceledOnTouchOutside(false);
                 mypDialog.show();
                 HttpHelpers http = new HttpHelpers(this, URL_COMPLETE, "");
+                Log.e("URL COMPLETA", URL_COMPLETE+"/api/document/GetCompanies");
                 http.client(Request.Method.GET, "/api/document/GetCompanies", "application/json; charset=utf-8", null, new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
+                        Log.e("onResponse GetCompanies", response);
                         try {
                             Gson gson = new Gson();
                             Application[] apps = gson.fromJson(response, Application[].class);
                             for (Application app : apps) {
-
                                 boolean resulCompany=companyRepository.CompanyInsert(app.getCompanyId(), app.getName(), code, app.getIsActive());
                                 if(resulCompany){
                                     SharedPreferences savePreferenceCodeActive=getSharedPreferences("code_activate", Context.MODE_PRIVATE);
@@ -116,7 +117,6 @@ public class HhSyncActivity extends AppCompatActivity implements View.OnClickLis
                             }
                             setViewEnabled(false);
                             if(codeCompany>0){
-                                Log.e("obtainAuthorizationHH", ""+codeCompany);
                                 obtainAuthorizationHH(codeCompany);
                             }
 
@@ -130,11 +130,18 @@ public class HhSyncActivity extends AppCompatActivity implements View.OnClickLis
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         if (error instanceof NetworkError) {
+                            mypDialog.dismiss();
+                            UIHelper.ToastMessage(HhSyncActivity.this, "Error de conexion, no hay conexion a internet", 3);
                         } else if (error instanceof ServerError) {
+                            mypDialog.dismiss();
+                            UIHelper.ToastMessage(HhSyncActivity.this, "Error de conexion, credenciales invalidas", 3);
                         } else if (error instanceof AuthFailureError) {
+                            mypDialog.dismiss();
+                            UIHelper.ToastMessage(HhSyncActivity.this, "Error de conexion, intente mas tarde.", 3);
                         } else if (error instanceof ParseError) {
-                        } else if (error instanceof NoConnectionError) {
-                        } else if (error instanceof TimeoutError) {
+                            mypDialog.dismiss();
+                            UIHelper.ToastMessage(HhSyncActivity.this, "Error desconocido, intente mas tarde", 3);
+                        } else if (error instanceof TimeoutError || error instanceof NoConnectionError) {
                             mypDialog.dismiss();
                             UIHelper.ToastMessage(HhSyncActivity.this, "Error con el servidor, intente mas tarde!!!", 3);
                         }
@@ -147,68 +154,87 @@ public class HhSyncActivity extends AppCompatActivity implements View.OnClickLis
     }
     private void setViewEnabled(boolean enabled) {
         btn_syncronousDevice.setEnabled(enabled);
-
     }
 
     private void obtainAuthorizationHH(int codeCompany){
         final DeviceRepository deviceRepository=new DeviceRepository(HhSyncActivity.this);
         boolean validarCodigoLocal=deviceRepository.FindCode(codeCompany);
-        if(validarCodigoLocal){
+       //if(validarCodigoLocal){
             try {
                 /**
                  * CONSULTA AL ENDPOINT de  /api/devices/GetInfoDevice
                  */
+                mypDialog.dismiss();
+                mypDialog = new ProgressDialog(HhSyncActivity.this);
+                mypDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+                mypDialog.setMessage("Sincronizando HH...");
+                mypDialog.setCanceledOnTouchOutside(false);
+                mypDialog.show();
                 JSONObject jsonBody = new JSONObject();
                 jsonBody.put("HardwareId", android_id);
                 jsonBody.put("CompanyId", codeCompany);
 
                 String code = et_syncCode.getText().toString().toLowerCase();
-                String URL_COMPLETE = PROTOCOL + code.toLowerCase() + URL;
-
+                String URL_COMPLETE=PROTOCOL_URLRFID+code+URL;
+                Log.e("URL COMPLETA 2", URL_COMPLETE+"/api/document/GetInfoDevice");
                 HttpHelpers http2 = new HttpHelpers(HhSyncActivity.this, URL_COMPLETE, "");
                 http2.client(Request.Method.POST, "/api/devices/GetInfoDevice", "application/json; charset=utf-8", jsonBody, new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
                         Log.e("onResponse", response);
-                        try{
-                            mypDialog.dismiss();
-                            setViewEnabled(true);
-                            Gson gson = new Gson();
-                            Application apps = gson.fromJson(response, Application.class);
-                            boolean inserT=deviceRepository.DeviceInsert(
-                                    apps.getId(),
-                                    apps.getName(),
-                                    apps.getDescription(),
-                                    apps.getIsActive(),
-                                    apps.getIsAssigned(),
-                                    apps.getCompanyId(),
-                                    apps.getHardwareId(),
-                                    apps.getTakingInventory(),
-                                    apps.getMakeLabel()
-                            );
-                            if(inserT && apps.getIsAssigned().equals("true")){
-                                Toast.makeText(HhSyncActivity.this, "Dispositivo Sincronizado", Toast.LENGTH_SHORT).show();
-                                Intent goToLogin=new Intent(HhSyncActivity.this, LoginActivity.class);
-                                startActivity(goToLogin);
-                            }else if(apps.getIsAssigned().equals("false")){
-                                Toast.makeText(HhSyncActivity.this, "Dispositivo deshabilitado", Toast.LENGTH_SHORT).show();
+                            if(response.length()>0){
+                                try{
+                                    mypDialog.dismiss();
+                                    setViewEnabled(true);
+                                    Gson gson = new Gson();
+                                    Application apps = gson.fromJson(response, Application.class);
+                                    if(apps.getAssignedResponse().equals("true")){
+                                        boolean inserT=deviceRepository.DeviceInsert(
+                                                apps.getId(),
+                                                apps.getName(),
+                                                apps.getDescription(),
+                                                apps.getIsActive(),
+                                                apps.getIsAssigned(),
+                                                apps.getCompanyId(),
+                                                apps.getHardwareId(),
+                                                apps.getTakingInventory(),
+                                                apps.getMakeLabel(),
+                                                apps.getAssignedResponse()
+                                        );
+                                        if(inserT && apps.getIsAssigned().equals("true")){
+                                            UIHelper.ToastMessage(HhSyncActivity.this, "Dispositivo Sincronizado", 10);
+                                            Intent goToLogin=new Intent(HhSyncActivity.this, LoginActivity.class);
+                                            startActivity(goToLogin);
+                                        }
+                                    }else if(apps.getAssignedResponse().equals("false")){
+                                        UIHelper.ToastMessage(HhSyncActivity.this, "Dispositivo, ya se encuentra vinculado a un inventario", 10);
+                                        Intent goToLogin=new Intent(HhSyncActivity.this, LoginActivity.class);
+                                        startActivity(goToLogin);
+                                    }
+                                }catch (Exception ehttp){
+                                    mypDialog.dismiss();
+                                    Toast.makeText(HhSyncActivity.this, "Error : "+ehttp.getMessage(), Toast.LENGTH_SHORT).show();
+                                    Log.e("Exception 2", ehttp.toString());
+                                }
+                            }else{
+                                Toast.makeText(HhSyncActivity.this, "Dispositivo no esta habilitado", Toast.LENGTH_SHORT).show();
                             }
-                        }catch (Exception ehttp){
-                            mypDialog.dismiss();
-                            Toast.makeText(HhSyncActivity.this, "Error : "+ehttp.getMessage(), Toast.LENGTH_SHORT).show();
-                            Log.e("Exception 2", ehttp.toString());
-                        }
+
+
                     }
                 }, new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         setViewEnabled(true);
                         if (error instanceof NetworkError) {
+                            UIHelper.ToastMessage(HhSyncActivity.this, "Error de conexion, no hay conexion a internet", 3);
                         } else if (error instanceof ServerError) {
+                            UIHelper.ToastMessage(HhSyncActivity.this, "Error de conexion, credenciales invalidas", 3);
                         } else if (error instanceof AuthFailureError) {
+                            UIHelper.ToastMessage(HhSyncActivity.this, "Error de conexion, intente mas tarde.", 3);
                         } else if (error instanceof ParseError) {
-                        } else if (error instanceof NoConnectionError) {
-                        } else if (error instanceof TimeoutError) {
+                            UIHelper.ToastMessage(HhSyncActivity.this, "Error desconocido, intente mas tarde", 3);
+                        } else if (error instanceof TimeoutError || error instanceof NoConnectionError) {
                             UIHelper.ToastMessage(HhSyncActivity.this, "Error con el servidor al sincronizar, intente mas tarde!!!", 3);
                         }
                         finish();
@@ -217,11 +243,11 @@ public class HhSyncActivity extends AppCompatActivity implements View.OnClickLis
             }catch (JSONException ex){
                 ex.printStackTrace();
             }
-        }else{
-            UIHelper.ToastMessage(this, "Codigo ya se encuentra registrado", 3);
-            Intent goToLogin=new Intent(HhSyncActivity.this, LoginActivity.class);
-            startActivity(goToLogin);
-        }
+        //}else{
+            //UIHelper.ToastMessage(this, "Codigo ya se encuentra registrado", 3);
+            //Intent goToLogin=new Intent(HhSyncActivity.this, LoginActivity.class);
+            //startActivity(goToLogin);
+        //}
 
     }
 

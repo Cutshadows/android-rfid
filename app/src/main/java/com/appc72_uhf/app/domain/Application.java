@@ -22,13 +22,14 @@ public class Application {
     private String DetailForDevice;
     private boolean Validate;
     private int IsSelect;
+    private String AssignedResponse;
 
     public Application() {
     }
 
 
 
-    public Application(int id, String name, String description, String applicationUserId, String applicationUser, String createDate, float locationId, Location locationObject, int inventoryStatus, String closeDate, String closeUserId, int companyId, String hardwareId, String isActive, String isAssigned, String takingInventory, String makeLabel, String accessToken, String detailForDevice, boolean validate, int isSelect) {
+    public Application(int id, String name, String description, String applicationUserId, String applicationUser, String createDate, float locationId, Location locationObject, int inventoryStatus, String closeDate, String closeUserId, int companyId, String hardwareId, String isActive, String isAssigned, String takingInventory, String makeLabel, String accessToken, String detailForDevice, boolean validate, int isSelect, String assignedResponse) {
         Id = id;
         Name = name;
         Description = description;
@@ -50,6 +51,7 @@ public class Application {
         DetailForDevice=detailForDevice;
         Validate=validate;
         IsSelect=isSelect;
+        AssignedResponse=assignedResponse;
 
     }
     public int getIsSelect() {
@@ -62,6 +64,9 @@ public class Application {
     // Getter Methods
     public String getMakeLabel(){
         return MakeLabel;
+    }
+    public String getAssignedResponse(){
+        return AssignedResponse;
     }
     public String getAccessToken(){
         return AccessToken;

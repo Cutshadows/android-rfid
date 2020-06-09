@@ -49,6 +49,15 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     String et_code="";
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        dataSelect.clear();
+        getDataCompany();
+        adapterSelect.notifyDataSetChanged();
+
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
@@ -210,13 +219,20 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                     Log.d(TAG, "onErrorResponse " + error.getMessage());
                     setViewEnabled(true);
                     if (error instanceof NetworkError) {
-                    } else if (error instanceof ServerError) {
-                    } else if (error instanceof AuthFailureError) {
-                    } else if (error instanceof ParseError) {
-                    } else if (error instanceof NoConnectionError) {
-                    } else if (error instanceof TimeoutError) {
                         mypDialog.dismiss();
-                        UIHelper.ToastMessage(LoginActivity.this, "Error con el servidor, intente mas tarde!!!", 3);
+                        UIHelper.ToastMessage(LoginActivity.this, "Error de conexion, no hay conexion a internet", 3);
+                    } else if (error instanceof ServerError) {
+                        mypDialog.dismiss();
+                        UIHelper.ToastMessage(LoginActivity.this, "Error de conexion, usuario o clave incorrecta ", 3);
+                    } else if (error instanceof AuthFailureError) {
+                        mypDialog.dismiss();
+                        UIHelper.ToastMessage(LoginActivity.this, "Error de conexion, intente mas tarde.", 3);
+                    } else if (error instanceof ParseError) {
+                        mypDialog.dismiss();
+                        UIHelper.ToastMessage(LoginActivity.this, "Error desconocido, intente mas tarde", 3);
+                    } else if (error instanceof TimeoutError || error instanceof NoConnectionError) {
+                        mypDialog.dismiss();
+                        UIHelper.ToastMessage(LoginActivity.this, "Tiempo agotado, intente mas tarde!!!", 3);
                     }
                 }
             });

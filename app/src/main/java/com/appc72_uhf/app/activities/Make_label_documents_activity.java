@@ -89,7 +89,7 @@ public class Make_label_documents_activity extends AppCompatActivity implements 
 
         HttpHelpers http= new HttpHelpers(Make_label_documents_activity.this, URL_COMPLETE, "");
         http.addHeader("Authorization", "Bearer "+token_access);
-        Log.e("INVENTARIO INT", "http://demo.izyrfid.com/api/devicedocument/GetAllDocumentsDeviceId?HardwareId="+android_id);
+        Log.e("INVENTARIO INT", PROTOCOL_URLRFID+code_enterprise.toLowerCase()+DOMAIN_URLRFID+"/api/devicedocument/GetAllDocumentsDeviceId?HardwareId="+android_id);
         http.clientProductDetail(Request.Method.GET, "/api/devicedocument/GetAllDocumentsDeviceId?HardwareId="+android_id, null,  new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
@@ -131,7 +131,6 @@ public class Make_label_documents_activity extends AppCompatActivity implements 
         int companyId;
         if(enterprises_code.isEmpty()){
             Log.e("No data preferences", " Error data no empty "+enterprises_code);
-
         }else{
             code_result=enterprises_code;
             companyId=companyRepository.getCompanieId(code_result);

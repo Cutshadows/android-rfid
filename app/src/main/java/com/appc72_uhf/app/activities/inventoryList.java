@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.BaseAdapter;
 import android.widget.ImageButton;
 import android.widget.ListView;
 
@@ -23,7 +24,6 @@ import java.util.ArrayList;
 
 
 public class inventoryList extends KeyDwonFragment implements View.OnClickListener{
-    private ListView lstData;
     private MainActivity mContext;
     ImageButton btnInventory;
     private static final String TAG="Inventory_list";
@@ -32,12 +32,10 @@ public class inventoryList extends KeyDwonFragment implements View.OnClickListen
     ArrayList<DatamodelInventories> dataArrayList;
     DataAdapterInventories dataAdapterInventories;
 
-    //ArrayAdapter<String> adapter;
-    String token_access;
     String code_enterprise;
     int codeCompany;
+    public ListView lstData;
     DatamodelInventories datamodelInventories;
-
 
     @Override
     public void onResume() {
@@ -64,6 +62,7 @@ public class inventoryList extends KeyDwonFragment implements View.OnClickListen
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         initComponent();
+
     }
     private void initComponent(){
         mContext = (MainActivity) getActivity();
@@ -76,12 +75,25 @@ public class inventoryList extends KeyDwonFragment implements View.OnClickListen
 
         getData();
 
-        dataAdapterInventories=new DataAdapterInventories(mContext, dataArrayList);
-        lstData.setAdapter(dataAdapterInventories);
-        dataAdapterInventories.notifyDataSetChanged();
+
 
         btnInventory.setOnClickListener(this);
+        dataAdapterInventories=new DataAdapterInventories(getContext(), R.layout.simple_list_inventories_1, dataArrayList);
+        //adapter=new ArrayAdapter<String>(mContext, R.layout.simple_list_inventories_1, nombres);
+        lstData.setAdapter(dataAdapterInventories);
 
+        dataAdapterInventories.notifyDataSetChanged();
+
+
+        /*lstData.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                //DatamodelInventories datamodelInventories1=datamodelInventories.get(position);
+                Log.e("CLICK", "CLICK EN EL LISTVIEW");
+                UIHelper.ToastMessage(view.getContext(), "HOLA MUNDO", 3);
+                Intent i = new Intent(getActivity(), Server_inventory_activity.class);
+                startActivity(i);
+            }
+        });*/
 
         //adapter = new ArrayAdapter<>(this.mContext, R.layout.simple_list_inventories_1, data);
         /*
@@ -96,6 +108,8 @@ public class inventoryList extends KeyDwonFragment implements View.OnClickListen
         }else{
             token_access=access_token;
         }*/
+        ((BaseAdapter) lstData.getAdapter()).notifyDataSetChanged();
+
     }
 
     @Override

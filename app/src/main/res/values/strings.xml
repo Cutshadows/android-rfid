@@ -1510,6 +1510,9 @@
     <string name="id_master_product" translatable="false">ID Producto Maestro:</string>
     <string name="title_master_product" translatable="false">Nombre del Producto</string>
     <string name="title_quantity" translatable="false">Cantidad: </string>
+    <string name="btn_take_inventory" translatable="false">Tomar \n inventario </string>
+    <string name="btn_back_product_list" translatable="false">VOLVER A\n DETALLES</string>
+
 
 
     <!--MAKE LABEL -->
@@ -1518,6 +1521,9 @@
     <string name="tv_minor_count_product" translatable="false">0</string>
     <string name="slach_count_product" translatable="false">/</string>
     <string name="tv_total_products" translatable="false">105</string>
+    <string name="tittle_document_make_label" translatable="false">Documento: </string>
+    <string name="location_documents" translatable="false">Ubicación:</string>
+    <string name="btn_add_inventory" translatable="false">Agregar Inventario</string>
 
 
 </resources>

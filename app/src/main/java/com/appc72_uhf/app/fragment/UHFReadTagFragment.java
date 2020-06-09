@@ -2,6 +2,7 @@ package com.appc72_uhf.app.fragment;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
@@ -24,6 +25,7 @@ import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.RelativeLayout;
 import android.widget.SimpleAdapter;
 import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
@@ -47,6 +49,7 @@ import com.android.volley.toolbox.HttpHeaderParser;
 import com.android.volley.toolbox.Volley;
 import com.appc72_uhf.app.MainActivity;
 import com.appc72_uhf.app.R;
+import com.appc72_uhf.app.activities.Detail_product_activity;
 import com.appc72_uhf.app.repositories.CompanyRepository;
 import com.appc72_uhf.app.repositories.InventaryRespository;
 import com.appc72_uhf.app.repositories.TagsRepository;
@@ -70,13 +73,11 @@ public class UHFReadTagFragment extends KeyDwonFragment {
     Handler handler;
     private ArrayList<HashMap<String, String>> tagList;
     SimpleAdapter adapter;
-    Button BtClear;
     TextView tv_count;
     RadioGroup RgInventory;
     RadioButton RbInventorySingle;
     RadioButton RbInventoryLoop;
-    Button BtSync;
-    Button BtInventory;
+    Button BtSync, btn_back_product_list, BtInventory, BtClear;
     ListView LvTags;
     SimpleCursorAdapter adapter2;
     private String android_id;
@@ -87,15 +88,16 @@ public class UHFReadTagFragment extends KeyDwonFragment {
     PopupWindow popFilter;
     ArrayList<String> result;
     private boolean shouldRefreshOnResume =false;
-    String code_enterprise;
+    String code_enterprise, name_inventory_pass;
     int inventoryID;
     int codeCompany;
-    boolean detailFordevice;
+    boolean detailFordevice, detailForDevice, inventory_type;
     ProgressDialog mypDialog;
+    RelativeLayout relative_layout_filter, relative_layout_backButton;
 
 
 
-    public static final String PROTOCOL_URLRFID="https://";
+    public static final String PROTOCOL_URLRFID="http://";
     public static final String DOMAIN_URLRFID=".izyrfid.com/";
 
 
@@ -117,7 +119,6 @@ public class UHFReadTagFragment extends KeyDwonFragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         Log.e("MY", "UHFReadTagFragment.onActivityCreated");
-
         initComponent();
     }
 
@@ -130,6 +131,9 @@ public class UHFReadTagFragment extends KeyDwonFragment {
         BtSync = (Button) getView().findViewById(R.id.BtSync);
         tv_count = (TextView) getView().findViewById(R.id.tv_count);
         RgInventory = (RadioGroup) getView().findViewById(R.id.RgInventory);
+        btn_back_product_list=(Button) getView().findViewById(R.id.btn_back_product_list);
+        relative_layout_filter=(RelativeLayout) getView().findViewById(R.id.relative_layout_filter);
+        relative_layout_backButton=(RelativeLayout) getView().findViewById(R.id.relative_layout_backButton);
         String tr = "";
         result=new ArrayList<>();
         inventoryID=mContext.getIntent().getIntExtra("inventoryID", 0);
@@ -149,6 +153,8 @@ public class UHFReadTagFragment extends KeyDwonFragment {
         //GET INVENTORIES
         getCompany();
         code_enterprise=getCompany();
+        btn_back_product_list.setOnClickListener(new BtnBackClickListener());
+
 
         btnFilter.setOnClickListener(new OnClickListener() {
             @Override
@@ -168,7 +174,7 @@ public class UHFReadTagFragment extends KeyDwonFragment {
                     final EditText etData = (EditText) viewPop.findViewById(R.id.etData);
                     final RadioButton rbEPC = (RadioButton) viewPop.findViewById(R.id.rbEPC);
                     final RadioButton rbTID = (RadioButton) viewPop.findViewById(R.id.rbTID);
-                    final RadioButton rbUser = (RadioButton) viewPop.findViewById(R.id.rbUser);
+                    //final RadioButton rbUser = (RadioButton) viewPop.findViewById(R.id.rbUser);
                     final Button btSet = (Button) viewPop.findViewById(R.id.btSet);
 
 
@@ -180,9 +186,10 @@ public class UHFReadTagFragment extends KeyDwonFragment {
                                 filterBank = "UII";
                             } else if (rbTID.isChecked()) {
                                 filterBank = "TID";
-                            } else if (rbUser.isChecked()) {
-                                filterBank = "USER";
                             }
+                            /*else if (rbUser.isChecked()) {
+                                filterBank = "USER";
+                            }*/
                             if (etLen.getText().toString() == null || etLen.getText().toString().isEmpty()) {
                                 UIHelper.ToastMessage(mContext, "La longitud de los datos no puede estar vacía.");
                                 return;
@@ -212,8 +219,8 @@ public class UHFReadTagFragment extends KeyDwonFragment {
                                 //禁用过滤
                                 String dataStr = "";
                                 if (mContext.mReader.setFilter(RFIDWithUHF.BankEnum.valueOf("UII"), 0, 0, dataStr, false)
-                                        && mContext.mReader.setFilter(RFIDWithUHF.BankEnum.valueOf("TID"), 0, 0, dataStr, false)
-                                        && mContext.mReader.setFilter(RFIDWithUHF.BankEnum.valueOf("USER"), 0, 0, dataStr, false)) {
+                                        && mContext.mReader.setFilter(RFIDWithUHF.BankEnum.valueOf("TID"), 0, 0, dataStr, false)){
+                                        //&& mContext.mReader.setFilter(RFIDWithUHF.BankEnum.valueOf("USER"), 0, 0, dataStr, false)) {
                                     UIHelper.ToastMessage(mContext, R.string.msg_disable_succ);
                                 } else {
                                     UIHelper.ToastMessage(mContext, R.string.msg_disable_fail);
@@ -240,14 +247,14 @@ public class UHFReadTagFragment extends KeyDwonFragment {
                             }
                         }
                     });
-                    rbUser.setOnClickListener(new OnClickListener() {
+                    /*rbUser.setOnClickListener(new OnClickListener() {
                         @Override
                         public void onClick(View view) {
                             if (rbUser.isChecked()) {
                                 etPtr.setText("0");
                             }
                         }
-                    });
+                    });*/
 
                     cb_filter.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                         @Override
@@ -270,9 +277,12 @@ public class UHFReadTagFragment extends KeyDwonFragment {
             }
         });
 
+
+
+
         LvTags.setAdapter(adapter);
         adapter.notifyDataSetChanged();
-
+        detailForDevice=mContext.getIntent().getBooleanExtra("inventoryType", false);
         handler = new Handler() {
             @Override
             public void handleMessage(Message msg) {
@@ -283,6 +293,14 @@ public class UHFReadTagFragment extends KeyDwonFragment {
                 mContext.playSound(1);
             }
         };
+        name_inventory_pass=mContext.getIntent().getStringExtra("Name");
+       // inventory_type=mContext.getIntent().getBooleanExtra("inventoryType", false);
+        if(detailForDevice){
+            relative_layout_filter.removeAllViews();
+        }else{
+            relative_layout_backButton.removeAllViews();
+        }
+
     }
     @Override
     public void onResume(){
@@ -304,9 +322,8 @@ public class UHFReadTagFragment extends KeyDwonFragment {
     public void onPause() {
         super.onPause();
         Log.e("onPause", "Estado: onPause");
-
         // 停止识别
-        //stopInventory();
+        stopInventory();
         shouldRefreshOnResume = true;
     }
 
@@ -353,10 +370,21 @@ public class UHFReadTagFragment extends KeyDwonFragment {
         }
     }
 
+    public class BtnBackClickListener implements OnClickListener {
+        @Override
+        public void onClick(View vie){
+            Intent goToMain=new Intent(mContext, Detail_product_activity.class);
+            goToMain.putExtra("Id",  inventoryID);
+            goToMain.putExtra("Name",  name_inventory_pass);
+            goToMain.putExtra("Name",  name_inventory_pass);
+            goToMain.putExtra("inventoryType", detailForDevice);
+            mContext.startActivity(goToMain);
+            mContext.onBackPressed();
+        }
+    }
 
     private void clearData() {
         TagsRepository tagsRepository = new TagsRepository(this.mContext);
-
         boolean cleartags=tagsRepository.ClearTags(inventoryID);
         if(cleartags){
             UIHelper.ToastMessage(this.mContext, "Se limpio correctamente", 4);
@@ -402,41 +430,38 @@ public class UHFReadTagFragment extends KeyDwonFragment {
                         mypDialog.setMessage("Procesando encontrados...");
                         mypDialog.setCanceledOnTouchOutside(false);
                         mypDialog.show();
-                        UIHelper.ToastMessage(mContext, "ESTOY EN LA OPCION 1 DE TAGLIST > 0", 3);
+                        int contadorFound=0;
                         for(int tagPosition=0; tagPosition<tagList.size(); tagPosition++){
-
                             JSONObject jsonObject= new JSONObject(tagList.get(tagPosition));
                             String strEPC=jsonObject.getString("tagUii");
                             boolean respFound=tagsRepository.UpdateTagsFound(strEPC, inventoryID);
                             if(respFound){
-                                mypDialog.dismiss();
-                                UIHelper.ToastMessage(mContext, "Encontrado en inventario", 12);
+                                contadorFound++;
                                 stopInventory();
                             }else{
-                                mypDialog.dismiss();
-                                UIHelper.ToastMessage(mContext, "No encontrado en inventario", 12);
                                 stopInventory();
                             }
                         }
+                        UIHelper.ToastMessage(mContext, "Inventario finalizado con exito, se encontraron "+contadorFound+" codigos", 5);
+                        mypDialog.dismiss();
 
                     }catch (Exception e){
                         mypDialog.dismiss();
                         e.printStackTrace();
                     }
                 }else{
-                    UIHelper.ToastMessage(mContext, "ESTOY EN LA OPCION 2 DE TAGLIST == 0", 3);
                     mypDialog.dismiss();
                     stopInventory();
                 }
             }else{
-                UIHelper.ToastMessage(mContext, "OPCION 3 SIN DETALLES", 3);
+                UIHelper.ToastMessage(mContext, "Inventario finalizado", 3);
                 stopInventory();
             }
         }
     }
 
     private void setViewEnabled(boolean enabled) {
-        btnFilter.setEnabled(enabled);
+    //  btnFilter.setEnabled(enabled);
         BtClear.setEnabled(enabled);
         BtSync.setEnabled(enabled);
     }
@@ -496,9 +521,6 @@ public class UHFReadTagFragment extends KeyDwonFragment {
                     } else {
                         strResult = "";
                     }
-                    Log.e("TID", " "+strResult);
-                    Log.e("repositoryTag.InsertTag",""+mContext.mReader.convertUiiToEPC(res[1])+" InventoryId:"+inventoryID+" ANDROIDID:"+android_id+" TID:"+strResult+" TAGSTATUS:"+0);
-
                     boolean saveRes=repositoryTag.InsertTag(mContext.mReader.convertUiiToEPC(res[1]),  inventoryID, android_id, strResult,0);
                     if(saveRes){
                         Message msg = handler.obtainMessage();
@@ -526,7 +548,6 @@ public class UHFReadTagFragment extends KeyDwonFragment {
                     String[] spliTags=etags.split("@");
                     String RFIDtagsString=spliTags[0];
                     String TIDtagsString=spliTags[1];
-                    Log.e("FOR DATA", "EPC: "+RFIDtagsString+"  TID: "+TIDtagsString);
                     int index = checkIsExist(RFIDtagsString);
                      if(index == -1 ){
                         addEPCToList(RFIDtagsString, TIDtagsString);
@@ -545,60 +566,63 @@ public class UHFReadTagFragment extends KeyDwonFragment {
         @Override
         public void onClick(View v) {
             JSONArray data=new JSONArray();
-            try {
-                final Context mcontext = getActivity();
+            if(tagList.size()>0){
+                try {
+                    final Context mcontext = getActivity();
+                    RequestQueue requestQueue= Volley.newRequestQueue(mcontext);
+                    String URL = PROTOCOL_URLRFID+code_enterprise.toLowerCase()+DOMAIN_URLRFID+"api/inventory/SaveTagReaded";
 
-                RequestQueue requestQueue= Volley.newRequestQueue(mcontext);
-                String URL = PROTOCOL_URLRFID+code_enterprise.toLowerCase()+DOMAIN_URLRFID+"api/inventory/SaveTagReaded";
-
-                JSONArray arregloCodigos = new JSONArray(tagList.toString());
-                mypDialog = new ProgressDialog(mContext);
-                mypDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-                mypDialog.setMessage("Enviando codigos...");
-                mypDialog.setCanceledOnTouchOutside(false);
-                mypDialog.show();
-                for(int index=0;index < arregloCodigos.length(); index++){
-                    JSONObject jsonBody=new JSONObject();
-                    JSONObject jsonObject= arregloCodigos.getJSONObject(index);
-                    String strEPC=jsonObject.getString("tagUii");
-                    String strTID=jsonObject.getString("tagRssi");
-
-                    jsonBody.put("InventoryId", String.valueOf(inventoryID));
-                    jsonBody.put("TId", strTID);
-                    jsonBody.put("IdHardware", android_id);
-                    jsonBody.put("RFID", strEPC);
-                    data.put(jsonBody);
-                }
-                Log.e("TODO ELGLOSE", ""+data);
-
-                BooleanRequest booleanRequest = new BooleanRequest(1, URL, data, new Response.Listener<Boolean>() {
-                    @Override
-                    public void onResponse(Boolean response) {
-                        if(response){
+                    JSONArray arregloCodigos = new JSONArray(tagList.toString());
+                    mypDialog = new ProgressDialog(mContext);
+                    mypDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+                    mypDialog.setMessage("Enviando codigos...");
+                    mypDialog.setCanceledOnTouchOutside(false);
+                    mypDialog.show();
+                    for(int index=0;index < arregloCodigos.length(); index++){
+                        JSONObject jsonBody=new JSONObject();
+                        JSONObject jsonObject= arregloCodigos.getJSONObject(index);
+                        String strEPC=jsonObject.getString("tagUii");
+                        String strTID=jsonObject.getString("tagRssi");
+                        jsonBody.put("InventoryId", String.valueOf(inventoryID));
+                        jsonBody.put("TId", strTID);
+                        jsonBody.put("IdHardware", android_id);
+                        jsonBody.put("RFID", strEPC);
+                        data.put(jsonBody);
+                    }
+                    BooleanRequest booleanRequest = new BooleanRequest(1, URL, data, new Response.Listener<Boolean>() {
+                        @Override
+                        public void onResponse(Boolean response) {
+                            if(response){
+                                mypDialog.dismiss();
+                                UIHelper.ToastMessage(mcontext, "Envio de codigos exitoso!!", 3);
+                            }
+                        }
+                    }, new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
                             mypDialog.dismiss();
-                            UIHelper.ToastMessage(mcontext, "Envio de tags con exito!!"+response, 3);
+                            if (error instanceof NetworkError) {
+                                UIHelper.ToastMessage(mcontext, "Error de conexion, no hay conexion a internet", 3);
+                            } else if (error instanceof ServerError) {
+                                UIHelper.ToastMessage(mcontext, "Error de conexion, credenciales invalidas", 3);
+                            } else if (error instanceof AuthFailureError) {
+                                UIHelper.ToastMessage(mcontext, "Error de conexion, intente mas tarde.", 3);
+                            } else if (error instanceof ParseError) {
+                                UIHelper.ToastMessage(mcontext, "Error desconocido, intente mas tarde", 3);
+                            } else if (error instanceof TimeoutError || error instanceof NoConnectionError) {
+                                UIHelper.ToastMessage(mcontext, "Error con el servidor, intente mas tarde!!!", 3);
+                            }
                         }
-                    }
-                }, new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        mypDialog.dismiss();
-                        if (error instanceof NetworkError) {
-                        } else if (error instanceof ServerError) {
-                        } else if (error instanceof AuthFailureError) {
-                        } else if (error instanceof ParseError) {
-                        } else if (error instanceof NoConnectionError) {
-                        } else if (error instanceof TimeoutError) {
-                            UIHelper.ToastMessage(mcontext, "Error con el servidor, intente mas tarde!!!", 3);
-                        }
-                    }
-                });
-                int socketTimeout = 30000;//30 seconds - change to what you want
-                RetryPolicy policy = new DefaultRetryPolicy(socketTimeout, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
-                booleanRequest.setRetryPolicy(policy);
-                requestQueue.add(booleanRequest);
-            } catch (JSONException e) {
-                e.printStackTrace();
+                    });
+                    int socketTimeout = 30000;//30 seconds - change to what you want
+                    RetryPolicy policy = new DefaultRetryPolicy(socketTimeout, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
+                    booleanRequest.setRetryPolicy(policy);
+                    requestQueue.add(booleanRequest);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }else{
+                UIHelper.ToastMessage(mContext, "Error no tiene codigos para enviar!!!", 3);
             }
 
         }
@@ -675,7 +699,6 @@ public class UHFReadTagFragment extends KeyDwonFragment {
         int companyId;
         if(enterprises_code.isEmpty()){
             Log.e("No data preferences", " Error data no empty "+enterprises_code);
-
         }else{
             code_result=enterprises_code;
             companyId=companyRepository.getCompanieId(code_result);

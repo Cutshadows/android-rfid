@@ -49,10 +49,12 @@ public class InventaryRespository {
         AdminSQLOpenHelper admin=new AdminSQLOpenHelper(context);
         SQLiteDatabase db=admin.getWritableDatabase();
         final String MY_TABLE_NAME="Inventory";
+        final String MY_TABLE_NAME2="DetailForDevice";
         final ContentValues cv=new ContentValues();
             try {
                 db.beginTransaction();
                 boolean result=db.delete(MY_TABLE_NAME, "Id="+inventoryID, null )>0;
+                boolean result2=db.delete(MY_TABLE_NAME2, "InventoryId="+inventoryID, null )>0;
                 db.setTransactionSuccessful();
                 return result;
             }catch (SQLException sqlex){

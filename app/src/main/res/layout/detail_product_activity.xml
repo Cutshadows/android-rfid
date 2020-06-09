@@ -1,107 +1,111 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout android:layout_width="fill_parent"
+<LinearLayout xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:orientation="vertical"
     xmlns:android="http://schemas.android.com/apk/res/android">
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1px"
-            android:background="@color/gray1" />
 
-        <LinearLayout
-            android:id="@+id/layout2"
-            android:layout_width="fill_parent"
+    <RadioGroup
+        android:id="@+id/RgInventory"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:padding="5dp">
+
+        <TextView
+            android:id="@+id/tv_detail_inventory"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:gravity="center_vertical"
+            android:textStyle="bold"
+            android:textSize="@dimen/text_size_12"
+            android:text="Inventario 12 ULTRA MEGA LARasdadsaasdasdasdasdGO"
+            android:textAppearance="?android:attr/textAppearanceLargeInverse"
+            android:textColor="@color/white"/>
+
+
+    </RadioGroup>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="12px"
+        android:background="@color/gray1" />
+
+    <LinearLayout
+        android:id="@+id/layout2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp">
+        <LinearLayout
+            android:id="@+id/llContinuous"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_gravity="center"
             android:orientation="horizontal"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp">
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp">
 
-
-            <LinearLayout
-                android:id="@+id/llContinuous"
+            <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:gravity="center_horizontal"
-                android:orientation="horizontal"
-                android:paddingTop="5dp"
-                android:paddingBottom="5dp"
-                android:paddingRight="20dp"
-                android:paddingEnd="20dp">
-
-                <TextView
-                    android:id="@+id/tv_tittle_detail"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:gravity="center_horizontal"
-                    android:textSize="@dimen/text_size_12"
-                    android:text="@string/title_product_detail"
-                    android:textStyle="bold" />
-                <TextView
-                    android:id="@+id/tv_detail_inventory"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:gravity="center_horizontal"
-                    android:textSize="@dimen/text_size_12"
-                    android:text="Inventario 12"
-                    android:layout_marginLeft="10dp"
-                    android:textStyle="bold" />
-
-
-            </LinearLayout>
-            <LinearLayout
-                android:layout_width="230dp"
+                android:layout_marginLeft="25dp"
+                android:padding="2sp"
+                android:gravity="center"
+                android:layout_gravity="center"
+                android:text="@string/title_quantity"
+                android:textColor="#ffffff"
+                android:textSize="@dimen/text_size_12"
+                android:textStyle="bold" />
+            <TextView
+                android:id="@+id/tv_minor_count"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:layout_marginLeft="10dp"
+                android:gravity="start"
+                android:padding="5sp"
+                android:text="99999"
+                android:textSize="@dimen/text_size_12"
+                android:textStyle="bold" />
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="25dp"
-                    android:padding="2sp"
-                    android:text="@string/title_quantity"
-                    android:textColor="#ffffff"
-                    android:textSize="@dimen/text_size_12"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:id="@+id/tv_minor_count"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
-                    android:gravity="start"
-                    android:padding="5sp"
-                    android:text="@string/tv_minor_count_product"
-                    android:textSize="@dimen/text_size_12"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:text="@string/slach_count_product"
-                    android:textSize="@dimen/text_size_12"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:id="@+id/tv_total_products"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="10dp"
-                    android:layout_marginLeft="10dp"
-                    android:gravity="center_horizontal"
-                    android:text="@string/tv_total_products"
-                    android:textSize="@dimen/text_size_12"
-                    android:textStyle="bold" />
-            </LinearLayout>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="@string/slach_count_product"
+                android:textSize="@dimen/text_size_12"
+                android:textStyle="bold" />
+            <TextView
+                android:id="@+id/tv_total_products"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginLeft="10dp"
+                android:gravity="center"
+                android:text="99999"
+                android:textSize="@dimen/text_size_12"
+                android:textStyle="bold" />
         </LinearLayout>
+        <Button
+            android:id="@+id/btn_take_inventory"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="30dp"
+            android:layout_marginTop="6dp"
+            android:layout_marginBottom="6dp"
+            android:layout_marginRight="5dp"
+            android:background="@drawable/button_bg"
+            android:text="@string/btn_take_inventory"
+            android:textColor="@color/white"
+            android:textSize="11sp" />
+    </LinearLayout>
         <View
             android:layout_width="fill_parent"
             android:layout_height="1px"
             android:background="@color/gray1"
             android:orientation="horizontal" />
-
     <ListView
         android:id="@+id/lv_detail_product"
         android:layout_width="wrap_content"

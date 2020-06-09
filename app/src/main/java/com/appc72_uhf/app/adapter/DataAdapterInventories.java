@@ -7,10 +7,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.net.ConnectivityManager;
-import android.net.Network;
-import android.net.NetworkInfo;
-import android.os.Build;
 import android.provider.Settings;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -19,28 +15,13 @@ import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ArrayAdapter;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.android.volley.AuthFailureError;
-import com.android.volley.DefaultRetryPolicy;
-import com.android.volley.NetworkError;
-import com.android.volley.NetworkResponse;
-import com.android.volley.NoConnectionError;
-import com.android.volley.ParseError;
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.RetryPolicy;
-import com.android.volley.ServerError;
-import com.android.volley.TimeoutError;
-import com.android.volley.VolleyError;
-import com.android.volley.VolleyLog;
-import com.android.volley.toolbox.HttpHeaderParser;
-import com.android.volley.toolbox.Volley;
 import com.appc72_uhf.app.MainActivity;
 import com.appc72_uhf.app.R;
 import com.appc72_uhf.app.activities.Detail_product_activity;
@@ -50,10 +31,6 @@ import com.appc72_uhf.app.repositories.InventaryRespository;
 import com.appc72_uhf.app.repositories.TagsRepository;
 import com.appc72_uhf.app.tools.UIHelper;
 
-import org.json.JSONArray;
-import org.json.JSONObject;
-
-import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 
 public class DataAdapterInventories extends ArrayAdapter<DatamodelInventories> implements View.OnClickListener {
@@ -61,15 +38,12 @@ public class DataAdapterInventories extends ArrayAdapter<DatamodelInventories> i
     Context mContext;
     ArrayList<DatamodelInventories> datalist;
     ProgressDialog mypDialog;
-    public static final String PROTOCOL_URLRFID="https://";
-    public static final String DOMAIN_URLRFID=".izyrfid.com/";
     String code_enterprise;
     private String android_id;
 
 
-
-    public DataAdapterInventories(@NonNull Context context, ArrayList<DatamodelInventories> datalist ) {
-        super(context, R.layout.simple_list_inventories_1, datalist);
+    public DataAdapterInventories(@NonNull Context context, int resource, ArrayList<DatamodelInventories> datalist ) {
+        super(context,  resource, datalist);
         this.datalist=datalist;
         this.mContext=context;
     }
@@ -86,96 +60,7 @@ public class DataAdapterInventories extends ArrayAdapter<DatamodelInventories> i
 
         switch (v.getId())
         {
-            case R.id.item_info:
-                Intent goToMain=new Intent(getContext(), Detail_product_activity.class);
-                goToMain.putExtra("Id",  datamodelInventories.getId());
-                goToMain.putExtra("Name",  datamodelInventories.getName());
-                mContext.startActivity(goToMain);
-                break;
-
-            case R.id.item_sync:
-                ConnectivityManager connMgr=(ConnectivityManager) getContext().getSystemService(Context.CONNECTIVITY_SERVICE);
-                boolean isWifiConn = false;
-                boolean isMobileConn = false;
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    for (Network network : connMgr.getAllNetworks()) {
-                        NetworkInfo networkInfo = connMgr.getNetworkInfo(network);
-                        if (networkInfo.getType() == ConnectivityManager.TYPE_WIFI) {
-                            isWifiConn |= networkInfo.isConnected();
-                        }
-                        if (networkInfo.getType() == ConnectivityManager.TYPE_MOBILE) {
-                            isMobileConn |= networkInfo.isConnected();
-                        }
-                    }
-                }
-                if(isMobileConn || isWifiConn) {
-                    try {
-                        TagsRepository tagRepo = new TagsRepository(getContext());
-                        ArrayList Tags = tagRepo.ViewAllTags(datamodelInventories.getId());
-                        RequestQueue requestQueue = Volley.newRequestQueue(getContext());
-                        JSONObject jsonBody;
-                        String URL = PROTOCOL_URLRFID + code_enterprise.toLowerCase()+ DOMAIN_URLRFID + "api/inventory/SaveTagReaded";
-                        JSONArray data = new JSONArray();
-                        mypDialog = new ProgressDialog((Activity) getContext());
-                        mypDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-                        mypDialog.setMessage("Enviando codigos leidos del inventario '" + datamodelInventories.getName() + "'...");
-                        mypDialog.setCanceledOnTouchOutside(false);
-                        mypDialog.show();
-
-                        if (Tags.size() > 0) {
-                            for (int i = 0; i <= Tags.size() - 1; i++) {
-                                jsonBody = new JSONObject();
-                                String etags = String.valueOf(Tags.get(i));
-                                String[] spliTags = etags.split("@");
-                                String RFIDtagsString = spliTags[0];
-                                String TIDtagsString = spliTags[1];
-
-                                jsonBody.put("InventoryId", String.valueOf(datamodelInventories.getId()));
-                                jsonBody.put("TId", TIDtagsString);
-                                jsonBody.put("IdHardware", android_id);
-                                jsonBody.put("RFID", RFIDtagsString);
-                                data.put(jsonBody);
-                            }
-                            Log.e("JSONBODY", "" + data.toString());
-                            Log.e("URL", "" + URL);
-
-                            BooleanRequest booleanRequest = new BooleanRequest(1, URL, data, new Response.Listener<Boolean>() {
-                                @Override
-                                public void onResponse(Boolean response) {
-                                    mypDialog.dismiss();
-                                    UIHelper.ToastMessage(getContext(), "Envio de tags con exito!!", 3);
-                                }
-                            }, new Response.ErrorListener() {
-                                @Override
-                                public void onErrorResponse(VolleyError error) {
-                                    if (error instanceof NetworkError) {
-                                    } else if (error instanceof ServerError) {
-                                    } else if (error instanceof AuthFailureError) {
-                                    } else if (error instanceof ParseError) {
-                                    } else if (error instanceof NoConnectionError) {
-                                    } else if (error instanceof TimeoutError) {
-                                        mypDialog.dismiss();
-                                        UIHelper.ToastMessage(getContext(), "Error con el servidor, intente mas tarde!!!", 3);
-                                    }
-                                    //UIHelper.ToastMessage(getContext(), "Error con el servidor, intente mas tarde!!!", 3);
-                                }
-                            });
-                            int socketTimeout = 30000;//30 seconds - change to what you want
-                            RetryPolicy policy = new DefaultRetryPolicy(socketTimeout, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
-                            booleanRequest.setRetryPolicy(policy);
-                            requestQueue.add(booleanRequest);
-                        } else {
-                            mypDialog.dismiss();
-                            UIHelper.ToastMessage(getContext(), "No tiene codigos en este inventario!!!");
-                        }
-                    } catch (Exception ex) {
-                        Log.e("Error Exception", "" + ex.getLocalizedMessage());
-                    }
-                }else{
-                    UIHelper.ToastMessage(getContext(), "No esta conectado a una red en estos momentos!!!");
-                }
-                break;
-            case R.id.item_void:
+            case R.id.item_delete:
                 try {
                     AlertDialog.Builder builder = new AlertDialog.Builder((Activity) getContext());
                     builder.setTitle(R.string.ap_dialog_inventario_vaciar);
@@ -193,6 +78,7 @@ public class DataAdapterInventories extends ArrayAdapter<DatamodelInventories> i
                         public void onClick(DialogInterface dialog, int which) {
                             dialog.dismiss();
                             TagsRepository tagsRepository=new TagsRepository(getContext());
+                            InventaryRespository inventaryRespository=new InventaryRespository(getContext());
                             mypDialog = new ProgressDialog((Activity) getContext());
                             mypDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
                             mypDialog.setMessage("Vaciando codigos disponibles...");
@@ -200,9 +86,15 @@ public class DataAdapterInventories extends ArrayAdapter<DatamodelInventories> i
                             mypDialog.show();
                             try{
                                 boolean res= tagsRepository.DeleteAllTags(datamodelInventories.getId());
-                                if(res){
+                                boolean resultUpdateFalse=inventaryRespository.DeleteInventory(datamodelInventories.getId());
+                                if(resultUpdateFalse && res){
                                     mypDialog.dismiss();
-                                    UIHelper.ToastMessage(getContext(), "Codigos elimandos exitosamente!!", 10);
+                                    UIHelper.ToastMessage(getContext(), "El inventario '"+datamodelInventories.getName()+"' eliminado!!", 5);
+                                    notifyDataSetChanged();
+                                    Intent goToMain=new Intent(getContext(), MainActivity.class);
+                                    mContext.startActivity(goToMain);
+
+                                    //UIHelper.ToastMessage(getContext(), "Codigos elimandos exitosamente!!", 10);
                                 }
                             }catch (Exception e){
                                 mypDialog.dismiss();
@@ -217,18 +109,30 @@ public class DataAdapterInventories extends ArrayAdapter<DatamodelInventories> i
                     e.printStackTrace();
                 }
                 break;
-            case R.id.item_take_inventory:
-                Intent fragment=new Intent(getContext(), MainActivity.class);
-                fragment.putExtra("inventoryBool", true);
-                fragment.putExtra("inventoryID", datamodelInventories.getId());
-                fragment.putExtra("inventoryName", datamodelInventories.getName());
-                mContext.startActivity(fragment);
+            case R.id.btn_global_detail:
+                if(datamodelInventories.getDetailForDevice()){
+                    Intent goToMain=new Intent(getContext(), Detail_product_activity.class);
+                    goToMain.putExtra("Id",  datamodelInventories.getId());
+                    goToMain.putExtra("Name",  datamodelInventories.getName());
+                    goToMain.putExtra("inventoryType", datamodelInventories.getDetailForDevice());
+                    mContext.startActivity(goToMain);
+
+                }else{
+                    Intent fragment=new Intent(getContext(), MainActivity.class);
+                    fragment.putExtra("inventoryBool", true);
+                    fragment.putExtra("inventoryID", datamodelInventories.getId());
+                    fragment.putExtra("inventoryName", datamodelInventories.getName());
+                    fragment.putExtra("inventoryType", datamodelInventories.getDetailForDevice());
+                    mContext.startActivity(fragment);
+
+                }
                 break;
         }
     }
     private class ViewHolder{
         TextView title;
-        ImageView info, item_sync, item_void, item_take_inventory;
+        ImageView item_delete;
+        ImageButton btn_global_detail;
     }
     private int lastPosition = -1;
     @NonNull
@@ -244,11 +148,10 @@ public class DataAdapterInventories extends ArrayAdapter<DatamodelInventories> i
             LayoutInflater inflater = LayoutInflater.from(getContext());
             convertView=inflater.inflate(R.layout.simple_list_inventories_1, parent, false);
 
+
             holder.title=(TextView) convertView.findViewById(R.id.tv_inventory);
-            holder.info=(ImageView)convertView.findViewById(R.id.item_info);
-            holder.item_sync=(ImageView)convertView.findViewById(R.id.item_sync);
-            holder.item_void=(ImageView)convertView.findViewById(R.id.item_void);
-            holder.item_take_inventory=(ImageView) convertView.findViewById(R.id.item_take_inventory);
+            holder.item_delete=(ImageView)convertView.findViewById(R.id.item_delete);
+            holder.btn_global_detail=(ImageButton)convertView.findViewById(R.id.btn_global_detail);
 
             result=convertView;
             convertView.setTag(holder);
@@ -258,23 +161,20 @@ public class DataAdapterInventories extends ArrayAdapter<DatamodelInventories> i
         }
         Animation animation = AnimationUtils.loadAnimation(mContext, (position > lastPosition) ? R.anim.up_from_bottom : R.anim.down_from_top);
         result.startAnimation(animation);
+
         lastPosition = position;
         holder.title.setText(datamodelInventories.getName());
-        holder.item_take_inventory.setOnClickListener(this);
-        holder.item_void.setOnClickListener(this);
-        holder.item_sync.setOnClickListener(this);
-        holder.info.setOnClickListener(this);
-        holder.item_take_inventory.setTag(position);
-        holder.item_void.setTag(position);
-        holder.item_sync.setTag(position);
-        holder.info.setTag(position);
+        holder.btn_global_detail.setOnClickListener(this);
+        holder.item_delete.setOnClickListener(this);
+        holder.btn_global_detail.setTag(position);
+        holder.item_delete.setTag(position);
 
         if(datamodelInventories.getDetailForDevice()){
             convertView.setBackgroundResource(R.color.lightblue);
         }else{
             convertView.setBackgroundResource(R.color.sbc_header_text);
-            holder.info.setVisibility(View.INVISIBLE);
         }
+
 
         return convertView;
     }
@@ -289,64 +189,6 @@ public class DataAdapterInventories extends ArrayAdapter<DatamodelInventories> i
             code_result=enterprises_code;
         }
         return code_result;
-    }
-
-    class BooleanRequest extends Request<Boolean> {
-        private final Response.Listener<Boolean> mListener;
-        private final Response.ErrorListener mErrorListener;
-        private final JSONArray mRequestBody;
-
-        private final String PROTOCOL_CHARSET = "utf-8";
-        private final String PROTOCOL_CONTENT_TYPE = String.format("application/json; charset=%s", PROTOCOL_CHARSET);
-
-        public BooleanRequest(int method, String url, JSONArray requestBody, Response.Listener<Boolean> listener, Response.ErrorListener errorListener) {
-            super(method, url, errorListener);
-            this.mListener = listener;
-            this.mErrorListener = errorListener;
-            this.mRequestBody = requestBody;
-        }
-
-        @Override
-        protected Response<Boolean> parseNetworkResponse(NetworkResponse response) {
-            Boolean parsed;
-            try {
-                parsed = Boolean.valueOf(new String(response.data, HttpHeaderParser.parseCharset(response.headers)));
-            } catch (UnsupportedEncodingException e) {
-                parsed = Boolean.valueOf(new String(response.data));
-            }
-            return Response.success(parsed, HttpHeaderParser.parseCacheHeaders(response));
-        }
-
-        @Override
-        protected VolleyError parseNetworkError(VolleyError volleyError) {
-            return super.parseNetworkError(volleyError);
-        }
-
-        @Override
-        protected void deliverResponse(Boolean response) {
-            mListener.onResponse(response);
-        }
-
-        @Override
-        public void deliverError(VolleyError error) {
-            mErrorListener.onErrorResponse(error);
-        }
-
-        @Override
-        public String getBodyContentType() {
-            return PROTOCOL_CONTENT_TYPE;
-        }
-
-        @Override
-        public byte[] getBody() throws AuthFailureError {
-            try {
-                return mRequestBody == null ? null : mRequestBody.toString().getBytes(PROTOCOL_CHARSET);
-            } catch (UnsupportedEncodingException uee) {
-                VolleyLog.wtf("Unsupported Encoding while trying to get the bytes of %s using %s",
-                        mRequestBody, PROTOCOL_CHARSET);
-                return null;
-            }
-        }
     }
 
 }

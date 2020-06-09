@@ -96,7 +96,7 @@
             android:gravity="center"
             android:text="TID"
             android:textColor="@drawable/check_text_color" />
-        <RadioButton
+        <!--RadioButton
             android:id="@+id/rbUser"
             android:layout_width="0dp"
             android:layout_height="30dp"
@@ -107,7 +107,7 @@
             android:checked="false"
             android:gravity="center"
             android:text="USER"
-            android:textColor="@drawable/check_text_color" />
+            android:textColor="@drawable/check_text_color" /-->
         <RadioButton
             android:visibility="gone"
             android:id="@+id/rbRESERVED"

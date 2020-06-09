@@ -41,6 +41,8 @@ public class AdapterProductDetails extends ArrayAdapter<DataModelProductDetails>
                 Intent goToMain=new Intent(getContext(), ProductMasterDetailActivity.class);
                 goToMain.putExtra("InventoryId",  dataModelProductDetails.getInventoryId());
                 goToMain.putExtra("ProductMasterId",  dataModelProductDetails.getProductMasterId());
+                goToMain.putExtra("Id",  dataModelProductDetails.getInventoryId());
+                goToMain.putExtra("Name",  dataModelProductDetails.getName());
                 mContext.startActivity(goToMain);
                 break;
         }
