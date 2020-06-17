@@ -33,7 +33,7 @@
                 android:textStyle="bold"
                 android:textSize="@dimen/text_size_14"
                 android:layout_marginRight="30dp" />
-            <LinearLayout
+            <!--LinearLayout
                 android:id="@+id/llPlusInventoryServer"
                 android:layout_gravity="end"
                 android:layout_width="match_parent"
@@ -55,7 +55,7 @@
                     android:textStyle="bold"
                     android:textColor="@color/white1"
                     android:layout_marginRight="10dp" />
-            </LinearLayout>
+            </LinearLayout-->
         </LinearLayout>
     </LinearLayout>
     <View

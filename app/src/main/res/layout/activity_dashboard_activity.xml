@@ -30,6 +30,7 @@
             android:orientation="vertical"
             android:paddingTop="30dp">
 
+
             <ImageView
                 android:id="@+id/imageView"
                 android:layout_width="match_parent"
@@ -157,8 +158,25 @@
                         android:textSize="@dimen/text_size_19"
                         android:textStyle="bold" />
                 </RelativeLayout>
-
             </LinearLayout>
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:visibility="invisible"
+                android:orientation="horizontal">
+                <Button
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/button_bg"
+                    android:id="@+id/btn_create_recovery"
+                    android:visibility="visible"
+                    android:text="Respaldo archivo BD"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Title"
+                    />
+            </LinearLayout>
+
+
         </LinearLayout>
 
     </RelativeLayout>

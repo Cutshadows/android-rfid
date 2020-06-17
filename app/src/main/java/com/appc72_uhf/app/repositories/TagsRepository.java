@@ -36,7 +36,7 @@ public class TagsRepository {
             db.close();
         }
     }
-    public boolean InsertTag(String RFID, int idInventory, String IdHardware, String TID, Integer TagStatus) {
+    public boolean InsertTag(String RFID, int idInventory, String IdHardware, String TID, int TagStatus) {
         AdminSQLOpenHelper admin = new AdminSQLOpenHelper(context);
         SQLiteDatabase db = admin.getWritableDatabase();
         boolean result;

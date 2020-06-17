@@ -25,7 +25,7 @@ import java.util.ArrayList;
 
 public class inventoryList extends KeyDwonFragment implements View.OnClickListener{
     private MainActivity mContext;
-    ImageButton btnInventory;
+    ImageButton btnInventory, btn_exit_productview;
     private static final String TAG="Inventory_list";
 
 
@@ -58,6 +58,7 @@ public class inventoryList extends KeyDwonFragment implements View.OnClickListen
                 .inflate(R.layout.activity_inventory_list, container, false);
 
     }
+
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
@@ -69,6 +70,7 @@ public class inventoryList extends KeyDwonFragment implements View.OnClickListen
         //lisInventory=(TextView) getView().findViewById(R.id.listInventory);
         lstData = (ListView) getView().findViewById(R.id.lstData);
         btnInventory=(ImageButton) getView().findViewById(R.id.btnInventory);
+
         dataArrayList=new ArrayList<DatamodelInventories>();
         //dataArrayList.add(new DatamodelInventories(9, "Android 4.0", false));*/
         code_enterprise=getCompany();
@@ -110,12 +112,6 @@ public class inventoryList extends KeyDwonFragment implements View.OnClickListen
         }*/
         ((BaseAdapter) lstData.getAdapter()).notifyDataSetChanged();
 
-    }
-
-    @Override
-    public void onStop() {
-        Log.e("onStop", "ON STOP 1 INVENTORY LIST");
-        super.onStop();
     }
 
     /*** @Override

@@ -833,6 +833,7 @@
     <string name="uhf_msg_tab_inventory" translatable="false">Inventario</string>
     <string name="uhf_msg_tab_read">Leer</string>
     <string name="uhf_msg_tab_write">Escribir</string>
+    <string name="uhf_msg_tab_support" translatable="false">Respaldo</string>
     <string name="uhf_msg_tab_set">Configuracion</string>
     <string name="uhf_msg_tab_kill">Kill</string>
     <string name="uhf_msg_tab_lock">Lock</string>
@@ -1511,7 +1512,8 @@
     <string name="title_master_product" translatable="false">Nombre del Producto</string>
     <string name="title_quantity" translatable="false">Cantidad: </string>
     <string name="btn_take_inventory" translatable="false">Tomar \n inventario </string>
-    <string name="btn_back_product_list" translatable="false">VOLVER A\n DETALLES</string>
+    <string name="btn_exit_productview" translatable="false">Salir</string>
+    <string name="btn_back_product_list" translatable="false">GUARDAR Y VOLVER</string>
 
 
 
@@ -1521,7 +1523,7 @@
     <string name="tv_minor_count_product" translatable="false">0</string>
     <string name="slach_count_product" translatable="false">/</string>
     <string name="tv_total_products" translatable="false">105</string>
-    <string name="tittle_document_make_label" translatable="false">Documento: </string>
+    <string name="tittle_document_make_label" translatable="false">N° Doc: </string>
     <string name="location_documents" translatable="false">Ubicación:</string>
     <string name="btn_add_inventory" translatable="false">Agregar Inventario</string>
 

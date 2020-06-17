@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ArrayAdapter;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -27,7 +28,8 @@ public class AdapterMakeLabelDocuments extends ArrayAdapter<DatamodelDocumentsMa
         this.datadocuments = datadocuments;
     }
     private class ViewHolder{
-        TextView tv_name_document;
+        TextView tv_document_id, tv_location_document, tv_document_name;
+        ImageButton item_more_details_documents;
     }
     private int lastPosition= -1;
     @NonNull
@@ -43,7 +45,10 @@ public class AdapterMakeLabelDocuments extends ArrayAdapter<DatamodelDocumentsMa
             LayoutInflater inflater = LayoutInflater.from(getContext());
             convertView=inflater.inflate(R.layout.simple_list_documents_server, parent, false);
 
-            holder.tv_name_document=(TextView) convertView.findViewById(R.id.tv_name_document);
+            holder.tv_document_id=(TextView) convertView.findViewById(R.id.tv_document_id);
+            holder.tv_document_name=(TextView) convertView.findViewById(R.id.tv_document_name);
+            holder.tv_location_document=(TextView) convertView.findViewById(R.id.tv_location_document);
+            holder.item_more_details_documents=(ImageButton) convertView.findViewById(R.id.item_more_details_documents);
             result=convertView;
             convertView.setTag(holder);
         }else{
@@ -54,8 +59,14 @@ public class AdapterMakeLabelDocuments extends ArrayAdapter<DatamodelDocumentsMa
         result.startAnimation(animation);
 
         lastPosition = position;
-        holder.tv_name_document.setText("Documento: "+datamodelDocumentsMakeLabel.getDocumentId());
-        holder.tv_name_document.setTag(position);
+        holder.tv_document_name.setText(datamodelDocumentsMakeLabel.getDocumentName().toUpperCase());
+        holder.tv_document_id.setText("N° Doc: "+datamodelDocumentsMakeLabel.getDocumentId());
+        holder.tv_location_document.setText(" "+datamodelDocumentsMakeLabel.getLocationOriginName().toUpperCase());
+        holder.tv_document_name.setTag(position);
+        holder.tv_document_id.setTag(position);
+        holder.tv_location_document.setTag(position);
+        //holder.item_more_details_documents.setBackgroundResource(R.color.color_primary);
+        convertView.setBackgroundResource(R.color.lightblue);
         return convertView;
     }
 }

@@ -23,10 +23,10 @@
         android:showAsAction="always"
         android:title="@string/uhf_msg_tab_write"/>
     -->
-    <!--item
-        android:id="@+id/action_write"
-        android:title="@string/uhf_msg_tab_write"
-        app:showAsAction="never" /-->
+    <item
+        android:id="@+id/action_support"
+        android:title="@string/uhf_msg_tab_support"
+        app:showAsAction="never" />
     <!--item
         android:id="@+id/action_lock"
         android:title="@string/uhf_msg_tab_lock"

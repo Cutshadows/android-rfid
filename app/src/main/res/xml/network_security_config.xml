@@ -2,10 +2,12 @@
 <network-security-config>
     <domain-config cleartextTrafficPermitted="true">
         <domain includeSubdomains="true">demo.izyrfid.com</domain>
+        <domain includeSubdomains="true">goldfields.izyrfid.com</domain>
         <domain includeSubdomains="true">izyrfid.com</domain>
         <domain includeSubdomains="true">rw.izyrfid.com</domain>
         <domain includeSubdomains="true">arenysmed.izyrfid.com</domain>
         <domain includeSubdomains="true">arenysmed</domain>
+        <domain includeSubdomains="true">goldfieds</domain>
         <domain includeSubdomains="true">demo.izyrfid.com/api/devices/GetInfoDevice</domain>
     </domain-config>
     <base-config cleartextTrafficPermitted="true" />

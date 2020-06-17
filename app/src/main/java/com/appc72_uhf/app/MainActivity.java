@@ -6,7 +6,7 @@ import android.media.AudioManager;
 import android.media.SoundPool;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.widget.Toast;
+import android.util.Log;
 
 import com.appc72_uhf.app.activities.inventoryList;
 import com.appc72_uhf.app.fragment.UHFReadTagFragment;
@@ -49,13 +49,19 @@ public class MainActivity extends BaseTabFragmentActivity {
     protected void initViewPageData() {
         if(takeInventory){
             lstFrg.add(new UHFReadTagFragment());
+            //lstFrg.add(new UHFWriteFragment());
             lstFrg.add(new UHFSetFragment());
+
             lstTitles.add(getString(R.string.uhf_msg_tab_scan).toUpperCase()+": "+inventaryName.toUpperCase());
+            //lstTitles.add(getString(R.string.uhf_msg_tab_write).toUpperCase());
             lstTitles.add(getString(R.string.uhf_msg_tab_set));
         }else{
             lstFrg.add(new inventoryList());
+            //lstFrg.add(new UHFWriteFragment());
             lstFrg.add(new UHFSetFragment());
+
             lstTitles.add(getString(R.string.uhf_msg_tab_inventory));
+            //lstTitles.add(getString(R.string.uhf_msg_tab_write).toUpperCase());
             lstTitles.add(getString(R.string.uhf_msg_tab_set));
         }
         //lstFrg.add(new UHFReadFragment());
@@ -95,8 +101,9 @@ public class MainActivity extends BaseTabFragmentActivity {
             mypDialog.cancel();
 
             if (!result) {
-                Toast.makeText(MainActivity.this, "fallo al iniciar",
-                        Toast.LENGTH_SHORT).show();
+                //Toast.makeText(MainActivity.this, "fallo al iniciar",
+                  //      Toast.LENGTH_SHORT).show();
+                Log.i("MainActivity", "fallo al iniciar");
             }
         }
 
@@ -104,12 +111,13 @@ public class MainActivity extends BaseTabFragmentActivity {
         protected void onPreExecute() {
             // TODO Auto-generated method stub
             super.onPreExecute();
+            Log.i("MainActivity", "iniciando ...");
 
-            mypDialog = new ProgressDialog(MainActivity.this);
-            mypDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-            mypDialog.setMessage("iniciando...");
-            mypDialog.setCanceledOnTouchOutside(false);
-            mypDialog.show();
+            // mypDialog = new ProgressDialog(MainActivity.this);
+            // mypDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+            // mypDialog.setMessage("iniciando...");
+            // mypDialog.setCanceledOnTouchOutside(false);
+            //mypDialog.show();
         }
 
     }

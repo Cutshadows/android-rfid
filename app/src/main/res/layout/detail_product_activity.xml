@@ -34,7 +34,7 @@
         android:id="@+id/layout2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center"
+        android:gravity="start"
         android:orientation="horizontal"
         android:paddingLeft="10dp"
         android:paddingRight="10dp">
@@ -90,14 +90,25 @@
         </LinearLayout>
         <Button
             android:id="@+id/btn_take_inventory"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="68dp"
+            android:layout_height="45dp"
             android:layout_marginLeft="30dp"
-            android:layout_marginTop="6dp"
             android:layout_marginBottom="6dp"
             android:layout_marginRight="5dp"
             android:background="@drawable/button_bg"
             android:text="@string/btn_take_inventory"
+            android:textColor="@color/white"
+            android:textSize="9sp" />
+        <Button
+            android:id="@+id/btn_exit_productview"
+            android:layout_width="60dp"
+            android:layout_height="45dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="6dp"
+            android:layout_marginBottom="6dp"
+            android:layout_marginRight="5dp"
+            android:background="@drawable/button_bg"
+            android:text="@string/btn_exit_productview"
             android:textColor="@color/white"
             android:textSize="11sp" />
     </LinearLayout>

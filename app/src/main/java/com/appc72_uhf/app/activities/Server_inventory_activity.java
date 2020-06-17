@@ -37,7 +37,7 @@ import java.util.ArrayList;
 
 public class Server_inventory_activity extends AppCompatActivity {
     private ListView lv_server_inventories;
-    public static final String PROTOCOL_URLRFID="http://";
+    public static final String PROTOCOL_URLRFID="https://";
     public static final String DOMAIN_URLRFID=".izyrfid.com";
     private RelativeLayout layout_server_inventory_load, layout_no_data;
     ArrayList<DatamodelInventories> dataArrayList;

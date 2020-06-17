@@ -21,7 +21,7 @@ import java.util.ArrayList;
 public class Detail_product_activity extends AppCompatActivity implements View.OnClickListener {
     private TextView tv_detail_inventory, tv_minor_count, tv_total_products;
     private ListView lv_detail_product;
-    private Button btn_take_inventory;
+    private Button btn_take_inventory, btn_exit_productview;
     ArrayList<DataModelProductDetails> dataArrayProducts;
     AdapterProductDetails adapterProductDetails;
     int val_inventory, totalFoundEPC, totalFoundEPCFOUND;
@@ -40,6 +40,8 @@ public class Detail_product_activity extends AppCompatActivity implements View.O
         tv_total_products=(TextView)findViewById(R.id.tv_total_products);
         btn_take_inventory=(Button) findViewById(R.id.btn_take_inventory);
         lv_detail_product=(ListView) findViewById(R.id.lv_detail_product);
+        btn_exit_productview=(Button) findViewById(R.id.btn_exit_productview);
+
 
         dataArrayProducts=new ArrayList<DataModelProductDetails>();
 
@@ -63,6 +65,7 @@ public class Detail_product_activity extends AppCompatActivity implements View.O
         totalFoundEPC=getCountTotalProduct();
         tv_total_products.setText(String.valueOf(totalFoundEPC));
         btn_take_inventory.setOnClickListener(this);
+        btn_exit_productview.setOnClickListener(this);
     }
 
     public int getCountFoundProductTotal(){
@@ -116,6 +119,11 @@ public class Detail_product_activity extends AppCompatActivity implements View.O
                 fragment.putExtra("Name",  inventory_name_detail);
                 fragment.putExtra("inventoryType", inventory_type);
                 Detail_product_activity.this.startActivity(fragment);
+                Detail_product_activity.this.onBackPressed();
+                break;
+            case R.id.btn_exit_productview:
+                Intent MainTo=new Intent(Detail_product_activity.this, MainActivity.class);
+                Detail_product_activity.this.startActivity(MainTo);
                 Detail_product_activity.this.onBackPressed();
                 break;
         }

@@ -5,8 +5,6 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.util.Log;
-import android.view.View;
-import android.widget.Button;
 import android.widget.ListView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -30,10 +28,10 @@ import com.google.gson.Gson;
 
 import java.util.ArrayList;
 
-public class Make_label_documents_activity extends AppCompatActivity implements View.OnClickListener{
-    private Button btn_syncDocumentServer;
+public class Make_label_documents_activity extends AppCompatActivity{
+    //private Button btn_syncDocumentServer;
     private ListView lv_server_documents;
-    public static final String PROTOCOL_URLRFID="http://";
+    public static final String PROTOCOL_URLRFID="https://";
     public static final String DOMAIN_URLRFID=".izyrfid.com";
     ArrayList<DatamodelDocumentsMakeLabel> datamodelDocumentsMakeLabelArrayList;
     AdapterMakeLabelDocuments adapterMakeLabelDocuments;
@@ -50,18 +48,12 @@ public class Make_label_documents_activity extends AppCompatActivity implements 
         initComponent();
     }
     private void initComponent(){
-        btn_syncDocumentServer=(Button) findViewById(R.id.btn_syncDocumentServer);
+        //btn_syncDocumentServer=(Button) findViewById(R.id.btn_syncDocumentServer);
         lv_server_documents=(ListView) findViewById(R.id.lv_server_documents);
 
-        btn_syncDocumentServer.setOnClickListener(this);
+        //btn_syncDocumentServer.setOnClickListener(this);
 
         datamodelDocumentsMakeLabelArrayList=new ArrayList<DatamodelDocumentsMakeLabel>();
-
-        adapterMakeLabelDocuments=new AdapterMakeLabelDocuments(Make_label_documents_activity.this, datamodelDocumentsMakeLabelArrayList);
-        lv_server_documents.setAdapter(adapterMakeLabelDocuments);
-
-        adapterMakeLabelDocuments.notifyDataSetChanged();
-        code_enterprise=getCompany();
         SharedPreferences preferencesAccess_token=getSharedPreferences("access_token", Context.MODE_PRIVATE);
         String access_token=preferencesAccess_token.getString("access_token", "");
         if(access_token.length()==0){
@@ -69,17 +61,23 @@ public class Make_label_documents_activity extends AppCompatActivity implements 
         }else{
             token_access=access_token;
         }
+        code_enterprise=getCompany();
         android_id = Settings.Secure.getString(getBaseContext().getContentResolver(),
                 Settings.Secure.ANDROID_ID);
-    }
+        syncronizedDocuments();
+        adapterMakeLabelDocuments=new AdapterMakeLabelDocuments(Make_label_documents_activity.this, datamodelDocumentsMakeLabelArrayList);
+        lv_server_documents.setAdapter(adapterMakeLabelDocuments);
 
-    @Override
+        adapterMakeLabelDocuments.notifyDataSetChanged();
+
+
+    /*@Override
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.btn_syncDocumentServer:
-                syncronizedDocuments();
                 break;
         }
+    }*/
     }
 
     public void syncronizedDocuments(){
@@ -99,7 +97,7 @@ public class Make_label_documents_activity extends AppCompatActivity implements 
                     DatamodelDocumentsMakeLabel[] docsMakelabels=gson.fromJson(response, DatamodelDocumentsMakeLabel[].class);
                     for(int index=0; index<=docsMakelabels.length-1; index++){
                         Log.e("DATA FOR", "DocumentsId: "+docsMakelabels[index].getDocumentId()+" DeviceId:"+docsMakelabels[index].getDeviceId()+" FechaAsignacion:"+docsMakelabels[index].getFechaAsignacion());
-                        datamodelDocumentsMakeLabelArrayList.add(new DatamodelDocumentsMakeLabel(docsMakelabels[index].getDocumentId(), docsMakelabels[index].getDeviceId()));
+                        datamodelDocumentsMakeLabelArrayList.add(new DatamodelDocumentsMakeLabel(docsMakelabels[index].getDocumentId(), docsMakelabels[index].getDeviceId(), docsMakelabels[index].getLocationOriginName(), docsMakelabels[index].getDocumentName()));
                     }
                     adapterMakeLabelDocuments.notifyDataSetChanged();
                 }catch (Exception e){
@@ -111,12 +109,15 @@ public class Make_label_documents_activity extends AppCompatActivity implements 
                 @Override
                 public void onErrorResponse(VolleyError error){
                     if (error instanceof NetworkError) {
+                        UIHelper.ToastMessage(Make_label_documents_activity.this, "Error de conexion, no hay conexion a internet", 3);
                     } else if (error instanceof ServerError) {
+                        UIHelper.ToastMessage(Make_label_documents_activity.this, "Error de conexion, 1 incorrecta ", 3);
                     } else if (error instanceof AuthFailureError) {
+                        UIHelper.ToastMessage(Make_label_documents_activity.this, "Error de conexion, intente mas tarde.", 3);
                     } else if (error instanceof ParseError) {
-                    } else if (error instanceof NoConnectionError) {
-                    } else if (error instanceof TimeoutError) {
-                        UIHelper.ToastMessage(Make_label_documents_activity.this, "Error con el servidor, intente mas tarde!!!", 3);
+                        UIHelper.ToastMessage(Make_label_documents_activity.this, "Error desconocido, intente mas tarde", 3);
+                    } else if (error instanceof TimeoutError || error instanceof NoConnectionError) {
+                        UIHelper.ToastMessage(Make_label_documents_activity.this, "Tiempo agotado, intente mas tarde!!!", 3);
                     }
                     Log.e("onErrorResponse", ""+error.getLocalizedMessage());
                 }

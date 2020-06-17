@@ -22,6 +22,12 @@ import com.appc72_uhf.app.widget.NoScrollViewPager;
 import com.rscja.deviceapi.RFIDWithUHF;
 import com.rscja.utility.StringUtility;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -48,7 +54,7 @@ public class BaseTabFragmentActivity extends FragmentActivity {
 	public RFIDWithUHF mReader;
 	private int index = 0;
 
-	private ActionBar.Tab tab_inventory, tab_write, tab_lock, tab_set ;
+	private ActionBar.Tab tab_inventory, tab_write, tab_lock, tab_set, tab_support ;
 	private DisplayMetrics metrics;
 	private AlertDialog dialog;
 	private long[] timeArr;
@@ -114,7 +120,8 @@ public class BaseTabFragmentActivity extends FragmentActivity {
 		}
 		tab_inventory=mActionBar.newTab().setText(mViewPagerAdapter.getPageTitle(0)).setTabListener(mTabListener);
 		//tab_inventory = mActionBar.newTab().setText(mViewPagerAdapter.getPageTitle(1)).setTabListener(mTabListener);
-		//tab_write = mActionBar.newTab().setText(mViewPagerAdapter.getPageTitle(2)).setTabListener(mTabListener);
+		//tab_write = mActionBar.newTab().setText(mViewPagerAdapter.getPageTitle(1)).setTabListener(mTabListener);
+		//tab_support = mActionBar.newTab().setText(mViewPagerAdapter.getPageTitle(1)).setTabListener(mTabListener);
 		//tab_lock = mActionBar.newTab().setText(mViewPagerAdapter.getPageTitle(2)).setTabListener(mTabListener);
 		tab_set = mActionBar.newTab().setText(mViewPagerAdapter.getPageTitle(1)).setTabListener(mTabListener);
 
@@ -161,14 +168,28 @@ public class BaseTabFragmentActivity extends FragmentActivity {
 			case android.R.id.home:
 				finish();
 				break;
-			/*case R.id.action_write:
-				index = 2;
-				mActionBar.addTab(tab_write, true);
-				break;
-			case R.id.action_lock:
+			//case R.id.action_write:
+			//	index = 1;
+			//	mActionBar.addTab(tab_write, true);
+			//	break;
+			/*case R.id.action_lock:
 				index = 2;
 				mActionBar.addTab(tab_lock, true);
 				break;*/
+			case R.id.action_support:
+				String strSrc = "/data/data/com.appc72_uhf.app/databases/IZYRFID.db";
+				String strDst = "/sdcard/IZYRFID.db";
+
+				File fSrc = new File(strSrc);
+				File fDst = new File(strDst);
+
+				try{
+					createBackup(fSrc, fDst);
+					UIHelper.ToastMessage(BaseTabFragmentActivity.this, "Respaldo creado con exito!");
+				}catch(IOException e){
+					Log.e("IOException", e.toString());
+				}
+				break;
 			case R.id.action_set:
 				index = 2;
 				mActionBar.addTab(tab_set, true);
@@ -284,10 +305,18 @@ public class BaseTabFragmentActivity extends FragmentActivity {
 
 		return false;
 	}
-
+	public static void createBackup(File src, File dst) throws IOException {
+		InputStream in = new FileInputStream(src);
+		OutputStream out = new FileOutputStream(dst);
+		byte[] buf = new byte[1024];
+		int len;
+		while ((len = in.read(buf)) > 0) {
+			out.write(buf, 0, len);
+		}
+		in.close();
+		out.close();
+	}
 	public void getUHFVersion() {
-
-
 		if(mReader!=null) {
 
 			String rfidVer = mReader.getHardwareType();

@@ -52,7 +52,7 @@ public class DetailProductRepository {
         AdminSQLOpenHelper admin=new AdminSQLOpenHelper(context);
         SQLiteDatabase db=admin.getWritableDatabase();
 
-        Cursor queryProducts=db.rawQuery("SELECT COUNT(ProductMasterId) as contador, Code, ProductMasterId, Name FROM DetailForDevice WHERE InventoryId="+inventoryId+" GROUP BY ProductMasterId ORDER BY Found=\"true\" ASC", null);
+        Cursor queryProducts=db.rawQuery("SELECT COUNT(ProductMasterId) as contador, Code, ProductMasterId, Name FROM DetailForDevice WHERE InventoryId="+inventoryId+" GROUP BY ProductMasterId ORDER BY Found='true' DESC", null);
         if(queryProducts.moveToFirst()){
             do{
                 masterProductCount.add(queryProducts.getInt(queryProducts.getColumnIndex("contador"))+"@"+queryProducts.getInt(queryProducts.getColumnIndex("ProductMasterId"))+"@"+queryProducts.getString(queryProducts.getColumnIndex("Name"))+"@"+queryProducts.getString(queryProducts.getColumnIndex("Code")));

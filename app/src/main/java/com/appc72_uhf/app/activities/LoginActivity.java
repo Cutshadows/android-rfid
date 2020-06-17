@@ -40,7 +40,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private Spinner sp_code;
     private EditText et_email, et_password;
     private Integer codeCompany;
-    public static final String PROTOCOL="http://";
+    public static final String PROTOCOL="https://";
     public static final String URL=".izyrfid.com";
     private static final String TAG="Login_activity";
     ProgressDialog mypDialog;

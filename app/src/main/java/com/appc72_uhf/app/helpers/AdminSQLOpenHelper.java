@@ -8,7 +8,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 public class AdminSQLOpenHelper extends SQLiteOpenHelper {
 
     public static final String DATABASE_NAME="IZYRFID.db";
-    public static final int DATABASE_VERSION=3;
+    public static final int DATABASE_VERSION=2;
 
 
     public AdminSQLOpenHelper( Context context) {
@@ -22,7 +22,7 @@ public class AdminSQLOpenHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         db.execSQL("CREATE TABLE IF  NOT EXISTS Tags(" +
-                "RFID TEXT UNIQUE, " +
+                "RFID TEXT NOT NULL PRIMARY KEY, " +
                 "InventoryId INTEGER, " +
                 "IdHardware TEXT, " +
                 "TID TEXT, " +

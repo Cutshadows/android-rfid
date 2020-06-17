@@ -12,8 +12,9 @@ public class DatamodelDocumentsMakeLabel {
         private String AssociatedDocNumber;
         private int DocumentTypeId;
         private String Description = null;
-        private String CreatedDate;
+        private String CreatedDate, DocumentName;
         private int LocationOriginId;
+        private String LocationOriginName;
         private String DestinationLocationId = null;
         private String Aux1 = null;
         private String Aux2 = null;
@@ -27,7 +28,7 @@ public class DatamodelDocumentsMakeLabel {
     public DatamodelDocumentsMakeLabel(){
 
     }
-    public DatamodelDocumentsMakeLabel(int documentId, int deviceId, String fechaAsignacion, String asignadoPor, boolean allowLabeling, int associatedDocumentId, String associatedDocNumber, int documentTypeId, String description, String createdDate, int locationOriginId, String destinationLocationId, String aux1, String aux2, String aux3, String client, int status, boolean hasVirtualItems, String readerId, ArrayList<Object> documentDetailsVirtual) {
+    public DatamodelDocumentsMakeLabel(int documentId, int deviceId, String fechaAsignacion, String asignadoPor, boolean allowLabeling, int associatedDocumentId, String associatedDocNumber, int documentTypeId, String description, String createdDate, int locationOriginId, String name, String destinationLocationId, String aux1, String aux2, String aux3, String client, int status, boolean hasVirtualItems, String readerId, ArrayList<Object> documentDetailsVirtual) {
         DocumentId = documentId;
         DeviceId = deviceId;
         FechaAsignacion = fechaAsignacion;
@@ -48,11 +49,14 @@ public class DatamodelDocumentsMakeLabel {
         HasVirtualItems = hasVirtualItems;
         ReaderId = readerId;
         DocumentDetailsVirtual = documentDetailsVirtual;
+        LocationOriginName=name;
     }
 
-    public DatamodelDocumentsMakeLabel(int documentId, int deviceId) {
+    public DatamodelDocumentsMakeLabel(int documentId, int deviceId, String locationOriginName, String documentName) {
         DocumentId = documentId;
         DeviceId = deviceId;
+        LocationOriginName=locationOriginName;
+        DocumentName=documentName;
     }
 
     public int getDocumentId() {
@@ -73,6 +77,12 @@ public class DatamodelDocumentsMakeLabel {
 
     public String getFechaAsignacion() {
         return FechaAsignacion;
+    }
+    public String getLocationOriginName() {
+        return LocationOriginName;
+    }
+    public String getDocumentName() {
+        return DocumentName;
     }
 
     public void setFechaAsignacion(String fechaAsignacion) {

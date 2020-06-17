@@ -22,6 +22,22 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.DefaultRetryPolicy;
+import com.android.volley.NetworkError;
+import com.android.volley.NetworkResponse;
+import com.android.volley.NoConnectionError;
+import com.android.volley.ParseError;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.RetryPolicy;
+import com.android.volley.ServerError;
+import com.android.volley.TimeoutError;
+import com.android.volley.VolleyError;
+import com.android.volley.VolleyLog;
+import com.android.volley.toolbox.HttpHeaderParser;
+import com.android.volley.toolbox.Volley;
 import com.appc72_uhf.app.MainActivity;
 import com.appc72_uhf.app.R;
 import com.appc72_uhf.app.activities.Detail_product_activity;
@@ -31,6 +47,11 @@ import com.appc72_uhf.app.repositories.InventaryRespository;
 import com.appc72_uhf.app.repositories.TagsRepository;
 import com.appc72_uhf.app.tools.UIHelper;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 
 public class DataAdapterInventories extends ArrayAdapter<DatamodelInventories> implements View.OnClickListener {
@@ -40,7 +61,8 @@ public class DataAdapterInventories extends ArrayAdapter<DatamodelInventories> i
     ProgressDialog mypDialog;
     String code_enterprise;
     private String android_id;
-
+    public static final String PROTOCOL_URLRFID="https://";
+    public static final String DOMAIN_URLRFID=".izyrfid.com/";
 
     public DataAdapterInventories(@NonNull Context context, int resource, ArrayList<DatamodelInventories> datalist ) {
         super(context,  resource, datalist);
@@ -60,6 +82,72 @@ public class DataAdapterInventories extends ArrayAdapter<DatamodelInventories> i
 
         switch (v.getId())
         {
+            case R.id.item_sync:
+                JSONArray data=new JSONArray();
+                TagsRepository tagRepo= new TagsRepository(this.mContext);
+                ArrayList Tags=tagRepo.ViewAllTags(datamodelInventories.getId());
+                    if(Tags.size()>0){
+                        try{
+
+                            RequestQueue requestQueue= Volley.newRequestQueue(getContext());
+                        String URL = PROTOCOL_URLRFID+code_enterprise.toLowerCase()+DOMAIN_URLRFID+"api/inventory/SaveTagReaded";
+
+                        JSONArray arregloCodigos = new JSONArray(Tags.toString());
+                        mypDialog = new ProgressDialog(mContext);
+                        mypDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+                        mypDialog.setMessage("Enviando codigos...");
+                        mypDialog.setCanceledOnTouchOutside(false);
+                        mypDialog.show();
+                        for(int i=0; i<arregloCodigos.length();i++){
+                            JSONObject jsonBody=new JSONObject();
+                            String etags=String.valueOf(Tags.get(i));
+                            String[] spliTags=etags.split("@");
+                            String RFIDtagsString=spliTags[0];
+                            String TIDtagsString=spliTags[1];
+                            jsonBody.put("InventoryId", String.valueOf(datamodelInventories.getId()));
+                            jsonBody.put("TId", TIDtagsString);
+                            jsonBody.put("IdHardware", android_id);
+                            jsonBody.put("RFID", RFIDtagsString);
+                            data.put(jsonBody);
+                        }
+                        Log.e("jsonBody", data.toString());
+
+                        BooleanRequest booleanRequest = new BooleanRequest(1, URL, data, new Response.Listener<Boolean>() {
+                            @Override
+                            public void onResponse(Boolean response) {
+                                if(response){
+                                    mypDialog.dismiss();
+                                    UIHelper.ToastMessage(getContext(), "Envio de codigos exitoso!!", 3);
+                                }
+                            }
+                        }, new Response.ErrorListener() {
+                            @Override
+                            public void onErrorResponse(VolleyError error) {
+                                mypDialog.dismiss();
+                                if (error instanceof NetworkError) {
+                                    UIHelper.ToastMessage(getContext(), "Error de conexion, no hay conexion a internet", 3);
+                                } else if (error instanceof ServerError) {
+                                    UIHelper.ToastMessage(getContext(), "Error de conexion, credenciales invalidas", 3);
+                                } else if (error instanceof AuthFailureError) {
+                                    UIHelper.ToastMessage(getContext(), "Error de conexion, intente mas tarde.", 3);
+                                } else if (error instanceof ParseError) {
+                                    UIHelper.ToastMessage(getContext(), "Error desconocido, intente mas tarde", 3);
+                                } else if (error instanceof TimeoutError || error instanceof NoConnectionError) {
+                                    UIHelper.ToastMessage(getContext(), "Error con el servidor, intente mas tarde!!!", 3);
+                                }
+                            }
+                        });
+                            int socketTimeout = 30000;//30 seconds - change to what you want
+                            RetryPolicy policy = new DefaultRetryPolicy(socketTimeout, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
+                            booleanRequest.setRetryPolicy(policy);
+                            requestQueue.add(booleanRequest);
+                        }catch (JSONException ex){
+                            ex.printStackTrace();
+                        }
+                    }else{
+                        UIHelper.ToastMessage(mContext, "No hay codigos leidos para enviar!!", 2);
+                    }
+                break;
             case R.id.item_delete:
                 try {
                     AlertDialog.Builder builder = new AlertDialog.Builder((Activity) getContext());
@@ -90,7 +178,7 @@ public class DataAdapterInventories extends ArrayAdapter<DatamodelInventories> i
                                 if(resultUpdateFalse && res){
                                     mypDialog.dismiss();
                                     UIHelper.ToastMessage(getContext(), "El inventario '"+datamodelInventories.getName()+"' eliminado!!", 5);
-                                    notifyDataSetChanged();
+                                    //notifyDataSetChanged();
                                     Intent goToMain=new Intent(getContext(), MainActivity.class);
                                     mContext.startActivity(goToMain);
 
@@ -131,7 +219,7 @@ public class DataAdapterInventories extends ArrayAdapter<DatamodelInventories> i
     }
     private class ViewHolder{
         TextView title;
-        ImageView item_delete;
+        ImageView item_delete, item_sync;
         ImageButton btn_global_detail;
     }
     private int lastPosition = -1;
@@ -151,6 +239,7 @@ public class DataAdapterInventories extends ArrayAdapter<DatamodelInventories> i
 
             holder.title=(TextView) convertView.findViewById(R.id.tv_inventory);
             holder.item_delete=(ImageView)convertView.findViewById(R.id.item_delete);
+            holder.item_sync=(ImageView) convertView.findViewById(R.id.item_sync);
             holder.btn_global_detail=(ImageButton)convertView.findViewById(R.id.btn_global_detail);
 
             result=convertView;
@@ -166,8 +255,10 @@ public class DataAdapterInventories extends ArrayAdapter<DatamodelInventories> i
         holder.title.setText(datamodelInventories.getName());
         holder.btn_global_detail.setOnClickListener(this);
         holder.item_delete.setOnClickListener(this);
+        holder.item_sync.setOnClickListener(this);
         holder.btn_global_detail.setTag(position);
         holder.item_delete.setTag(position);
+        holder.item_sync.setTag(position);
 
         if(datamodelInventories.getDetailForDevice()){
             convertView.setBackgroundResource(R.color.lightblue);
@@ -189,6 +280,64 @@ public class DataAdapterInventories extends ArrayAdapter<DatamodelInventories> i
             code_result=enterprises_code;
         }
         return code_result;
+    }
+
+    class BooleanRequest extends Request<Boolean> {
+        private final Response.Listener<Boolean> mListener;
+        private final Response.ErrorListener mErrorListener;
+        private final JSONArray mRequestBody;
+
+        private final String PROTOCOL_CHARSET = "utf-8";
+        private final String PROTOCOL_CONTENT_TYPE = String.format("application/json; charset=%s", PROTOCOL_CHARSET);
+
+        public BooleanRequest(int method, String url, JSONArray requestBody, Response.Listener<Boolean> listener, Response.ErrorListener errorListener) {
+            super(method, url, errorListener);
+            this.mListener = listener;
+            this.mErrorListener = errorListener;
+            this.mRequestBody = requestBody;
+        }
+
+        @Override
+        protected Response<Boolean> parseNetworkResponse(NetworkResponse response) {
+            Boolean parsed;
+            try {
+                parsed = Boolean.valueOf(new String(response.data, HttpHeaderParser.parseCharset(response.headers)));
+            } catch (UnsupportedEncodingException e) {
+                parsed = Boolean.valueOf(new String(response.data));
+            }
+            return Response.success(parsed, HttpHeaderParser.parseCacheHeaders(response));
+        }
+
+        @Override
+        protected VolleyError parseNetworkError(VolleyError volleyError) {
+            return super.parseNetworkError(volleyError);
+        }
+
+        @Override
+        protected void deliverResponse(Boolean response) {
+            mListener.onResponse(response);
+        }
+
+        @Override
+        public void deliverError(VolleyError error) {
+            mErrorListener.onErrorResponse(error);
+        }
+
+        @Override
+        public String getBodyContentType() {
+            return PROTOCOL_CONTENT_TYPE;
+        }
+
+        @Override
+        public byte[] getBody() throws AuthFailureError {
+            try {
+                return mRequestBody == null ? null : mRequestBody.toString().getBytes(PROTOCOL_CHARSET);
+            } catch (UnsupportedEncodingException uee) {
+                VolleyLog.wtf("Unsupported Encoding while trying to get the bytes of %s using %s",
+                        mRequestBody, PROTOCOL_CHARSET);
+                return null;
+            }
+        }
     }
 
 }
