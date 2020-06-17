@@ -1,7 +1,10 @@
 package com.appc72_uhf.app.fragment;
 
+import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -90,7 +93,7 @@ public class UHFReadTagFragment extends KeyDwonFragment {
 
 
 
-    public static final String PROTOCOL_URLRFID="https://";
+    public static final String PROTOCOL_URLRFID="http://";
     public static final String DOMAIN_URLRFID=".izyrfid.com/";
 
 
@@ -315,14 +318,46 @@ public class UHFReadTagFragment extends KeyDwonFragment {
     }
 
     private void clearData() {
-        TagsRepository tagsRepository = new TagsRepository(this.mContext);
-        boolean cleartags=tagsRepository.ClearTags(inventoryID);
-        if(cleartags){
-            UIHelper.ToastMessage(this.mContext, "Se limpio correctamente", 4);
-            tv_count.setText("0");
-            tagList.clear();
-            adapter.notifyDataSetChanged();
+
+
+        try {
+            AlertDialog.Builder builder = new AlertDialog.Builder((Activity) getContext());
+            builder.setTitle(R.string.ap_dialog_inventario_vaciar);
+            builder.setMessage("Vaciar codigos para este inventario?");
+            builder.setIcon(R.drawable.button_bg_up);
+
+            builder.setNegativeButton(R.string.ap_dialog_cancel, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                }
+            });
+            builder.setNeutralButton(R.string.ap_dialog_acept, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                    mypDialog = new ProgressDialog((Activity) getContext());
+                    mypDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+                    mypDialog.setMessage("limpiando codigos en lectura...");
+                    mypDialog.setCanceledOnTouchOutside(false);
+                    mypDialog.show();
+                    TagsRepository tagsRepository = new TagsRepository(getContext());
+                    boolean cleartags=tagsRepository.ClearTags(inventoryID);
+                    if(cleartags){
+                        mypDialog.dismiss();
+                        UIHelper.ToastMessage(getContext(), "Se limpio correctamente", 4);
+                        tv_count.setText("0");
+                        tagList.clear();
+                        adapter.notifyDataSetChanged();
+                    }
+
+                }
+            });
+            builder.create().show();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
+
     }
     public class BtInventoryClickListener implements OnClickListener {
         @Override

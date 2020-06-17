@@ -61,7 +61,7 @@ public class DataAdapterInventories extends ArrayAdapter<DatamodelInventories> i
     ProgressDialog mypDialog;
     String code_enterprise;
     private String android_id;
-    public static final String PROTOCOL_URLRFID="https://";
+    public static final String PROTOCOL_URLRFID="http://";
     public static final String DOMAIN_URLRFID=".izyrfid.com/";
 
     public DataAdapterInventories(@NonNull Context context, int resource, ArrayList<DatamodelInventories> datalist ) {
@@ -83,70 +83,91 @@ public class DataAdapterInventories extends ArrayAdapter<DatamodelInventories> i
         switch (v.getId())
         {
             case R.id.item_sync:
-                JSONArray data=new JSONArray();
-                TagsRepository tagRepo= new TagsRepository(this.mContext);
-                ArrayList Tags=tagRepo.ViewAllTags(datamodelInventories.getId());
-                    if(Tags.size()>0){
-                        try{
 
-                            RequestQueue requestQueue= Volley.newRequestQueue(getContext());
-                        String URL = PROTOCOL_URLRFID+code_enterprise.toLowerCase()+DOMAIN_URLRFID+"api/inventory/SaveTagReaded";
-
-                        JSONArray arregloCodigos = new JSONArray(Tags.toString());
-                        mypDialog = new ProgressDialog(mContext);
-                        mypDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-                        mypDialog.setMessage("Enviando codigos...");
-                        mypDialog.setCanceledOnTouchOutside(false);
-                        mypDialog.show();
-                        for(int i=0; i<arregloCodigos.length();i++){
-                            JSONObject jsonBody=new JSONObject();
-                            String etags=String.valueOf(Tags.get(i));
-                            String[] spliTags=etags.split("@");
-                            String RFIDtagsString=spliTags[0];
-                            String TIDtagsString=spliTags[1];
-                            jsonBody.put("InventoryId", String.valueOf(datamodelInventories.getId()));
-                            jsonBody.put("TId", TIDtagsString);
-                            jsonBody.put("IdHardware", android_id);
-                            jsonBody.put("RFID", RFIDtagsString);
-                            data.put(jsonBody);
+                try {
+                    AlertDialog.Builder builder = new AlertDialog.Builder((Activity) getContext());
+                    builder.setTitle(R.string.ap_dialog_inventario_vaciar);
+                    builder.setMessage("¿Desea enviar codigos a procesar?");
+                    builder.setIcon(R.drawable.button_bg_up);
+                    builder.setNegativeButton(R.string.ap_dialog_cancel, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
                         }
-                        Log.e("jsonBody", data.toString());
+                    });
+                    builder.setNeutralButton(R.string.ap_dialog_acept, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                            JSONArray data=new JSONArray();
+                            TagsRepository tagRepo= new TagsRepository(getContext());
+                            ArrayList Tags=tagRepo.ViewAllTags(datamodelInventories.getId());
+                            if(Tags.size()>0){
+                                try{
+                                    RequestQueue requestQueue= Volley.newRequestQueue(getContext());
+                                    String URL = PROTOCOL_URLRFID+code_enterprise.toLowerCase()+DOMAIN_URLRFID+"api/inventory/SaveTagReaded";
+                                    JSONArray arregloCodigos = new JSONArray(Tags.toString());
+                                    mypDialog = new ProgressDialog(mContext);
+                                    mypDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+                                    mypDialog.setMessage("Enviando codigos...");
+                                    mypDialog.setCanceledOnTouchOutside(false);
+                                    mypDialog.show();
+                                    for(int i=0; i<arregloCodigos.length();i++){
+                                        JSONObject jsonBody=new JSONObject();
+                                        String etags=String.valueOf(Tags.get(i));
+                                        String[] spliTags=etags.split("@");
+                                        String RFIDtagsString=spliTags[0];
+                                        String TIDtagsString=spliTags[1];
+                                        jsonBody.put("InventoryId", String.valueOf(datamodelInventories.getId()));
+                                        jsonBody.put("TId", TIDtagsString);
+                                        jsonBody.put("IdHardware", android_id);
+                                        jsonBody.put("RFID", RFIDtagsString);
+                                        data.put(jsonBody);
+                                    }
+                                    Log.e("jsonBody", data.toString());
 
-                        BooleanRequest booleanRequest = new BooleanRequest(1, URL, data, new Response.Listener<Boolean>() {
-                            @Override
-                            public void onResponse(Boolean response) {
-                                if(response){
-                                    mypDialog.dismiss();
-                                    UIHelper.ToastMessage(getContext(), "Envio de codigos exitoso!!", 3);
+                                    BooleanRequest booleanRequest = new BooleanRequest(1, URL, data, new Response.Listener<Boolean>() {
+                                        @Override
+                                        public void onResponse(Boolean response) {
+                                            if(response){
+                                                mypDialog.dismiss();
+                                                UIHelper.ToastMessage(getContext(), "Envio de codigos exitoso!!", 3);
+                                            }
+                                        }
+                                    }, new Response.ErrorListener() {
+                                        @Override
+                                        public void onErrorResponse(VolleyError error) {
+                                            mypDialog.dismiss();
+                                            if (error instanceof NetworkError) {
+                                                UIHelper.ToastMessage(getContext(), "Error de conexion, no hay conexion a internet", 3);
+                                            } else if (error instanceof ServerError) {
+                                                UIHelper.ToastMessage(getContext(), "Error de conexion, credenciales invalidas", 3);
+                                            } else if (error instanceof AuthFailureError) {
+                                                UIHelper.ToastMessage(getContext(), "Error de conexion, intente mas tarde.", 3);
+                                            } else if (error instanceof ParseError) {
+                                                UIHelper.ToastMessage(getContext(), "Error desconocido, intente mas tarde", 3);
+                                            } else if (error instanceof TimeoutError || error instanceof NoConnectionError) {
+                                                UIHelper.ToastMessage(getContext(), "Error con el servidor, intente mas tarde!!!", 3);
+                                            }
+                                        }
+                                    });
+                                    int socketTimeout = 30000;//30 seconds - change to what you want
+                                    RetryPolicy policy = new DefaultRetryPolicy(socketTimeout, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
+                                    booleanRequest.setRetryPolicy(policy);
+                                    requestQueue.add(booleanRequest);
+                                }catch (JSONException ex){
+                                    ex.printStackTrace();
                                 }
+                            }else{
+                                UIHelper.ToastMessage(mContext, "No hay codigos leidos para enviar!!", 2);
                             }
-                        }, new Response.ErrorListener() {
-                            @Override
-                            public void onErrorResponse(VolleyError error) {
-                                mypDialog.dismiss();
-                                if (error instanceof NetworkError) {
-                                    UIHelper.ToastMessage(getContext(), "Error de conexion, no hay conexion a internet", 3);
-                                } else if (error instanceof ServerError) {
-                                    UIHelper.ToastMessage(getContext(), "Error de conexion, credenciales invalidas", 3);
-                                } else if (error instanceof AuthFailureError) {
-                                    UIHelper.ToastMessage(getContext(), "Error de conexion, intente mas tarde.", 3);
-                                } else if (error instanceof ParseError) {
-                                    UIHelper.ToastMessage(getContext(), "Error desconocido, intente mas tarde", 3);
-                                } else if (error instanceof TimeoutError || error instanceof NoConnectionError) {
-                                    UIHelper.ToastMessage(getContext(), "Error con el servidor, intente mas tarde!!!", 3);
-                                }
-                            }
-                        });
-                            int socketTimeout = 30000;//30 seconds - change to what you want
-                            RetryPolicy policy = new DefaultRetryPolicy(socketTimeout, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
-                            booleanRequest.setRetryPolicy(policy);
-                            requestQueue.add(booleanRequest);
-                        }catch (JSONException ex){
-                            ex.printStackTrace();
                         }
-                    }else{
-                        UIHelper.ToastMessage(mContext, "No hay codigos leidos para enviar!!", 2);
-                    }
+                    });
+
+                    builder.create().show();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
                 break;
             case R.id.item_delete:
                 try {
@@ -154,7 +175,6 @@ public class DataAdapterInventories extends ArrayAdapter<DatamodelInventories> i
                     builder.setTitle(R.string.ap_dialog_inventario_vaciar);
                     builder.setMessage("Vaciar codigos para este inventario?");
                     builder.setIcon(R.drawable.button_bg_up);
-
                     builder.setNegativeButton(R.string.ap_dialog_cancel, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
