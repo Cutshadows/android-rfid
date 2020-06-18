@@ -63,7 +63,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/tv_document_id"
                 android:layout_marginLeft="60dp"
-                android:text="Total: "
+                android:text="Disponible: "
                 android:textStyle="normal"
                 android:layout_marginTop="1sp"
                 android:textColor="@android:color/white"/>
@@ -96,6 +96,38 @@
                 android:scaleType="fitCenter"
                 android:src="@drawable/ic_file_make_label"
                 tools:src="@drawable/ic_file_make_label" />
+
+            <!--ImageButton
+                android:id="@+id/ibtn_download_labels"
+                android:layout_width="50dp"
+                android:layout_height="65dp"
+                android:scaleType="fitCenter"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentRight="true"
+                android:backgroundTint="@color/red4"
+                android:rotation="180"
+                android:src="@drawable/ic_upload"
+                tools:src="@drawable/ic_upload"
+                /-->
+
+            <CheckBox
+                android:id="@+id/chbx_takeInventory"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:layout_centerHorizontal="true"
+                android:foregroundGravity="center_vertical"
+                android:layout_marginRight="20dp"
+                android:gravity="center_horizontal"
+                android:focusable="true"
+                android:enabled="true"
+                android:layout_alignParentRight="true"
+                android:button="@drawable/boton_checkbox"
+                />
         </RelativeLayout>
     </LinearLayout>
 </ScrollView>

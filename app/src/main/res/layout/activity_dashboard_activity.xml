@@ -104,6 +104,7 @@
                         android:background="@color/full_transparent"
                         android:scaleType="fitCenter"
                         android:src="@drawable/etiquetado"
+                        android:focusable="true"
                         tools:src="@drawable/etiquetado"></ImageButton>
                     <TextView
                         android:id="@+id/tv_makeLabel"
@@ -140,6 +141,7 @@
                         android:layout_marginBottom="15dp"
                         android:background="@color/full_transparent"
                         android:drawingCacheQuality="auto"
+                        android:focusable="true"
                         android:scaleType="fitCenter"
                         android:src="@drawable/tomar_inventario"></ImageButton>
                     <TextView

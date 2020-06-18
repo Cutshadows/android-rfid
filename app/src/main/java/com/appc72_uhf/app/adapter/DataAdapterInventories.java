@@ -61,7 +61,7 @@ public class DataAdapterInventories extends ArrayAdapter<DatamodelInventories> i
     ProgressDialog mypDialog;
     String code_enterprise;
     private String android_id;
-    public static final String PROTOCOL_URLRFID="http://";
+    public static final String PROTOCOL_URLRFID="https://";
     public static final String DOMAIN_URLRFID=".izyrfid.com/";
 
     public DataAdapterInventories(@NonNull Context context, int resource, ArrayList<DatamodelInventories> datalist ) {

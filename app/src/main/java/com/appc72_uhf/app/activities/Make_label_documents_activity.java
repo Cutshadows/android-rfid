@@ -1,5 +1,6 @@
 package com.appc72_uhf.app.activities;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -40,6 +41,8 @@ public class Make_label_documents_activity extends AppCompatActivity{
     String code_enterprise;
     String android_id;
     int codeCompany;
+    ProgressDialog mypDialog;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,7 +87,11 @@ public class Make_label_documents_activity extends AppCompatActivity{
         UIHelper.ToastMessage(this, "CARGANDO INFORMACION DE DOCUMENTOS CON ESTE ANDROID ID "+android_id+" access_token:"+token_access+" COMPANYID"+code_enterprise+" ID ENTERPRISE"+codeCompany);
 
         final String URL_COMPLETE=PROTOCOL_URLRFID+code_enterprise.toLowerCase()+DOMAIN_URLRFID;
-
+        mypDialog = new ProgressDialog(this);
+        mypDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        mypDialog.setMessage("Verificando documentos en servidor...");
+        mypDialog.setCanceledOnTouchOutside(false);
+        mypDialog.show();
         HttpHelpers http= new HttpHelpers(Make_label_documents_activity.this, URL_COMPLETE, "");
         http.addHeader("Authorization", "Bearer "+token_access);
         Log.e("INVENTARIO INT", PROTOCOL_URLRFID+code_enterprise.toLowerCase()+DOMAIN_URLRFID+"/api/devicedocument/GetAllDocumentsDeviceId?HardwareId="+android_id);
@@ -100,7 +107,9 @@ public class Make_label_documents_activity extends AppCompatActivity{
                         datamodelDocumentsMakeLabelArrayList.add(new DatamodelDocumentsMakeLabel(docsMakelabels[index].getDocumentId(), docsMakelabels[index].getDeviceId(), docsMakelabels[index].getLocationOriginName(), docsMakelabels[index].getDocumentName()));
                     }
                     adapterMakeLabelDocuments.notifyDataSetChanged();
+                    mypDialog.dismiss();
                 }catch (Exception e){
+                    mypDialog.dismiss();
                     e.printStackTrace();
                 }
 
@@ -108,6 +117,7 @@ public class Make_label_documents_activity extends AppCompatActivity{
             }, new Response.ErrorListener(){
                 @Override
                 public void onErrorResponse(VolleyError error){
+                    mypDialog.dismiss();
                     if (error instanceof NetworkError) {
                         UIHelper.ToastMessage(Make_label_documents_activity.this, "Error de conexion, no hay conexion a internet", 3);
                     } else if (error instanceof ServerError) {
