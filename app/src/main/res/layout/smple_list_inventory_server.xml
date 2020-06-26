@@ -28,7 +28,8 @@
             android:padding="10sp"
             android:text="@string/tv_welkomen_user"
             android:textColor="#ffffff"
-            xmlns:android="http://schemas.android.com/apk/res/android" />
+            xmlns:android="http://schemas.android.com/apk/res/android"
+           />
     </LinearLayout>
     <!--ImageView
         android:id="@+id/item_delete"
@@ -51,7 +52,8 @@
         android:gravity="center_horizontal"
         android:checked="true"
         android:textSize="18sp"
-        android:layout_alignParentRight="true" />
+        android:layout_alignParentRight="true"
+        android:button="@drawable/boton_checkbox"/>
 </RelativeLayout>
 </LinearLayout>
 </ScrollView>

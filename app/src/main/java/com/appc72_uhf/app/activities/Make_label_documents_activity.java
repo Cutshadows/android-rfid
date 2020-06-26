@@ -32,7 +32,7 @@ import java.util.ArrayList;
 public class Make_label_documents_activity extends AppCompatActivity{
     //private Button btn_syncDocumentServer;
     private ListView lv_server_documents;
-    public static final String PROTOCOL_URLRFID="https://";
+    public static final String PROTOCOL_URLRFID="http://";
     public static final String DOMAIN_URLRFID=".izyrfid.com";
     ArrayList<DatamodelDocumentsMakeLabel> datamodelDocumentsMakeLabelArrayList;
     AdapterMakeLabelDocuments adapterMakeLabelDocuments;
@@ -73,14 +73,6 @@ public class Make_label_documents_activity extends AppCompatActivity{
 
         adapterMakeLabelDocuments.notifyDataSetChanged();
 
-
-    /*@Override
-    public void onClick(View v) {
-        switch (v.getId()){
-            case R.id.btn_syncDocumentServer:
-                break;
-        }
-    }*/
     }
 
     public void syncronizedDocuments(){
@@ -104,7 +96,7 @@ public class Make_label_documents_activity extends AppCompatActivity{
                     DatamodelDocumentsMakeLabel[] docsMakelabels=gson.fromJson(response, DatamodelDocumentsMakeLabel[].class);
                     for(int index=0; index<=docsMakelabels.length-1; index++){
                         Log.e("DATA FOR", "DocumentsId: "+docsMakelabels[index].getDocumentId()+" DeviceId:"+docsMakelabels[index].getDeviceId()+" FechaAsignacion:"+docsMakelabels[index].getFechaAsignacion());
-                        datamodelDocumentsMakeLabelArrayList.add(new DatamodelDocumentsMakeLabel(docsMakelabels[index].getDocumentId(), docsMakelabels[index].getDeviceId(), docsMakelabels[index].getLocationOriginName(), docsMakelabels[index].getDocumentName()));
+                        datamodelDocumentsMakeLabelArrayList.add(new DatamodelDocumentsMakeLabel(docsMakelabels[index].getDocumentId(), docsMakelabels[index].getDeviceId(), docsMakelabels[index].getLocationOriginName(), docsMakelabels[index].getDocumentName(), docsMakelabels[index].getDocumentDetailsVirtual()));
                     }
                     adapterMakeLabelDocuments.notifyDataSetChanged();
                     mypDialog.dismiss();

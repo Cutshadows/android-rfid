@@ -65,6 +65,17 @@ public class DeviceRepository {
             return result_code;
     }
 
+    public String PermissionDevice(String hardwareId, int companyId){
+        AdminSQLOpenHelper admin = new AdminSQLOpenHelper(context);
+        SQLiteDatabase db = admin.getWritableDatabase();
+        String response="";
+        Cursor queryDevice=db.rawQuery("SELECT TakingInventory, MakeLabel FROM Device WHERE HardwareId='"+hardwareId+"' AND CompanyId="+companyId, null);
+        if(queryDevice.moveToFirst()){
+            response=queryDevice.getString(queryDevice.getColumnIndex("TakingInventory"))+"@"+queryDevice.getString(queryDevice.getColumnIndex("MakeLabel"));
+        }
+        return response;
+    }
+
 
 
 }

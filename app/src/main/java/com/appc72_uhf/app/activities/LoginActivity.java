@@ -29,8 +29,12 @@ import com.appc72_uhf.app.helpers.HttpHelpers;
 import com.appc72_uhf.app.repositories.CompanyRepository;
 import com.appc72_uhf.app.tools.UIHelper;
 
-import java.net.URLDecoder;
+import org.json.JSONObject;
+
+import java.text.DateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -40,13 +44,15 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private Spinner sp_code;
     private EditText et_email, et_password;
     private Integer codeCompany;
-    public static final String PROTOCOL="https://";
+    public static final String PROTOCOL="http://";
     public static final String URL=".izyrfid.com";
     private static final String TAG="Login_activity";
+    private String userDataName, userDataPassword;
     ProgressDialog mypDialog;
     ArrayList<String> dataSelect = new ArrayList<>();
     ArrayAdapter<String> adapterSelect;
     String et_code="";
+    String expires;
 
     @Override
     protected void onResume() {
@@ -62,6 +68,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         initComponent();
+        validate_session();
+
     }
 
     private void initComponent(){
@@ -109,25 +117,22 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             Log.i("No data preferences", Username);
         }else{
             et_email.setText(Username);
+            userDataName=Username;
         }
-
-        /**************************************************
-                 * Load data preferences of the get code companies
-
-        SharedPreferences preferencesCompanyId=getSharedPreferences("CompanyId", Context.MODE_PRIVATE);
-        codeCompany=preferencesCompanyId.getInt("CompanyId", 0);
-
-        SharedPreferences preferencesNameCompany=getSharedPreferences("CompanyName", Context.MODE_PRIVATE);
-        String CompanyName=preferencesNameCompany.getString("CompanyName", "");
-        if(CompanyName.length()==0){
-            Log.i("No data preferences", CompanyName);
+        SharedPreferences preferencesGetPassword=getSharedPreferences("password", Context.MODE_PRIVATE);
+        String Password=preferencesGetPassword.getString("password", "");
+        if(Password.length()==0){
+            Log.i("No data preferences", Username);
         }else{
-            dataSelect.add(CompanyName);
-            et_code.setText(CompanyName);
-            et_code.setEnabled(false);
+            userDataPassword=Password;
         }
-        Log.e("COdeCompany Login", String.valueOf(codeCompany));
-       ***************************************************/
+        SharedPreferences preferencesExpireDate=getSharedPreferences("expireDate", Context.MODE_PRIVATE);
+        String expireDateString=preferencesExpireDate.getString("expireDate", "");
+        if(expireDateString.length()==0){
+            Log.i("No data preferences", expireDateString);
+        }else{
+            expires=expireDateString;
+        }
     }
 
     @Override
@@ -156,9 +161,13 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             UIHelper.ToastMessage(this, "Los campos usuario y contraseña son obligatorios", 2);
         }else{
             SharedPreferences savePreferencesUsername=getSharedPreferences("username", Context.MODE_PRIVATE);
-            SharedPreferences.Editor obj_edite=savePreferencesUsername.edit();
-            obj_edite.putString("username", username);
-            obj_edite.apply();
+            SharedPreferences.Editor obj_edite_username=savePreferencesUsername.edit();
+            obj_edite_username.putString("username", username);
+            obj_edite_username.apply();
+            SharedPreferences savePreferencesPassword=getSharedPreferences("password", Context.MODE_PRIVATE);
+            SharedPreferences.Editor obj_edite_pw=savePreferencesPassword.edit();
+            obj_edite_pw.putString("password", password);
+            obj_edite_pw.apply();
             try{
                 setViewEnabled(false);
                 final String code=et_code;
@@ -172,7 +181,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 params.put("CompanyId", String.valueOf(companyId));
 
 
-                Log.e("valor 2", URLDecoder.decode(URL_COMPLETE));
                 Log.e("valor 3", password);
                 Log.e("valor 4", String.valueOf(companyId));
 
@@ -186,13 +194,18 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 @Override
                 public void onResponse(String response) {
                     try{
-                        ArrayList<String> resArray=new ArrayList<String>();
-                        resArray.add(response);
-                        String[] rest=response.split(",");
-                        String quitStringToken=rest[0].replace("{\"access_token\":", "");
-                        String access_token=quitStringToken.replace("\"", "");
+                        Log.e("eResponse", response);
 
-                        Log.e("TOKEN ACCESS", access_token);
+                        JSONObject jsonResponse;
+                        jsonResponse = new JSONObject(response);
+                        String access_token=(String)jsonResponse.get("access_token");
+                        String expiredate=(String)jsonResponse.get(".expires");
+
+                        SharedPreferences savePreferenceExpireDate=getSharedPreferences("expireDate", Context.MODE_PRIVATE);
+                        SharedPreferences.Editor obj_expireDate=savePreferenceExpireDate.edit();
+                        obj_expireDate.putString("expireDate", expiredate);
+                        obj_expireDate.apply();
+
 
                         SharedPreferences savePreferenceCodeActive=getSharedPreferences("code_activate", Context.MODE_PRIVATE);
                         SharedPreferences.Editor obj_codeActive=savePreferenceCodeActive.edit();
@@ -230,9 +243,11 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                     } else if (error instanceof ParseError) {
                         mypDialog.dismiss();
                         UIHelper.ToastMessage(LoginActivity.this, "Error desconocido, intente mas tarde", 3);
+
                     } else if (error instanceof TimeoutError || error instanceof NoConnectionError) {
                         mypDialog.dismiss();
                         UIHelper.ToastMessage(LoginActivity.this, "Tiempo agotado, intente mas tarde!!!", 3);
+
                     }
                 }
             });
@@ -254,9 +269,24 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         sp_code.setAdapter(adapterSelect);
         adapterSelect.notifyDataSetChanged();
     }
-
+    public void validate_session(){
+        if(userDataPassword!=null && userDataName!=null && expires!=null){
+            Date fecha=new Date(expires);
+            Date c = Calendar.getInstance().getTime();
+            String simpleDateFormatToday= DateFormat.getDateInstance(DateFormat.SHORT).format(c);
+            String simpleDateFormatExpire= DateFormat.getDateInstance(DateFormat.SHORT).format(fecha);
+            if(simpleDateFormatToday.equals(simpleDateFormatExpire)){
+                UIHelper.ToastMessage(LoginActivity.this, "Token expiro, tiene que iniciar sesión nuevamente.", 3);
+            }else{
+                Intent goToMain=new Intent(LoginActivity.this, Dashboard_activity.class);
+                startActivity(goToMain);
+            }
+        }
+    }
     private void setViewEnabled(boolean enabled) {
         btn_ingresar.setEnabled(enabled);
         btn_nuevaEmpresa.setEnabled(enabled);
     }
+
+
 }

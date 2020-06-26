@@ -49,26 +49,16 @@
 
             <Button
                 android:id="@+id/BtClear"
-                android:layout_width="70dp"
-                android:layout_height="53dp"
+                android:layout_width="120dp"
+                android:layout_height="45dp"
                 android:layout_marginLeft="5dp"
                 android:layout_marginRight="5dp"
                 android:background="@drawable/button_bg"
                 android:text="@string/btClear"
+                android:gravity="center"
                 android:textColor="@color/white"
                 android:textSize="11sp" />
 
-            <Button
-                android:id="@+id/BtSync"
-                android:layout_width="50dp"
-                android:layout_height="53dp"
-                android:layout_marginLeft="5dp"
-                android:layout_marginRight="5dp"
-                android:background="@drawable/button_bg"
-                android:text="@string/btSync"
-                android:visibility="invisible"
-                android:textColor="@color/white"
-                android:textSize="11sp" />
 
             <RelativeLayout
                 android:id="@+id/relative_layout_backButton"
@@ -77,7 +67,8 @@
                 <Button
                     android:id="@+id/btn_back_product_list"
                     android:layout_width="120dp"
-                    android:layout_height="53dp"
+                    android:layout_height="45dp"
+                    android:gravity="center"
                     android:layout_marginLeft="5dp"
                     android:background="@drawable/button_bg"
                     android:text="@string/btn_back_product_list"
@@ -87,6 +78,26 @@
 
 
         </LinearLayout>
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="start">
+
+            <ImageButton
+                android:id="@+id/imgbtn_indicator"
+                android:layout_width="45dp"
+                android:layout_height="45dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginLeft="30dp"
+                android:layout_marginRight="5dp"
+                android:layout_marginEnd="5dp"
+                android:background="@drawable/circle_indicator_stop"
+                android:layout_centerInParent="true"
+                android:scaleType="fitCenter"
+                android:layout_alignParentLeft="true"
+                android:layout_marginStart="30dp" />
+
+        </RelativeLayout>
 
         <!--Spinner
             android:id="@+id/spInventories"
@@ -101,21 +112,20 @@
     <LinearLayout
         android:id="@+id/layout12"
         android:layout_width="fill_parent"
-        android:layout_height="20dp"
+        android:layout_height="2dp"
         android:orientation="horizontal"
         android:padding="5dp">
 
         <Button
             android:id="@+id/BtInventory"
             android:layout_width="0dp"
-            android:layout_height="10dp"
+            android:layout_height="1dp"
             android:layout_marginLeft="5dp"
             android:layout_marginRight="5dp"
             android:layout_weight="1"
             android:background="@drawable/button_bg"
             android:text="@string/btInventory"
             android:textColor="@color/white"
-            android:textSize="18dp"
             android:visibility="invisible" />
 
     </LinearLayout>

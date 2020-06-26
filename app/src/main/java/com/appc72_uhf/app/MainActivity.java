@@ -20,6 +20,7 @@ public class MainActivity extends BaseTabFragmentActivity {
     private final static String TAG ="MainActivity";
     boolean takeInventory;
     String inventaryName;
+    int idInventory;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,6 +31,7 @@ public class MainActivity extends BaseTabFragmentActivity {
         if(this.getIntent().hasExtra("inventoryBool")){
             takeInventory=true;
             inventaryName= this.getIntent().getStringExtra("inventoryName");
+            idInventory= this.getIntent().getIntExtra("Id", 0);
             initSound();
             initUHF();
             initViewPageData();
@@ -52,7 +54,7 @@ public class MainActivity extends BaseTabFragmentActivity {
             //lstFrg.add(new UHFWriteFragment());
             lstFrg.add(new UHFSetFragment());
 
-            lstTitles.add(getString(R.string.uhf_msg_tab_scan).toUpperCase()+": "+inventaryName.toUpperCase());
+            lstTitles.add(getString(R.string.uhf_msg_tab_scan).toUpperCase()+": "+inventaryName.toUpperCase()+"  ["+idInventory+"]");
             //lstTitles.add(getString(R.string.uhf_msg_tab_write).toUpperCase());
             lstTitles.add(getString(R.string.uhf_msg_tab_set));
         }else{

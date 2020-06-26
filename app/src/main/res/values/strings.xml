@@ -155,7 +155,7 @@
     <string name="tvTagUii">EPC</string>
     <string name="tvTagLen">Length</string>
     <string name="tvTagCount">Count</string>
-    <string name="btClear">LIMPIAR</string>
+    <string name="btClear">LIMPIAR LECTURAS</string>
     <string name="btSync" translatable="false">ENVIAR</string>
     <string name="tv_wellcome" translatable="false">Bienvenido:</string>
     <string name="tv_welkomen_user" translatable="false">admin@izysearch.com</string>
@@ -1488,6 +1488,9 @@
 
     <!-- Botones opciones inventarios -->
     <string name="ap_dialog_inventario_vaciar" translatable="false">Vaciar codigos</string>
+    <string name="ap_dialog_configuration_entry" translatable="false">Configuración</string>
+    <string name="ap_dialog_delete_inventory" translatable="false">Eliminar</string>
+    <string name="ap_dialog_sync_inventory" translatable="false">Enviar</string>
     <string name="ap_dialog_acept" translatable="false">aceptar</string>
     <string name="ap_dialog_cancel" translatable="false">cancelar</string>
 

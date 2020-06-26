@@ -55,7 +55,7 @@ public class Detail_product_activity extends AppCompatActivity implements View.O
 
 
 
-        tv_detail_inventory.setText(inventory_name_detail);
+        tv_detail_inventory.setText("["+val_inventory+"]"+"  "+inventory_name_detail);
         //inventory_type=getIntent().getBooleanExtra("inventoryType", false);
         adapterProductDetails.notifyDataSetChanged();
 

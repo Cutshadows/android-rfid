@@ -3,14 +3,17 @@ package com.appc72_uhf.app;
 import android.app.ActionBar;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.text.InputType;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.fragment.app.FragmentActivity;
@@ -191,8 +194,41 @@ public class BaseTabFragmentActivity extends FragmentActivity {
 				}
 				break;
 			case R.id.action_set:
-				index = 2;
-				mActionBar.addTab(tab_set, true);
+				try{
+					AlertDialog.Builder builder = new AlertDialog.Builder(this );
+					builder.setTitle(R.string.ap_dialog_configuration_entry);
+					builder.setMessage("Ingresar clave de acceso");
+					final EditText input= new EditText(this);
+					input.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+					builder.setView(input);
+					builder.setIcon(R.drawable.button_bg_up);
+					builder.setNegativeButton(R.string.ap_dialog_cancel, new DialogInterface.OnClickListener() {
+						@Override
+						public void onClick(DialogInterface dialog, int which) {
+							dialog.dismiss();
+						}
+					});
+					builder.setNeutralButton(R.string.ap_dialog_acept, new DialogInterface.OnClickListener() {
+						@Override
+						public void onClick(DialogInterface dialog, int which) {
+							dialog.dismiss();
+						}
+					});
+						builder.setNeutralButton(R.string.ap_dialog_acept, new DialogInterface.OnClickListener() {
+							@Override
+							public void onClick(DialogInterface dialog, int which) {
+								if(input.getText().toString().equals("@Izytech2020")){
+									dialog.dismiss();
+									index = 2;
+									mActionBar.addTab(tab_set, true);
+								}
+							}
+					});
+					builder.create().show();
+				}catch (Exception e){
+					e.printStackTrace();
+				}
+
 				break;
 			case R.id.UHF_ver:
 				getUHFVersion();

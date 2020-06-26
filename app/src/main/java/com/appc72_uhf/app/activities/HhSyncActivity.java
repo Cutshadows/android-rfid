@@ -41,7 +41,7 @@ public class HhSyncActivity extends AppCompatActivity implements View.OnClickLis
     private EditText et_syncCode;
     private Button btn_syncronousDevice, btn_asynDevice_back_login;
     ProgressDialog mypDialog;
-    public static final String PROTOCOL_URLRFID="https://";
+    public static final String PROTOCOL_URLRFID="http://";
     public static final String URL=".izyrfid.com";
     private static final String TAG="HhSyncActivity";
     int codeCompany;
@@ -97,7 +97,6 @@ public class HhSyncActivity extends AppCompatActivity implements View.OnClickLis
                 mypDialog.setCanceledOnTouchOutside(false);
                 mypDialog.show();
                 HttpHelpers http = new HttpHelpers(this, URL_COMPLETE, "");
-                Log.e("URL COMPLETA", URL_COMPLETE+"/api/document/GetCompanies");
                 http.client(Request.Method.GET, "/api/document/GetCompanies", "application/json; charset=utf-8", null, new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -188,6 +187,7 @@ public class HhSyncActivity extends AppCompatActivity implements View.OnClickLis
                                     setViewEnabled(true);
                                     Gson gson = new Gson();
                                     Application apps = gson.fromJson(response, Application.class);
+
                                     if(apps.getAssignedResponse().equals("true")){
                                         boolean inserT=deviceRepository.DeviceInsert(
                                                 apps.getId(),

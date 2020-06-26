@@ -40,7 +40,7 @@ public class DataAdapterInventoryServer extends ArrayAdapter<DatamodelInventorie
     Context mContext;
     ArrayList<DatamodelInventories> datalist;
     ProgressDialog mypDialog;
-    public static final String PROTOCOL_URLRFID="https://";
+    public static final String PROTOCOL_URLRFID="http://";
     public static final String DOMAIN_URLRFID=".izyrfid.com";
     String token_access;
     String code_enterprise;

@@ -8,7 +8,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 public class AdminSQLOpenHelper extends SQLiteOpenHelper {
 
     public static final String DATABASE_NAME="IZYRFID.db";
-    public static final int DATABASE_VERSION=2;
+    public static final int DATABASE_VERSION=3;
 
 
     public AdminSQLOpenHelper( Context context) {
@@ -63,6 +63,47 @@ public class AdminSQLOpenHelper extends SQLiteOpenHelper {
                 "ProductMasterId INTEGER, " +
                 "InventoryId INTEGER);");//String, String, Float
 
+        db.execSQL("CREATE TABLE IF NOT EXISTS Documents("+
+                "DocumentName TEXT,"+
+                "DocumentId INTEGER UNIQUE,"+
+                "DeviceId INTEGER,"+
+                "FechaAsignacion TEXT,"+
+                "AsignadoPor TEXT,"+
+                "AllowLabeling TEXT,"+
+                "AssociatedDocumentId INTEGER," +
+                "AssociatedDocNumber TEXT," +
+                "DocumentTypeId INTEGER," +
+                "Description TEXT," +
+                "CreatedDate TEXT," +
+                "LocationOriginId INTEGER," +
+                "LocationOriginName TEXT," +
+                "DestinationLocationId TEXT," +
+                "Aux1 TEXT," +
+                "Aux2 TEXT," +
+                "Aux3 TEXT," +
+                "Client TEXT," +
+                "Status INTEGER," +
+                "HasVirtualItems TEXT," +
+                "isSelected INTEGER," +
+                "ReaderId TEXT"+");");
+
+        db.execSQL("CREATE TABLE IF NOT EXISTS DocumentDetailsVirtual("+
+                "Id INTEGER UNIQUE," +
+                "AssociatedDocNumber TEXT," +
+                "Status INTEGER," +
+                "CreatedDate TEXT," +
+                "ReadDate TEXT," +
+                "ProductMasterId INTEGER," +
+                "ProductVirtualId INTEGER," +
+                "DocumentId INTEGER," +
+                "ProductMaster INTEGER," +
+                "Document TEXT," +
+                "TypeDocumentVirtual INTEGER," +
+                "Cost TEXT," +
+                "wasMoved TEXT," +
+                "LabelAssociated TEXT," +
+                "ProductId INTEGER," +
+                "Product TEXT"+");");
     }
 
     @Override
@@ -72,6 +113,8 @@ public class AdminSQLOpenHelper extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS Device");
         db.execSQL("DROP TABLE IF EXISTS Company");
         db.execSQL("DROP TABLE IF EXISTS DetailForDevice");
+        db.execSQL("DROP TABLE IF EXISTS Documents");
+        db.execSQL("DROP TABLE IF EXISTS DocumentDetailsVirtual");
     }
 
 }

@@ -92,6 +92,7 @@
                 android:orientation="horizontal"
                 android:paddingTop="20dp">
                 <RelativeLayout
+                    android:id="@+id/Relative_layout_Makelabel"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical">
@@ -125,6 +126,7 @@
                 </RelativeLayout>
 
                 <RelativeLayout
+                    android:id="@+id/Relative_layout_takeInventory"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical">

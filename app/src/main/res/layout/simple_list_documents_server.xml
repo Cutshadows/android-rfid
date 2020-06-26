@@ -14,6 +14,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"
+            android:background="@color/blue1"
             android:padding="8dp">
             <TextView
                 android:id="@+id/tv_document_name"
@@ -113,7 +114,7 @@
                 /-->
 
             <CheckBox
-                android:id="@+id/chbx_takeInventory"
+                android:id="@+id/chbx_download_documents"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentTop="true"
