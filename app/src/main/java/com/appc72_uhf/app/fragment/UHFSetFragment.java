@@ -154,7 +154,8 @@ public class UHFSetFragment extends KeyDwonFragment implements OnClickListener {
         cbFastID.setOnCheckedChangeListener(new OnMyCheckedChangedListener());
         cbEPC_TID.setOnCheckedChangeListener(new OnMyCheckedChangedListener());
 
-        SpSession.setSelection(1);
+        SpSession.setSelection(2);
+       // SpSession.setSelection(1); //viene por defecto 1
         SpInv.setSelection(0);
         String ver = mContext.mReader.getHardwareType();
         arrPow = R.array.arrayPower;

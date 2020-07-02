@@ -17,7 +17,7 @@ public class InventaryRespository {
         this.context = context;
     }
 
-    public boolean InventoryInsert(int id, String name, String detailForDevice, int InventoryStatus, int codeCompany, int isSelect) {
+    public boolean InventoryInsert(int id, String name, String detailForDevice, int InventoryStatus, int codeCompany, boolean IncludeTID, int isSelect) {
         AdminSQLOpenHelper admin = new AdminSQLOpenHelper(context);
         SQLiteDatabase db = admin.getWritableDatabase();
         Cursor readInventories=db.rawQuery("SELECT * FROM Inventory WHERE Id="+id, null);
@@ -30,6 +30,7 @@ public class InventaryRespository {
             reg.put("InventoryStatus", InventoryStatus);
             reg.put("DetailForDevice", detailForDevice);
             reg.put("CompanyId", codeCompany);
+            reg.put("IncludeTID", String.valueOf(IncludeTID));
             reg.put("IsSelect", isSelect);
 
             if(readInventories.getCount()>0){
@@ -110,6 +111,17 @@ public class InventaryRespository {
         }catch (SQLException e){
             throw e;
         }
+        db.close();
+        return result;
+    }
+    public String inventoryWithTID(int inventoryId){
+        AdminSQLOpenHelper admin=new AdminSQLOpenHelper(context);
+        SQLiteDatabase db=admin.getWritableDatabase();
+        String result="";
+            Cursor querydetail=db.rawQuery("SELECT IncludeTID FROM Inventory WHERE InventoryStatus=0 AND Id="+inventoryId, null);
+            if(querydetail.moveToFirst()){
+                result=querydetail.getString(querydetail.getColumnIndex("IncludeTID"));
+            }
         db.close();
         return result;
     }

@@ -77,8 +77,50 @@ public class MakeLabelRepository {
 
 
     public boolean insertVirtualTag(
-
+    int id,
+    String associatedDocNumber,
+    int status,
+    String createdDate,
+    String readDate,
+    int productMasterId,
+    int productVirtualId,
+    int documentId,
+    int productMaster,
+    String document,
+    int typeDocumentVirtual,
+    String cost,
+    String wasMoved,
+    String labelAssociated,
+    int productId,
+    String product
     ){
-        return false;
+        AdminSQLOpenHelper admin = new AdminSQLOpenHelper(context);
+        SQLiteDatabase db = admin.getWritableDatabase();
+        boolean resultInsertTags;
+
+        try {
+            ContentValues valContentVirtualTags= new ContentValues();
+            valContentVirtualTags.put("Id", id);
+            valContentVirtualTags.put("AssociatedDocNumber", associatedDocNumber);
+            valContentVirtualTags.put("Status", status);
+            valContentVirtualTags.put("CreatedDate", createdDate);
+            valContentVirtualTags.put("ReadDate", readDate);
+            valContentVirtualTags.put("ProductMasterId", productMasterId);
+            valContentVirtualTags.put("ProductVirtualId", productVirtualId);
+            valContentVirtualTags.put("DocumentId", documentId);
+            valContentVirtualTags.put("ProductMaster", productMaster);
+            valContentVirtualTags.put("Document",document);
+            valContentVirtualTags.put("TypeDocumentVirtual", typeDocumentVirtual);
+            valContentVirtualTags.put("Cost", cost);
+            valContentVirtualTags.put("wasMoved", wasMoved);
+            valContentVirtualTags.put("LabelAssociated", labelAssociated);
+            valContentVirtualTags.put("ProductId", productId);
+            valContentVirtualTags.put("Product", product);
+            resultInsertTags=db.insert("DocumentDetailsVirtual", null,  valContentVirtualTags)>0;
+        }catch (SQLiteException sqliEx){
+            resultInsertTags=false;
+        }
+        db.close();
+        return resultInsertTags;
     }
 }

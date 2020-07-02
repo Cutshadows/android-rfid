@@ -7,6 +7,9 @@ public class DatamodelInventories {
     boolean DetailForDevice;
     int InventoryStatus;
     int CodeCompany;
+    boolean IncludeTID, TypeInventory;
+    int LocationId;
+    int DocumentId;
 
     public DatamodelInventories(int Id, String Name, boolean DetailForDevice, int inventoryStatus){
         this.Id = Id;
@@ -14,15 +17,19 @@ public class DatamodelInventories {
         this.DetailForDevice = DetailForDevice;
         this.InventoryStatus=inventoryStatus;
     }
-    public DatamodelInventories(int Id, String Name, boolean DetailForDevice, int inventoryStatus, int isSelect, int codeCompany){
+
+    public DatamodelInventories(int Id, String Name, boolean DetailForDevice, int inventoryStatus, boolean includeTID, int isSelect, boolean typeInventory, int codeCompany){
         this.Id = Id;
         this.Name = Name;
         this.DetailForDevice = DetailForDevice;
         this.InventoryStatus=inventoryStatus;
         this.IsSelect=isSelect;
         this.CodeCompany=codeCompany;
+        this.IncludeTID=includeTID;
+        this.TypeInventory=typeInventory;
     }
 
+    public boolean isTypeInventory(){return TypeInventory;};
     public int getisSelect() {
         return IsSelect;
     }
@@ -55,6 +62,9 @@ public class DatamodelInventories {
 
     public boolean getDetailForDevice() {
         return DetailForDevice;
+    }
+    public boolean getIncludeTID(){
+        return IncludeTID;
     }
 
     public void setDetailForDevice(boolean detailForDevice) {

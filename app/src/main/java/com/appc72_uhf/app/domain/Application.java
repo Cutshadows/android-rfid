@@ -7,7 +7,7 @@ public class Application {
     private String Name;
     private String ApplicationUser = null;
     private String CreateDate;
-    private float LocationId;
+    private int LocationId;
     Location LocationObject;
     private int InventoryStatus;
     private String CloseDate;
@@ -23,13 +23,40 @@ public class Application {
     private boolean Validate;
     private int IsSelect;
     private String AssignedResponse;
-
+    private boolean IncludeTID;
+    private int DocumentId;
     public Application() {
     }
 
 
 
-    public Application(int id, String name, String description, String applicationUserId, String applicationUser, String createDate, float locationId, Location locationObject, int inventoryStatus, String closeDate, String closeUserId, int companyId, String hardwareId, String isActive, String isAssigned, String takingInventory, String makeLabel, String accessToken, String detailForDevice, boolean validate, int isSelect, String assignedResponse) {
+
+    public Application(
+            int id,
+            String name,
+            String description,
+            String applicationUserId,
+            String applicationUser,
+            String createDate,
+            int locationId,
+            Location locationObject,
+            int inventoryStatus,
+            String closeDate,
+            String closeUserId,
+            int companyId,
+            String hardwareId,
+            String isActive,
+            String isAssigned,
+            String takingInventory,
+            String makeLabel,
+            String accessToken,
+            String detailForDevice,
+            boolean validate,
+            boolean includeTID,
+            int isSelect,
+            String assignedResponse,
+            int documentId
+    ) {
         Id = id;
         Name = name;
         Description = description;
@@ -52,12 +79,20 @@ public class Application {
         Validate=validate;
         IsSelect=isSelect;
         AssignedResponse=assignedResponse;
+        IncludeTID=includeTID;
+        DocumentId=documentId;
 
     }
     public int getIsSelect() {
         return IsSelect;
     }
+    public int getDocumentId() {
+        return DocumentId;
+    }
 
+    public void setDocumentId(int documentId) {
+        DocumentId = documentId;
+    }
     public void setSelect(int select) {
         IsSelect = select;
     }
@@ -71,6 +106,7 @@ public class Application {
     public String getAccessToken(){
         return AccessToken;
     }
+    public boolean getIncludeTID(){return IncludeTID;};
     public String getTakingInventory(){
         return TakingInventory;
     }
@@ -111,7 +147,7 @@ public class Application {
         return CreateDate;
     }
 
-    public float getLocationId() {
+    public int getLocationId() {
         return LocationId;
     }
 
@@ -160,7 +196,7 @@ public class Application {
         this.CreateDate = CreateDate;
     }
 
-    public void setLocationId( float LocationId ) {
+    public void setLocationId( int LocationId ) {
         this.LocationId = LocationId;
     }
 

@@ -32,7 +32,7 @@ import java.util.ArrayList;
 public class Make_label_documents_activity extends AppCompatActivity{
     //private Button btn_syncDocumentServer;
     private ListView lv_server_documents;
-    public static final String PROTOCOL_URLRFID="http://";
+    public static final String PROTOCOL_URLRFID="https://";
     public static final String DOMAIN_URLRFID=".izyrfid.com";
     ArrayList<DatamodelDocumentsMakeLabel> datamodelDocumentsMakeLabelArrayList;
     AdapterMakeLabelDocuments adapterMakeLabelDocuments;

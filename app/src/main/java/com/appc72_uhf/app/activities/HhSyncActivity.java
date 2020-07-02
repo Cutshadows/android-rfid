@@ -41,7 +41,7 @@ public class HhSyncActivity extends AppCompatActivity implements View.OnClickLis
     private EditText et_syncCode;
     private Button btn_syncronousDevice, btn_asynDevice_back_login;
     ProgressDialog mypDialog;
-    public static final String PROTOCOL_URLRFID="http://";
+    public static final String PROTOCOL_URLRFID="https://";
     public static final String URL=".izyrfid.com";
     private static final String TAG="HhSyncActivity";
     int codeCompany;

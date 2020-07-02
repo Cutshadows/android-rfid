@@ -21,30 +21,11 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.PopupWindow;
-import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 import android.widget.SimpleAdapter;
-import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 
-import com.android.volley.AuthFailureError;
-import com.android.volley.DefaultRetryPolicy;
-import com.android.volley.NetworkError;
-import com.android.volley.NetworkResponse;
-import com.android.volley.NoConnectionError;
-import com.android.volley.ParseError;
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.RetryPolicy;
-import com.android.volley.ServerError;
-import com.android.volley.TimeoutError;
-import com.android.volley.VolleyError;
-import com.android.volley.VolleyLog;
-import com.android.volley.toolbox.HttpHeaderParser;
-import com.android.volley.toolbox.Volley;
 import com.appc72_uhf.app.MainActivity;
 import com.appc72_uhf.app.R;
 import com.appc72_uhf.app.activities.Detail_product_activity;
@@ -54,11 +35,6 @@ import com.appc72_uhf.app.repositories.TagsRepository;
 import com.appc72_uhf.app.tools.StringUtils;
 import com.appc72_uhf.app.tools.UIHelper;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -70,32 +46,28 @@ public class UHFReadTagFragment extends KeyDwonFragment {
     Handler handler;
     private ArrayList<HashMap<String, String>> tagList;
     SimpleAdapter adapter;
-    TextView tv_count;
+    TextView tv_count, tv_TID;
     RadioGroup RgInventory;
-    RadioButton RbInventorySingle;
-    RadioButton RbInventoryLoop;
     Button  btn_back_product_list, BtInventory, BtClear; //BtSync
     ListView LvTags;
-    SimpleCursorAdapter adapter2;
     private String android_id;
-    private Button btnFilter;//过滤
     private LinearLayout llContinuous;
     private MainActivity mContext;
     private HashMap<String, String> map;
-    PopupWindow popFilter;
     ArrayList<String> result;
     private boolean shouldRefreshOnResume =false;
     String code_enterprise, name_inventory_pass;
     int inventoryID;
     int codeCompany;
-    boolean detailFordevice, detailForDevice, inventory_type;
+    boolean detailFordevice, detailForDevice;
     ProgressDialog mypDialog;
-    RelativeLayout relative_layout_filter, relative_layout_backButton;
+    RelativeLayout  relative_layout_backButton;
     ImageButton imgbtn_indicator;
+    String inventory_include_tid;
 
 
 
-    public static final String PROTOCOL_URLRFID="http://";
+    public static final String PROTOCOL_URLRFID="https://";
     public static final String DOMAIN_URLRFID=".izyrfid.com/";
 
 
@@ -134,6 +106,8 @@ public class UHFReadTagFragment extends KeyDwonFragment {
         relative_layout_backButton=(RelativeLayout) getView().findViewById(R.id.relative_layout_backButton);
         imgbtn_indicator=(ImageButton) getView().findViewById(R.id.imgbtn_indicator);
         imgbtn_indicator.setBackgroundResource(R.drawable.circle_indicator_stop);
+        tv_TID=(TextView) getView().findViewById(R.id.tv_TID);
+
         String tr = "";
         result=new ArrayList<>();
         inventoryID=mContext.getIntent().getIntExtra("inventoryID", 0);
@@ -168,13 +142,13 @@ public class UHFReadTagFragment extends KeyDwonFragment {
                 mContext.playSound(1);
             }
         };
+        UIHelper.ToastMessage(mContext, "INCLUYE TID: "+inventory_include_tid, 10);
         name_inventory_pass=mContext.getIntent().getStringExtra("Name");
-       // inventory_type=mContext.getIntent().getBooleanExtra("inventoryType", false);
-       /* if(detailForDevice){
-            relative_layout_filter.removeAllViews();
-        }else{
-            relative_layout_backButton.removeAllViews();
-        }*/
+        if(inventory_include_tid.equals("true")){
+                tv_TID.setVisibility(View.VISIBLE);
+        }else {
+            tv_TID.setVisibility(View.INVISIBLE);
+        }
 
     }
     @Override
@@ -355,14 +329,7 @@ public class UHFReadTagFragment extends KeyDwonFragment {
     }
 
 
-
-
-
-
-
     private void clearData() {
-
-
         try {
             AlertDialog.Builder builder = new AlertDialog.Builder((Activity) getContext());
             builder.setTitle(R.string.ap_dialog_inventario_vaciar);
@@ -413,7 +380,15 @@ public class UHFReadTagFragment extends KeyDwonFragment {
         if (BtInventory.getText().equals(mContext.getString(R.string.btInventory))){
                     switch (inventoryFlag) {
                         case 1:// 单标签循环  .startInventoryTag((byte) 0, (byte) 0))
-                            mContext.mReader.setEPCTIDMode(true);
+                            if(inventory_include_tid.equals("true")){
+                                mContext.mReader.setEPCTIDMode(true);
+                                mContext.mReader.setFastID(true);
+                                //mContext.mReader.setTagFocus(true);
+                            }else if(inventory_include_tid.equals("false")){
+                                mContext.mReader.setEPCTIDMode(false);
+                                mContext.mReader.setFastID(true);
+                                //mContext.mReader.setTagFocus(false);
+                            }
                             if (mContext.mReader.startInventoryTag(0,0)) {
                                 BtInventory.setText(mContext
                                         .getString(R.string.title_stop_Inventory));
@@ -496,7 +471,7 @@ public class UHFReadTagFragment extends KeyDwonFragment {
                     if (strTid.length() != 0 && !strTid.equals("0000000" + "000000000") && !strTid.equals("000000000000000000000000")) {
                         strResult =strTid;
                     } else {
-                        strResult = "";
+                        strResult = " ";
                     }
                         Message msg = handler.obtainMessage();
                         Log.e("EPC","EPC:"+ mContext.mReader.convertUiiToEPC(res[1])+"@"+res[2]+"@"+strResult);
@@ -512,6 +487,7 @@ public class UHFReadTagFragment extends KeyDwonFragment {
         ArrayList Tags=tagRepo.ViewAllTags(inventoryID);
         InventaryRespository inventaryRespository=new InventaryRespository(this.mContext);
         detailFordevice=inventaryRespository.inventoryDetailForDevice(inventoryID);
+
         try{
             if(Tags.size()!=0){
                 for(int i=0; i<=Tags.size();i++){
@@ -532,134 +508,6 @@ public class UHFReadTagFragment extends KeyDwonFragment {
         }
     }
 
-//ENVIO de tags
-    public class BtSyncClickListener implements OnClickListener {
-        @Override
-        public void onClick(View v) {
-            JSONArray data=new JSONArray();
-            if(tagList.size()>0){
-                try {
-                    final Context mcontext = getActivity();
-                    RequestQueue requestQueue= Volley.newRequestQueue(mcontext);
-                    String URL = PROTOCOL_URLRFID+code_enterprise.toLowerCase()+DOMAIN_URLRFID+"api/inventory/SaveTagReaded";
-
-                    JSONArray arregloCodigos = new JSONArray(tagList.toString());
-                    mypDialog = new ProgressDialog(mContext);
-                    mypDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-                    mypDialog.setMessage("Enviando codigos...");
-                    mypDialog.setCanceledOnTouchOutside(false);
-                    mypDialog.show();
-                    for(int index=0;index < arregloCodigos.length(); index++){
-                            JSONObject jsonBody=new JSONObject();
-                            JSONObject jsonObject= arregloCodigos.getJSONObject(index);
-                            String strEPC=jsonObject.getString("tagUii");
-                            String strTID=jsonObject.getString("tagRssi");
-
-                            jsonBody.put("InventoryId", String.valueOf(inventoryID));
-                            jsonBody.put("TId", strTID);
-                            jsonBody.put("IdHardware", android_id);
-                            jsonBody.put("RFID", strEPC);
-
-                            data.put(jsonBody);
-                    }
-                    Log.e("jsonBody", data.toString());
-                    BooleanRequest booleanRequest = new BooleanRequest(1, URL, data, new Response.Listener<Boolean>() {
-                        @Override
-                        public void onResponse(Boolean response) {
-                            if(response){
-                                mypDialog.dismiss();
-                                UIHelper.ToastMessage(mcontext, "Envio de codigos exitoso!!", 3);
-                            }
-                        }
-                    }, new Response.ErrorListener() {
-                        @Override
-                        public void onErrorResponse(VolleyError error) {
-                            mypDialog.dismiss();
-                            if (error instanceof NetworkError) {
-                                UIHelper.ToastMessage(mcontext, "Error de conexion, no hay conexion a internet", 3);
-                            } else if (error instanceof ServerError) {
-                                UIHelper.ToastMessage(mcontext, "Error de conexion, credenciales invalidas", 3);
-                            } else if (error instanceof AuthFailureError) {
-                                UIHelper.ToastMessage(mcontext, "Error de conexion, intente mas tarde.", 3);
-                            } else if (error instanceof ParseError) {
-                                UIHelper.ToastMessage(mcontext, "Error desconocido, intente mas tarde", 3);
-                            } else if (error instanceof TimeoutError || error instanceof NoConnectionError) {
-                                UIHelper.ToastMessage(mcontext, "Error con el servidor, intente mas tarde!!!", 3);
-                            }
-                        }
-                    });
-                    int socketTimeout = 30000;//30 seconds - change to what you want
-                    RetryPolicy policy = new DefaultRetryPolicy(socketTimeout, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
-                    booleanRequest.setRetryPolicy(policy);
-                    requestQueue.add(booleanRequest);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }else{
-                UIHelper.ToastMessage(mContext, "Error no tiene codigos para enviar!!!", 3);
-            }
-
-        }
-    }
-
-
-    class BooleanRequest extends Request<Boolean> {
-        private final Response.Listener<Boolean> mListener;
-        private final Response.ErrorListener mErrorListener;
-        private final JSONArray mRequestBody;
-
-        private final String PROTOCOL_CHARSET = "utf-8";
-        private final String PROTOCOL_CONTENT_TYPE = String.format("application/json; charset=%s", PROTOCOL_CHARSET);
-
-        public BooleanRequest(int method, String url, JSONArray requestBody, Response.Listener<Boolean> listener, Response.ErrorListener errorListener) {
-            super(method, url, errorListener);
-            this.mListener = listener;
-            this.mErrorListener = errorListener;
-            this.mRequestBody = requestBody;
-        }
-
-        @Override
-        protected Response<Boolean> parseNetworkResponse(NetworkResponse response) {
-            Boolean parsed;
-            try {
-                parsed = Boolean.valueOf(new String(response.data, HttpHeaderParser.parseCharset(response.headers)));
-            } catch (UnsupportedEncodingException e) {
-                parsed = Boolean.valueOf(new String(response.data));
-            }
-            return Response.success(parsed, HttpHeaderParser.parseCacheHeaders(response));
-        }
-
-        @Override
-        protected VolleyError parseNetworkError(VolleyError volleyError) {
-            return super.parseNetworkError(volleyError);
-        }
-
-        @Override
-        protected void deliverResponse(Boolean response) {
-            mListener.onResponse(response);
-        }
-
-        @Override
-        public void deliverError(VolleyError error) {
-            mErrorListener.onErrorResponse(error);
-        }
-
-        @Override
-        public String getBodyContentType() {
-            return PROTOCOL_CONTENT_TYPE;
-        }
-
-        @Override
-        public byte[] getBody() throws AuthFailureError {
-            try {
-                return mRequestBody == null ? null : mRequestBody.toString().getBytes(PROTOCOL_CHARSET);
-            } catch (UnsupportedEncodingException uee) {
-                VolleyLog.wtf("Unsupported Encoding while trying to get the bytes of %s using %s",
-                        mRequestBody, PROTOCOL_CHARSET);
-                return null;
-            }
-        }
-    }
 
     @Override
     public void myOnKeyDwon() {
@@ -667,8 +515,10 @@ public class UHFReadTagFragment extends KeyDwonFragment {
         }
     private String getCompany(){
         CompanyRepository companyRepository=new CompanyRepository(mContext);
+        InventaryRespository inventaryRespository= new InventaryRespository(mContext);
         SharedPreferences preferenceCodeActive=getContext().getSharedPreferences("code_activate", Context.MODE_PRIVATE);
         String enterprises_code=preferenceCodeActive.getString("code_activate", "");
+        inventory_include_tid=inventaryRespository.inventoryWithTID(inventoryID);
         String code_result="";
         int companyId;
         if(enterprises_code.isEmpty()){

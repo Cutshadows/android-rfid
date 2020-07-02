@@ -37,7 +37,7 @@ import java.util.ArrayList;
 
 public class Server_inventory_activity extends AppCompatActivity {
     private ListView lv_server_inventories;
-    public static final String PROTOCOL_URLRFID="http://";
+    public static final String PROTOCOL_URLRFID="https://";
     public static final String DOMAIN_URLRFID=".izyrfid.com";
     private RelativeLayout layout_server_inventory_load, layout_no_data;
     ArrayList<DatamodelInventories> dataArrayList;
@@ -70,7 +70,7 @@ public class Server_inventory_activity extends AppCompatActivity {
         SharedPreferences preferencesAccess_token=getSharedPreferences("access_token", Context.MODE_PRIVATE);
         String access_token=preferencesAccess_token.getString("access_token", "");
         if(access_token.length()==0){
-            Log.e("No data preferences", " Error data no empty "+access_token);
+            Log.e("No data preferences", " Error data empty "+access_token);
         }else{
             token_access=access_token;
         }
@@ -101,7 +101,7 @@ public class Server_inventory_activity extends AppCompatActivity {
             /**
              * Function to get inventories from web
              */
-                String URL_COMPLETE=PROTOCOL_URLRFID+code_enterprise.toLowerCase()+DOMAIN_URLRFID;
+                final String URL_COMPLETE=PROTOCOL_URLRFID+code_enterprise.toLowerCase()+DOMAIN_URLRFID;
                 final InventaryRespository inventoryRepo = new InventaryRespository(Server_inventory_activity.this);
                 dataArrayList.clear();
                 HttpHelpers http = new HttpHelpers(Server_inventory_activity.this, URL_COMPLETE, "");
@@ -109,30 +109,35 @@ public class Server_inventory_activity extends AppCompatActivity {
                 http.client(Request.Method.GET, "/api/inventory/GetAllInventories", "application/json; charset=utf-8", null, new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                        Log.e("onResponse", ""+response);
+                        Log.e("onResponse UBICACION", ""+response);
                         try{
                             Gson gson = new Gson();
                             Application[] apps = gson.fromJson(response, Application[].class);
                             layout_server_inventory_load.removeAllViews();
                             layout_no_data.removeAllViews();
                             lv_server_inventories.setVisibility(View.VISIBLE);
-                            dataArrayList.clear();
                             for( int i=0; i< apps.length; i++){
-                                Log.e("DATA FOR", ""+apps[i].getId()+""+apps[i].getName()+" "+Boolean.valueOf(apps[i].getDetailForDevice())+" INVENTORY STATUS: "+apps[i].getInventoryStatus());
+                                Log.e("DATA FOR", ""+apps[i].getId()+""+apps[i].getName()+" "+Boolean.valueOf(apps[i].getDetailForDevice())+" INVENTORY STATUS: "+apps[i].getInventoryStatus()+" INCLUDETID: "+apps[i].getIncludeTID());
                                 int inventoryFound=inventoryRepo.ViewInventory(apps[i].getId());
                                 if(apps[i].getInventoryStatus()==0 && inventoryFound==0){
-                                    dataArrayList.add(new DatamodelInventories(apps[i].getId(), String.valueOf(apps[i].getName()),  Boolean.parseBoolean(apps[i].getDetailForDevice()), apps[i].getInventoryStatus(), apps[i].getIsSelect(), codeCompany));
-                                }/*else{
-                                    UIHelper.ToastMessage(Server_inventory_activity.this, "No se encontraron inventarios disponibles", 5);
-                                    lv_server_inventories.setVisibility(View.INVISIBLE);
-                                    layout_no_data.setVisibility(View.VISIBLE);
-                                    Server_inventory_activity.super.onBackPressed();
-                                }*/
+                                    dataArrayList.add(
+                                            new DatamodelInventories(
+                                                    apps[i].getId(),
+                                                    String.valueOf(apps[i].getName()),
+                                                    Boolean.parseBoolean(apps[i].getDetailForDevice()),
+                                                    apps[i].getInventoryStatus(),
+                                                    apps[i].getIncludeTID(),
+                                                    apps[i].getIsSelect(),
+                                                    true,
+                                                    codeCompany
+                                            ));
+                                }
                             }
-                            dataAdapterInventoryServer.notifyDataSetChanged();
                         }catch (Exception e){
                             UIHelper.ToastMessage(Server_inventory_activity.this, "Error : "+e.getMessage(), 1);
                         }
+
+
                     }
                 }, new Response.ErrorListener() {
                     @Override
@@ -151,6 +156,65 @@ public class Server_inventory_activity extends AppCompatActivity {
                         }
                     }
                 });
+            /**
+             * Cargar inventario por documento
+             */
+            HttpHelpers http2 = new HttpHelpers(Server_inventory_activity.this, URL_COMPLETE, "");
+            http.addHeader("Authorization", "Bearer "+token_access);
+            http.client(Request.Method.GET, "/api/inventoryDoc/GetAllInventories", "application/json; charset=utf-8", null, new Response.Listener<String>() {
+                @Override
+                public void onResponse(String response) {
+                    Log.e("onResponse DOCUMENT", ""+response);
+                    try{
+                        Gson gson = new Gson();
+                        Application[] inventaryDoc = gson.fromJson(response, Application[].class);
+                        /*layout_server_inventory_load.removeAllViews();
+                        layout_no_data.removeAllViews();
+                        lv_server_inventories.setVisibility(View.VISIBLE);*/
+                        for (Application application : inventaryDoc) {
+                            Log.e("DATA FOR", "" + application.getId() + "" + application.getName() + " " + Boolean.valueOf(application.getDetailForDevice()) + " INVENTORY STATUS: " + application.getInventoryStatus() + " INCLUDETID: " + application.getIncludeTID());
+                            int inventoryFound = inventoryRepo.ViewInventory(application.getId());
+                            Log.e("InventoryStatus", "InventoryStatus: " + application.getInventoryStatus());
+                            if (application.getInventoryStatus() == 0 && inventoryFound == 0) {
+                                dataArrayList.add(
+                                        new DatamodelInventories(
+                                                application.getId(),
+                                                application.getName(),
+                                                Boolean.parseBoolean(application.getDetailForDevice()),
+                                                application.getInventoryStatus(),
+                                                application.getIncludeTID(),
+                                                application.getIsSelect(),
+                                                false,
+                                                codeCompany
+                                        ));
+                            }
+                        }
+                        dataAdapterInventoryServer.notifyDataSetChanged();
+                    }catch (Exception ex){
+                        UIHelper.ToastMessage(Server_inventory_activity.this, "Error : "+ex.getLocalizedMessage(), 5);
+                    }
+                }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    if (error instanceof NetworkError) {
+                        UIHelper.ToastMessage(Server_inventory_activity.this, "Error de conexion, no hay conexion a internet", 3);
+                    } else if (error instanceof ServerError) {
+                        UIHelper.ToastMessage(Server_inventory_activity.this, "Error de conexion, credenciales invalidas", 3);
+                    } else if (error instanceof AuthFailureError) {
+                        UIHelper.ToastMessage(Server_inventory_activity.this, "Error de conexion, intente mas tarde.", 3);
+                    } else if (error instanceof ParseError) {
+                        UIHelper.ToastMessage(Server_inventory_activity.this, "Error desconocido, intente mas tarde", 3);
+                    } else if (error instanceof TimeoutError || error instanceof NoConnectionError) {
+                        UIHelper.ToastMessage(Server_inventory_activity.this, "Error con el servidor, intente mas tarde!!!", 3);
+                        Server_inventory_activity.super.onBackPressed();
+                    }
+                }
+            });
+            /**
+             * FIN DE CARGA POR DOCUMENTO
+             */
+            dataAdapterInventoryServer.notifyDataSetChanged();
 
         }else{
             UIHelper.ToastMessage(this, "Necesita Internet para sincronizar", 3);

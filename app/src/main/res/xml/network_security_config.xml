@@ -8,7 +8,7 @@
         <domain includeSubdomains="true">arenysmed.izyrfid.com</domain>
         <domain includeSubdomains="true">arenysmed</domain>
         <domain includeSubdomains="true">goldfieds</domain>
-        <domain includeSubdomains="true">demo.izyrfid.com/api/devices/GetInfoDevice</domain>
+        <domain includeSubdomains="true">demo</domain>
     </domain-config>
     <base-config cleartextTrafficPermitted="true" />
 </network-security-config>

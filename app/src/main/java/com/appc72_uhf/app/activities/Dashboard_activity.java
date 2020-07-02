@@ -21,7 +21,6 @@ import androidx.core.app.ActivityCompat;
 import com.appc72_uhf.app.MainActivity;
 import com.appc72_uhf.app.R;
 import com.appc72_uhf.app.repositories.CompanyRepository;
-import com.appc72_uhf.app.repositories.DeviceRepository;
 import com.appc72_uhf.app.tools.UIHelper;
 
 import java.io.File;
@@ -93,8 +92,8 @@ public class Dashboard_activity extends AppCompatActivity implements View.OnClic
                 startActivity(goToMain);
                 break;
             case R.id.ibtn_Labelled:
-                Intent goToMain2=new Intent(Dashboard_activity.this, Make_label_documents_activity.class);
-                startActivity(goToMain2);
+                //Intent goToMain2=new Intent(Dashboard_activity.this, Make_label_documents_activity.class);
+                //startActivity(goToMain2);
                 break;
             case R.id.btn_create_recovery:
                 String strSrc = "/data/data/com.appc72_uhf.app/databases/IZYRFID.db";
@@ -109,27 +108,6 @@ public class Dashboard_activity extends AppCompatActivity implements View.OnClic
                     Log.e("IOException", e.toString());
                 }
                 break;
-        }
-    }
-
-    public void devicePermissions(){
-        DeviceRepository deviceRepository=new DeviceRepository(Dashboard_activity.this);
-        String resultQueryDevicePermissions= "";
-        try{
-            resultQueryDevicePermissions=deviceRepository.PermissionDevice(android_id, companyId);
-            Log.e("resultQuery", ""+resultQueryDevicePermissions);
-            String[] splitPermissions=resultQueryDevicePermissions.split("@");
-            takingInventory=splitPermissions[0];
-            takingMakeLabel=splitPermissions[1];
-            if(takingInventory.equals("false")){
-                Relative_layout_Makelabel.removeAllViews();
-            }else if(takingMakeLabel.equals("true")){
-                Relative_layout_takeInventory.removeAllViews();
-            }else if(takingInventory.equals("true")&&takingMakeLabel.equals("true")){
-
-            }
-        }catch (Exception ex){
-
         }
     }
 

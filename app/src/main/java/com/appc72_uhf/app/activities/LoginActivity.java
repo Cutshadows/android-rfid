@@ -44,7 +44,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private Spinner sp_code;
     private EditText et_email, et_password;
     private Integer codeCompany;
-    public static final String PROTOCOL="http://";
+    public static final String PROTOCOL="https://";
     public static final String URL=".izyrfid.com";
     private static final String TAG="Login_activity";
     private String userDataName, userDataPassword;
@@ -275,11 +275,28 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             Date c = Calendar.getInstance().getTime();
             String simpleDateFormatToday= DateFormat.getDateInstance(DateFormat.SHORT).format(c);
             String simpleDateFormatExpire= DateFormat.getDateInstance(DateFormat.SHORT).format(fecha);
-            if(simpleDateFormatToday.equals(simpleDateFormatExpire)){
-                UIHelper.ToastMessage(LoginActivity.this, "Token expiro, tiene que iniciar sesión nuevamente.", 3);
-            }else{
+
+           String[] fechaSpExp=simpleDateFormatExpire.split("/");
+            int dayExp=Integer.parseInt(fechaSpExp[0]);
+            int mesExp=Integer.parseInt(fechaSpExp[1]);
+            int yearExp=Integer.parseInt(fechaSpExp[2]);
+            int concatDateExp=dayExp+mesExp+yearExp;
+
+            String[] fechaSpToday=simpleDateFormatToday.split("/");
+            int dayTod=Integer.parseInt(fechaSpToday[0]);
+            int mesTod=Integer.parseInt(fechaSpToday[1]);
+            int yearTod=Integer.parseInt(fechaSpToday[2]);
+            int concatDateTod=dayTod+mesTod+yearTod;
+
+            if(concatDateTod<=concatDateExp){
                 Intent goToMain=new Intent(LoginActivity.this, Dashboard_activity.class);
                 startActivity(goToMain);
+            }else{
+                UIHelper.ToastMessage(LoginActivity.this, "Token expiro, tiene que iniciar sesión nuevamente.", 3);
+                SharedPreferences preferencesExpireDate=getSharedPreferences("expireDate", Context.MODE_PRIVATE);
+                SharedPreferences.Editor obj_expireDate=preferencesExpireDate.edit();
+                obj_expireDate.remove("expireDate");
+                obj_expireDate.apply();
             }
         }
     }

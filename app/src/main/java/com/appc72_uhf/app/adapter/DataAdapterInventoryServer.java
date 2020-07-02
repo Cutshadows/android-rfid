@@ -16,23 +16,10 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.android.volley.AuthFailureError;
-import com.android.volley.NetworkError;
-import com.android.volley.NoConnectionError;
-import com.android.volley.ParseError;
-import com.android.volley.Request;
-import com.android.volley.Response;
-import com.android.volley.ServerError;
-import com.android.volley.TimeoutError;
-import com.android.volley.VolleyError;
 import com.appc72_uhf.app.R;
-import com.appc72_uhf.app.entities.DataModelProductDetails;
 import com.appc72_uhf.app.entities.DatamodelInventories;
-import com.appc72_uhf.app.helpers.HttpHelpers;
-import com.appc72_uhf.app.repositories.DetailProductRepository;
 import com.appc72_uhf.app.repositories.InventaryRespository;
 import com.appc72_uhf.app.tools.UIHelper;
-import com.google.gson.Gson;
 
 import java.util.ArrayList;
 
@@ -40,7 +27,7 @@ public class DataAdapterInventoryServer extends ArrayAdapter<DatamodelInventorie
     Context mContext;
     ArrayList<DatamodelInventories> datalist;
     ProgressDialog mypDialog;
-    public static final String PROTOCOL_URLRFID="http://";
+    public static final String PROTOCOL_URLRFID="https://";
     public static final String DOMAIN_URLRFID=".izyrfid.com";
     String token_access;
     String code_enterprise;
@@ -62,7 +49,12 @@ public class DataAdapterInventoryServer extends ArrayAdapter<DatamodelInventorie
         switch (v.getId()){
             case R.id.chbx_takeInventory:
                 if(chb_takeInventory.isChecked()){
-                    boolean  resultInventoryInsert=inventaryRespository.InventoryInsert(datamodelInventories.getId(), datamodelInventories.getName(), String.valueOf(datamodelInventories.getDetailForDevice()), datamodelInventories.getInventoryStatus(), datamodelInventories.getCodeCompany(), 1);
+                    if(datamodelInventories.isTypeInventory()){
+                        UIHelper.ToastMessage(getContext(), "UBICACION: "+datamodelInventories.isTypeInventory(), 6);
+                    }else{
+                        UIHelper.ToastMessage(getContext(), "DOCUMENTO: "+datamodelInventories.isTypeInventory(), 6);
+                    }
+                    /*boolean  resultInventoryInsert=inventaryRespository.InventoryInsert(datamodelInventories.getId(), datamodelInventories.getName(), String.valueOf(datamodelInventories.getDetailForDevice()), datamodelInventories.getInventoryStatus(), datamodelInventories.getCodeCompany(), datamodelInventories.getIncludeTID(), 1);
                     if(datamodelInventories.getDetailForDevice()){
                         if(resultInventoryInsert){
                                 mypDialog = new ProgressDialog(getContext());
@@ -75,16 +67,15 @@ public class DataAdapterInventoryServer extends ArrayAdapter<DatamodelInventorie
                                 final DetailProductRepository detailProductRepository=new DetailProductRepository(getContext());
                                 HttpHelpers http = new HttpHelpers(getContext(), URL_COMPLETE, "");
                                 http.addHeader("Authorization", "Bearer "+token_access);
-                                Log.e("INVENTARIO INT", URL_COMPLETE+"/api/inventory/GetDetailForDevice?InventoryId="+datamodelInventories.getId());
+                                //Log.e("INVENTARIO INT", URL_COMPLETE+"/api/inventory/GetDetailForDevice?InventoryId="+datamodelInventories.getId());
                                 http.clientProductDetail(Request.Method.GET, "/api/inventory/GetDetailForDevice?InventoryId="+datamodelInventories.getId(), null,  new Response.Listener<String>() {
                                     @Override
                                     public void onResponse(String response) {
-                                        Log.e("onRESPONSE PRODUCT", response);
                                         try{
                                             Gson gson=new Gson();
                                             DataModelProductDetails[] products=gson.fromJson(response, DataModelProductDetails[].class);
                                             for(int index=0; index<=products.length-1; index++){
-                                                Log.e("DATA FOR", "ID: "+products[index].getId()+" NAME:"+products[index].getName()+" ProductMaster:"+products[index].getProductMasterId()+" FOUNG:"+Boolean.valueOf(products[index].getFound())+ "INTEGER INVENTARIO: "+datamodelInventories.getId());
+                                                //Log.e("DATA FOR", "ID: "+products[index].getId()+" NAME:"+products[index].getName()+" ProductMaster:"+products[index].getProductMasterId()+" FOUNG:"+Boolean.valueOf(products[index].getFound())+ "INTEGER INVENTARIO: "+datamodelInventories.getId());
                                                 boolean resultInsertProduct=detailProductRepository.DetailProductInsert(products[index].getId(), products[index].getEPC(), products[index].getCode(), products[index].getName(), products[index].getFound(), products[index].getProductMasterId(), datamodelInventories.getId());
                                                 if(resultInsertProduct){
 
@@ -123,7 +114,7 @@ public class DataAdapterInventoryServer extends ArrayAdapter<DatamodelInventorie
                         if(resultInventoryInsert){
                             UIHelper.ToastMessage(getContext(), "Obteniendo inventario '"+datamodelInventories.getName()+"' para habilitar!!", 5);
                         }
-                    }
+                    }*/
 
                 }else {
                    boolean resultUpdateFalse=inventaryRespository.DeleteInventory(datamodelInventories.getId());
@@ -181,7 +172,9 @@ public class DataAdapterInventoryServer extends ArrayAdapter<DatamodelInventorie
         result.startAnimation(animation);
 
         lastPosition = position;
-        holder.tv_inventory.setText(datamodelInventories.getName());
+        Log.e("CREACON VIEW", "LLEGUE HASTA ACA DETALLE"+"["+datamodelInventories.getId()+"] "+datamodelInventories.getName()+ "DETAILFORDEVICE:"+datamodelInventories.getDetailForDevice()+datamodelInventories.getisSelect());
+
+        holder.tv_inventory.setText("["+datamodelInventories.getId()+"] "+datamodelInventories.getName());
         holder.chbx_takeInventory.setOnClickListener(this);
         //holder.item_delete.setOnClickListener(this);
 
@@ -197,6 +190,7 @@ public class DataAdapterInventoryServer extends ArrayAdapter<DatamodelInventorie
         }
         holder.chbx_takeInventory.setTag(position);
         //holder.item_delete.setTag(position);
+        Log.e("CREACON VIEW", "LLEGUE HASTA ACA 2");
 
         return convertView;
     }

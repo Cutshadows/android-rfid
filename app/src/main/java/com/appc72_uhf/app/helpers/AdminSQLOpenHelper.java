@@ -34,6 +34,7 @@ public class AdminSQLOpenHelper extends SQLiteOpenHelper {
                 "Name TEXT, " +
                 "DetailForDevice TEXT, " +
                 "InventoryStatus INTEGER,"+
+                "IncludeTID TEXT,"+
                 "IsSelect INTEGER);"); //String, String, Float //isSelect=1 true || 0 false
 
         db.execSQL("CREATE TABLE IF  NOT EXISTS Device(" +

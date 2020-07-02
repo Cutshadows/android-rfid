@@ -61,7 +61,7 @@ public class DataAdapterInventories extends ArrayAdapter<DatamodelInventories> i
     ProgressDialog mypDialog;
     String code_enterprise;
     private String android_id;
-    public static final String PROTOCOL_URLRFID="http://";
+    public static final String PROTOCOL_URLRFID="https://";
     public static final String DOMAIN_URLRFID=".izyrfid.com/";
 
     public DataAdapterInventories(@NonNull Context context, int resource, ArrayList<DatamodelInventories> datalist ) {
@@ -106,6 +106,7 @@ public class DataAdapterInventories extends ArrayAdapter<DatamodelInventories> i
                                         try{
                                             RequestQueue requestQueue= Volley.newRequestQueue(getContext());
                                             String URL = PROTOCOL_URLRFID+code_enterprise.toLowerCase()+DOMAIN_URLRFID+"api/inventory/SaveTagReaded";
+                                            Log.e("URL", PROTOCOL_URLRFID+code_enterprise.toLowerCase()+DOMAIN_URLRFID+"api/inventory/SaveTagReaded");
                                             JSONArray arregloCodigos = new JSONArray(Tags.toString());
                                             mypDialog = new ProgressDialog(mContext);
                                             mypDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
@@ -228,6 +229,7 @@ public class DataAdapterInventories extends ArrayAdapter<DatamodelInventories> i
                 }else{
                     Intent fragment=new Intent(getContext(), MainActivity.class);
                     fragment.putExtra("inventoryBool", true);
+                    fragment.putExtra("Id",  datamodelInventories.getId());
                     fragment.putExtra("inventoryID", datamodelInventories.getId());
                     fragment.putExtra("inventoryName", datamodelInventories.getName());
                     fragment.putExtra("inventoryType", datamodelInventories.getDetailForDevice());

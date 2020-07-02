@@ -45,7 +45,7 @@ public class AdapterMakeLabelDocuments extends ArrayAdapter<DatamodelDocumentsMa
         Object object=getItem(position);
 
         final DatamodelDocumentsMakeLabel dModelMakeLabel=(DatamodelDocumentsMakeLabel)object;
-       // final DataModelVirtualDocument dModVirtualDocument=(DataModelVirtualDocument)object;
+        DataModelVirtualDocument dModVirtualDocument=(DataModelVirtualDocument)object;
         CheckBox chbx_download_documents=(CheckBox) v.findViewById(R.id.chbx_download_documents);
 
         switch (v.getId()){
@@ -78,8 +78,7 @@ public class AdapterMakeLabelDocuments extends ArrayAdapter<DatamodelDocumentsMa
 
                     if(resultDocumentInsert){
                         for(int indexVirtual=0; indexVirtual<dModelMakeLabel.getDocumentDetailsVirtual().size(); indexVirtual++){
-                            DataModelVirtualDocument dModVirtualDocument =dModelMakeLabel.getDocumentDetailsVirtual().get(indexVirtual);
-
+                            dModVirtualDocument =dModelMakeLabel.getDocumentDetailsVirtual().get(indexVirtual);
 
                         }
                     }
