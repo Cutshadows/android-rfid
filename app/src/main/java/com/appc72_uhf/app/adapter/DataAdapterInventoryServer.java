@@ -72,7 +72,6 @@ public class DataAdapterInventoryServer extends ArrayAdapter<DatamodelInventorie
                                     mypDialog.setMessage("Habilitando inventario por Documento'"+datamodelInventories.getName()+"'...");
                                     mypDialog.setCanceledOnTouchOutside(false);
                                     mypDialog.show();
-                                    //UIHelper.ToastMessage(getContext(), "Obteniendo inventario '"+datamodelInventories.getName()+"' y los detalles para habilitar!!", 5);
                                     String URL_COMPLETE=PROTOCOL_URLRFID+code_enterprise.toLowerCase()+DOMAIN_URLRFID;
                                     final DetailProductRepository detailProductRepository=new DetailProductRepository(getContext());
                                     HttpHelpers http = new HttpHelpers(getContext(), URL_COMPLETE, "");
