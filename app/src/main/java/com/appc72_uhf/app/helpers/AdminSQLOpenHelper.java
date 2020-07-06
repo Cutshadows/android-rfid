@@ -23,13 +23,13 @@ public class AdminSQLOpenHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         db.execSQL("CREATE TABLE IF  NOT EXISTS Tags(" +
                 "RFID TEXT NOT NULL PRIMARY KEY, " +
-                "InventoryId INTEGER, " +
+                "InventoryId TEXT, " +
                 "IdHardware TEXT, " +
                 "TID TEXT, " +
                 "TagStatus INTEGER);"); //String, String, Float
 
         db.execSQL("CREATE TABLE IF  NOT EXISTS Inventory(" +
-                "Id INTEGER UNIQUE, " +
+                "Id TEXT UNIQUE, " +
                 "CompanyId INTEGER, " +
                 "Name TEXT, " +
                 "DetailForDevice TEXT, " +
@@ -62,7 +62,7 @@ public class AdminSQLOpenHelper extends SQLiteOpenHelper {
                 "Name TEXT,"+
                 "Found TEXT,"+
                 "ProductMasterId INTEGER, " +
-                "InventoryId INTEGER);");//String, String, Float
+                "InventoryId TEXT);");//String, String, Float
 
         db.execSQL("CREATE TABLE IF NOT EXISTS Documents("+
                 "DocumentName TEXT,"+

@@ -62,76 +62,89 @@ public class DataAdapterInventoryServer extends ArrayAdapter<DatamodelInventorie
         switch (v.getId()){
             case R.id.chbx_takeInventory:
                 if(chb_takeInventory.isChecked()){
-                    if(datamodelInventories.isTypeInventory()){
-                        UIHelper.ToastMessage(getContext(), "UBICACION: "+datamodelInventories.isTypeInventory(), 6);
-                            boolean  resultInventoryInsert=inventaryRespository.InventoryInsert(datamodelInventories.getId(), datamodelInventories.getName(), String.valueOf(datamodelInventories.getDetailForDevice()), datamodelInventories.getInventoryStatus(), datamodelInventories.getCodeCompany(), datamodelInventories.getIncludeTID(), 1);
-                            if(datamodelInventories.getDetailForDevice()){
-                                if(resultInventoryInsert){
-                                    mypDialog = new ProgressDialog(getContext());
-                                    mypDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-                                    mypDialog.setMessage("Habilitando inventario por Documento'"+datamodelInventories.getName()+"'...");
-                                    mypDialog.setCanceledOnTouchOutside(false);
-                                    mypDialog.show();
-                                    String URL_COMPLETE=PROTOCOL_URLRFID+code_enterprise.toLowerCase()+DOMAIN_URLRFID;
-                                    final DetailProductRepository detailProductRepository=new DetailProductRepository(getContext());
-                                    HttpHelpers http = new HttpHelpers(getContext(), URL_COMPLETE, "");
-                                    http.addHeader("Authorization", "Bearer "+token_access);
-                                    //Log.e("INVENTARIO INT", URL_COMPLETE+"/api/inventory/GetDetailForDevice?InventoryId="+datamodelInventories.getId());
-                                    http.clientProductDetail(Request.Method.GET, "/api/inventory/GetDetailForDevice?InventoryId="+datamodelInventories.getId(), null,  new Response.Listener<String>() {
-                                        @Override
-                                        public void onResponse(String response) {
-                                            try{
-                                                Gson gson=new Gson();
-                                                DataModelProductDetails[] products=gson.fromJson(response, DataModelProductDetails[].class);
-                                                for(int index=0; index<=products.length-1; index++){
-                                                    //Log.e("DATA FOR", "ID: "+products[index].getId()+" NAME:"+products[index].getName()+" ProductMaster:"+products[index].getProductMasterId()+" FOUNG:"+Boolean.valueOf(products[index].getFound())+ "INTEGER INVENTARIO: "+datamodelInventories.getId());
-                                                    boolean resultInsertProduct=detailProductRepository.DetailProductInsert(products[index].getId(), products[index].getEPC(), products[index].getCode(), products[index].getName(), products[index].getFound(), products[index].getProductMasterId(), datamodelInventories.getId());
-                                                    if(resultInsertProduct){
+                    if(datamodelInventories.isTypeInventory()==1){
+                            UIHelper.ToastMessage(getContext(), "UBICACION: "+datamodelInventories.isTypeInventory(), 6);
+                                boolean  resultInventoryInsert=inventaryRespository.InventoryInsert("U"+datamodelInventories.getId(), datamodelInventories.getName(), String.valueOf(datamodelInventories.getDetailForDevice()), datamodelInventories.getInventoryStatus(), datamodelInventories.getCodeCompany(), datamodelInventories.getIncludeTID(), 1);
+                                if(datamodelInventories.getDetailForDevice()){
+                                    if(resultInventoryInsert){
+                                        mypDialog = new ProgressDialog(getContext());
+                                        mypDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+                                        mypDialog.setMessage("Habilitando inventario por Ubicación'"+datamodelInventories.getName()+"'...");
+                                        mypDialog.setCanceledOnTouchOutside(false);
+                                        mypDialog.show();
+                                        String URL_COMPLETE=PROTOCOL_URLRFID+code_enterprise.toLowerCase()+DOMAIN_URLRFID;
+                                        final DetailProductRepository detailProductRepository=new DetailProductRepository(getContext());
+                                        HttpHelpers http = new HttpHelpers(getContext(), URL_COMPLETE, "");
+                                        http.addHeader("Authorization", "Bearer "+token_access);
+                                        //Log.e("INVENTARIO INT", URL_COMPLETE+"/api/inventory/GetDetailForDevice?InventoryId="+datamodelInventories.getId());
+                                        http.clientProductDetail(Request.Method.GET, "/api/inventory/GetDetailForDevice?InventoryId="+datamodelInventories.getId(), null,  new Response.Listener<String>() {
+                                            @Override
+                                            public void onResponse(String response) {
+                                                try{
+                                                    Gson gson=new Gson();
+                                                    DataModelProductDetails[] products=gson.fromJson(response, DataModelProductDetails[].class);
+                                                    for(int index=0; index<=products.length-1; index++){
+                                                        //Log.e("DATA FOR", "ID: "+products[index].getId()+" NAME:"+products[index].getName()+" ProductMaster:"+products[index].getProductMasterId()+" FOUNG:"+Boolean.valueOf(products[index].getFound())+ "INTEGER INVENTARIO: "+datamodelInventories.getId());
+                                                        boolean resultInsertProduct=detailProductRepository.DetailProductInsert(products[index].getId(),
+                                                                products[index].getEPC(),
+                                                                products[index].getCode(),
+                                                                products[index].getName(),
+                                                                products[index].getFound(),
+                                                                products[index].getProductMasterId(),
+                                                                "U"+datamodelInventories.getId()
+                                                        );
+                                                        if(resultInsertProduct){
 
+                                                        }
                                                     }
+                                                    mypDialog.dismiss();
+                                                    UIHelper.ToastMessage(getContext(), "Inventario habilitado exitosamente", 5);
+                                                }catch (Exception e){
+                                                    e.printStackTrace();
                                                 }
-                                                mypDialog.dismiss();
-                                                UIHelper.ToastMessage(getContext(), "Inventario habilitado exitosamente", 5);
-                                            }catch (Exception e){
-                                                e.printStackTrace();
-                                            }
 
-                                        }
-                                    }, new Response.ErrorListener() {
-                                        @Override
-                                        public void onErrorResponse(VolleyError error) {
-                                            if (error instanceof NetworkError) {
-                                                mypDialog.dismiss();
-                                                UIHelper.ToastMessage(mContext, "Error de conexion, no hay conexion a internet", 3);
-                                            } else if (error instanceof ServerError) {
-                                                mypDialog.dismiss();
-                                                UIHelper.ToastMessage(mContext, "Error de conexion, credenciales invalidas", 3);
-                                            } else if (error instanceof AuthFailureError) {
-                                                mypDialog.dismiss();
-                                                UIHelper.ToastMessage(mContext, "Error de conexion, intente mas tarde.", 3);
-                                            } else if (error instanceof ParseError) {
-                                                mypDialog.dismiss();
-                                                UIHelper.ToastMessage(mContext, "Error desconocido, intente mas tarde", 3);
-                                            } else if (error instanceof TimeoutError || error instanceof NoConnectionError) {
-                                                mypDialog.dismiss();
-                                                UIHelper.ToastMessage(mContext, "Tiempo agotado, intente mas tarde!!!", 3);
                                             }
-                                        }
-                                    });
+                                        }, new Response.ErrorListener() {
+                                            @Override
+                                            public void onErrorResponse(VolleyError error) {
+                                                if (error instanceof NetworkError) {
+                                                    mypDialog.dismiss();
+                                                    UIHelper.ToastMessage(mContext, "Error de conexion, no hay conexion a internet", 3);
+                                                } else if (error instanceof ServerError) {
+                                                    mypDialog.dismiss();
+                                                    UIHelper.ToastMessage(mContext, "Error de conexion, credenciales invalidas", 3);
+                                                } else if (error instanceof AuthFailureError) {
+                                                    mypDialog.dismiss();
+                                                    UIHelper.ToastMessage(mContext, "Error de conexion, intente mas tarde.", 3);
+                                                } else if (error instanceof ParseError) {
+                                                    mypDialog.dismiss();
+                                                    UIHelper.ToastMessage(mContext, "Error desconocido, intente mas tarde", 3);
+                                                } else if (error instanceof TimeoutError || error instanceof NoConnectionError) {
+                                                    mypDialog.dismiss();
+                                                    UIHelper.ToastMessage(mContext, "Tiempo agotado, intente mas tarde!!!", 3);
+                                                }
+                                            }
+                                        });
+                                    }
+                            }else {
+                                if(resultInventoryInsert){
+                                    UIHelper.ToastMessage(getContext(), "Obteniendo inventario '"+datamodelInventories.getName()+"' para habilitar!!", 5);
                                 }
-                    }else {
-                        if(resultInventoryInsert){
-                            UIHelper.ToastMessage(getContext(), "Obteniendo inventario '"+datamodelInventories.getName()+"' para habilitar!!", 5);
-                        }
-                    }
-                    }else{
+                            }
+                    }else if(datamodelInventories.isTypeInventory()==2){
                         UIHelper.ToastMessage(getContext(), "DOCUMENTO: "+datamodelInventories.isTypeInventory(), 6);
-                        boolean  resultInventoryInsert=inventaryRespository.InventoryInsert(datamodelInventories.getId(), datamodelInventories.getName(), String.valueOf(datamodelInventories.getDetailForDevice()), datamodelInventories.getInventoryStatus(), datamodelInventories.getCodeCompany(), datamodelInventories.getIncludeTID(), 1);
+                        boolean  resultInventoryInsert=inventaryRespository.InventoryInsert("D"+datamodelInventories.getId(),
+                                                                                                datamodelInventories.getName(),
+                                                                                                String.valueOf(datamodelInventories.getDetailForDevice()),
+                                                                                                datamodelInventories.getInventoryStatus(),
+                                                                                                datamodelInventories.getCodeCompany(),
+                                                                                                datamodelInventories.getIncludeTID(),
+                                                                                                1);
                         if(datamodelInventories.getDetailForDevice()){
                             if(resultInventoryInsert){
                                 mypDialog = new ProgressDialog(getContext());
                                 mypDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-                                mypDialog.setMessage("Habilitando inventario por Ubicación '"+datamodelInventories.getName()+"'...");
+                                mypDialog.setMessage("Habilitando inventario por Documento '"+datamodelInventories.getName()+"'...");
                                 mypDialog.setCanceledOnTouchOutside(false);
                                 mypDialog.show();
                                 //UIHelper.ToastMessage(getContext(), "Obteniendo inventario '"+datamodelInventories.getName()+"' y los detalles para habilitar!!", 5);
@@ -148,7 +161,165 @@ public class DataAdapterInventoryServer extends ArrayAdapter<DatamodelInventorie
                                             DataModelProductDetails[] products=gson.fromJson(response, DataModelProductDetails[].class);
                                             for(int index=0; index<=products.length-1; index++){
                                                 //Log.e("DATA FOR", "ID: "+products[index].getId()+" NAME:"+products[index].getName()+" ProductMaster:"+products[index].getProductMasterId()+" FOUNG:"+Boolean.valueOf(products[index].getFound())+ "INTEGER INVENTARIO: "+datamodelInventories.getId());
-                                                boolean resultInsertProduct=detailProductRepository.DetailProductInsert(products[index].getId(), products[index].getEPC(), products[index].getCode(), products[index].getName(), products[index].getFound(), products[index].getProductMasterId(), datamodelInventories.getId());
+                                                boolean resultInsertProduct=detailProductRepository.DetailProductInsert(products[index].getId(),
+                                                        products[index].getEPC(),
+                                                        products[index].getCode(),
+                                                        products[index].getName(),
+                                                        products[index].getFound(),
+                                                        products[index].getProductMasterId(),
+                                                        "D"+datamodelInventories.getId());
+                                                if(resultInsertProduct){
+
+                                                }
+                                            }
+                                            mypDialog.dismiss();
+                                            UIHelper.ToastMessage(getContext(), "Inventario habilitado exitosamente", 5);
+                                        }catch (Exception e){
+                                            e.printStackTrace();
+                                        }
+
+                                    }
+                                }, new Response.ErrorListener() {
+                                    @Override
+                                    public void onErrorResponse(VolleyError error) {
+                                        if (error instanceof NetworkError) {
+                                            mypDialog.dismiss();
+                                            UIHelper.ToastMessage(mContext, "Error de conexion, no hay conexion a internet", 3);
+                                        } else if (error instanceof ServerError) {
+                                            mypDialog.dismiss();
+                                            UIHelper.ToastMessage(mContext, "Error de conexion, credenciales invalidas", 3);
+                                        } else if (error instanceof AuthFailureError) {
+                                            mypDialog.dismiss();
+                                            UIHelper.ToastMessage(mContext, "Error de conexion, intente mas tarde.", 3);
+                                        } else if (error instanceof ParseError) {
+                                            mypDialog.dismiss();
+                                            UIHelper.ToastMessage(mContext, "Error desconocido, intente mas tarde", 3);
+                                        } else if (error instanceof TimeoutError || error instanceof NoConnectionError) {
+                                            mypDialog.dismiss();
+                                            UIHelper.ToastMessage(mContext, "Tiempo agotado, intente mas tarde!!!", 3);
+                                        }
+                                    }
+                                });
+                            }
+                        }else {
+                            if(resultInventoryInsert){
+                                UIHelper.ToastMessage(getContext(), "Obteniendo inventario '"+datamodelInventories.getName()+"' para habilitar!!", 5);
+                            }
+                        }
+                    }else if(datamodelInventories.isTypeInventory()==3){
+
+                        UIHelper.ToastMessage(getContext(), "TEMPLATE: "+datamodelInventories.isTypeInventory(), 6);
+                        boolean  resultInventoryInsert=inventaryRespository.InventoryInsert("T"+datamodelInventories.getId(),
+                                datamodelInventories.getName(),
+                                String.valueOf(datamodelInventories.getDetailForDevice()),
+                                datamodelInventories.getInventoryStatus(),
+                                datamodelInventories.getCodeCompany(),
+                                datamodelInventories.getIncludeTID(),
+                                1);
+                        if(datamodelInventories.getDetailForDevice()){
+                            if(resultInventoryInsert){
+                                mypDialog = new ProgressDialog(getContext());
+                                mypDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+                                mypDialog.setMessage("Habilitando inventario por Ubicación'"+datamodelInventories.getName()+"'...");
+                                mypDialog.setCanceledOnTouchOutside(false);
+                                mypDialog.show();
+                                String URL_COMPLETE=PROTOCOL_URLRFID+code_enterprise.toLowerCase()+DOMAIN_URLRFID;
+                                final DetailProductRepository detailProductRepository=new DetailProductRepository(getContext());
+                                HttpHelpers http = new HttpHelpers(getContext(), URL_COMPLETE, "");
+                                http.addHeader("Authorization", "Bearer "+token_access);
+                                //Log.e("INVENTARIO INT", URL_COMPLETE+"/api/inventory/GetDetailForDevice?InventoryId="+datamodelInventories.getId());
+                                http.clientProductDetail(Request.Method.GET, "/api/inventoryTemplate/GetDetailForDevice?InventoryId="+datamodelInventories.getId(), null,  new Response.Listener<String>() {
+                                    @Override
+                                    public void onResponse(String response) {
+                                        try{
+                                            Gson gson=new Gson();
+                                            DataModelProductDetails[] products=gson.fromJson(response, DataModelProductDetails[].class);
+                                            for(int index=0; index<=products.length-1; index++){
+                                                //Log.e("DATA FOR", "ID: "+products[index].getId()+" NAME:"+products[index].getName()+" ProductMaster:"+products[index].getProductMasterId()+" FOUNG:"+Boolean.valueOf(products[index].getFound())+ "INTEGER INVENTARIO: "+datamodelInventories.getId());
+                                                boolean resultInsertProduct=detailProductRepository.DetailProductInsert(products[index].getId(),
+                                                        products[index].getEPC(),
+                                                        products[index].getCode(),
+                                                        products[index].getName(),
+                                                        products[index].getFound(),
+                                                        products[index].getProductMasterId(),
+                                                        "T"+datamodelInventories.getId()
+                                                );
+                                                if(resultInsertProduct){
+
+                                                }
+                                            }
+                                            mypDialog.dismiss();
+                                            UIHelper.ToastMessage(getContext(), "Inventario habilitado exitosamente", 5);
+                                        }catch (Exception e){
+                                            e.printStackTrace();
+                                        }
+
+                                    }
+                                }, new Response.ErrorListener() {
+                                    @Override
+                                    public void onErrorResponse(VolleyError error) {
+                                        if (error instanceof NetworkError) {
+                                            mypDialog.dismiss();
+                                            UIHelper.ToastMessage(mContext, "Error de conexion, no hay conexion a internet", 3);
+                                        } else if (error instanceof ServerError) {
+                                            mypDialog.dismiss();
+                                            UIHelper.ToastMessage(mContext, "Error de conexion, credenciales invalidas", 3);
+                                        } else if (error instanceof AuthFailureError) {
+                                            mypDialog.dismiss();
+                                            UIHelper.ToastMessage(mContext, "Error de conexion, intente mas tarde.", 3);
+                                        } else if (error instanceof ParseError) {
+                                            mypDialog.dismiss();
+                                            UIHelper.ToastMessage(mContext, "Error desconocido, intente mas tarde", 3);
+                                        } else if (error instanceof TimeoutError || error instanceof NoConnectionError) {
+                                            mypDialog.dismiss();
+                                            UIHelper.ToastMessage(mContext, "Tiempo agotado, intente mas tarde!!!", 3);
+                                        }
+                                    }
+                                });
+                            }
+                        }else {
+                            if(resultInventoryInsert){
+                                UIHelper.ToastMessage(getContext(), "Obteniendo inventario '"+datamodelInventories.getName()+"' para habilitar!!", 5);
+                            }
+                        }
+
+                    }else if(datamodelInventories.isTypeInventory()==4){
+                        UIHelper.ToastMessage(getContext(), "PRODUCTO : "+datamodelInventories.isTypeInventory(), 6);
+                        boolean  resultInventoryInsert=inventaryRespository.InventoryInsert("P"+datamodelInventories.getId(),
+                                datamodelInventories.getName(),
+                                String.valueOf(datamodelInventories.getDetailForDevice()),
+                                datamodelInventories.getInventoryStatus(),
+                                datamodelInventories.getCodeCompany(),
+                                datamodelInventories.getIncludeTID(),
+                                1);
+                        if(datamodelInventories.getDetailForDevice()){
+                            if(resultInventoryInsert){
+                                mypDialog = new ProgressDialog(getContext());
+                                mypDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+                                mypDialog.setMessage("Habilitando inventario por Ubicación'"+datamodelInventories.getName()+"'...");
+                                mypDialog.setCanceledOnTouchOutside(false);
+                                mypDialog.show();
+                                String URL_COMPLETE=PROTOCOL_URLRFID+code_enterprise.toLowerCase()+DOMAIN_URLRFID;
+                                final DetailProductRepository detailProductRepository=new DetailProductRepository(getContext());
+                                HttpHelpers http = new HttpHelpers(getContext(), URL_COMPLETE, "");
+                                http.addHeader("Authorization", "Bearer "+token_access);
+                                //Log.e("INVENTARIO INT", URL_COMPLETE+"/api/inventory/GetDetailForDevice?InventoryId="+datamodelInventories.getId());
+                                http.clientProductDetail(Request.Method.GET, "/api/inventoryProduct/GetDetailForDevice?InventoryId="+datamodelInventories.getId(), null,  new Response.Listener<String>() {
+                                    @Override
+                                    public void onResponse(String response) {
+                                        try{
+                                            Gson gson=new Gson();
+                                            DataModelProductDetails[] products=gson.fromJson(response, DataModelProductDetails[].class);
+                                            for(int index=0; index<=products.length-1; index++){
+                                                //Log.e("DATA FOR", "ID: "+products[index].getId()+" NAME:"+products[index].getName()+" ProductMaster:"+products[index].getProductMasterId()+" FOUNG:"+Boolean.valueOf(products[index].getFound())+ "INTEGER INVENTARIO: "+datamodelInventories.getId());
+                                                boolean resultInsertProduct=detailProductRepository.DetailProductInsert(products[index].getId(),
+                                                        products[index].getEPC(),
+                                                        products[index].getCode(),
+                                                        products[index].getName(),
+                                                        products[index].getFound(),
+                                                        products[index].getProductMasterId(),
+                                                        "P"+datamodelInventories.getId()
+                                                );
                                                 if(resultInsertProduct){
 
                                                 }
@@ -188,7 +359,6 @@ public class DataAdapterInventoryServer extends ArrayAdapter<DatamodelInventorie
                             }
                         }
                     }
-
 
                 }else {
                    boolean resultUpdateFalse=inventaryRespository.DeleteInventory(datamodelInventories.getId());
@@ -248,7 +418,22 @@ public class DataAdapterInventoryServer extends ArrayAdapter<DatamodelInventorie
         lastPosition = position;
         Log.e("CREACON VIEW", "LLEGUE HASTA ACA DETALLE"+"["+datamodelInventories.getId()+"] "+datamodelInventories.getName()+ "DETAILFORDEVICE:"+datamodelInventories.getDetailForDevice()+datamodelInventories.getisSelect());
 
-        holder.tv_inventory.setText("["+datamodelInventories.getId()+"] "+datamodelInventories.getName());
+        switch (datamodelInventories.isTypeInventory()){
+            case 1:
+                holder.tv_inventory.setText("[U"+datamodelInventories.getId()+"] "+datamodelInventories.getName());
+                break;
+            case 2:
+                holder.tv_inventory.setText("[D"+datamodelInventories.getId()+"] "+datamodelInventories.getName());
+                break;
+            case 3:
+                holder.tv_inventory.setText("[T"+datamodelInventories.getId()+"] "+datamodelInventories.getName());
+                break;
+            case 4:
+                holder.tv_inventory.setText("[P"+datamodelInventories.getId()+"] "+datamodelInventories.getName());
+                break;
+
+        }
+
         holder.chbx_takeInventory.setOnClickListener(this);
         //holder.item_delete.setOnClickListener(this);
 

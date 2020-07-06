@@ -17,10 +17,10 @@ public class InventaryRespository {
         this.context = context;
     }
 
-    public boolean InventoryInsert(int id, String name, String detailForDevice, int InventoryStatus, int codeCompany, boolean IncludeTID, int isSelect) {
+    public boolean InventoryInsert(String id, String name, String detailForDevice, int InventoryStatus, int codeCompany, boolean IncludeTID, int isSelect) {
         AdminSQLOpenHelper admin = new AdminSQLOpenHelper(context);
         SQLiteDatabase db = admin.getWritableDatabase();
-        Cursor readInventories=db.rawQuery("SELECT * FROM Inventory WHERE Id="+id, null);
+        Cursor readInventories=db.rawQuery("SELECT * FROM Inventory WHERE Id='"+id+"'", null);
         boolean result;
         try {
             ContentValues reg = new ContentValues();
@@ -46,7 +46,7 @@ public class InventaryRespository {
         return result;
     }
 
-    public boolean DeleteInventory(int inventoryID){
+    public boolean DeleteInventory(String inventoryID){
         AdminSQLOpenHelper admin=new AdminSQLOpenHelper(context);
         SQLiteDatabase db=admin.getWritableDatabase();
         final String MY_TABLE_NAME="Inventory";
@@ -54,8 +54,8 @@ public class InventaryRespository {
         final ContentValues cv=new ContentValues();
             try {
                 db.beginTransaction();
-                boolean result=db.delete(MY_TABLE_NAME, "Id="+inventoryID, null )>0;
-                boolean result2=db.delete(MY_TABLE_NAME2, "InventoryId="+inventoryID, null )>0;
+                boolean result=db.delete(MY_TABLE_NAME, "Id='"+inventoryID+"'", null )>0;
+                boolean result2=db.delete(MY_TABLE_NAME2, "InventoryId='"+inventoryID+"'", null )>0;
                 db.setTransactionSuccessful();
                 return result;
             }catch (SQLException sqlex){
@@ -66,11 +66,11 @@ public class InventaryRespository {
             }
     }
 
-    public int ViewInventory(int InventoryID){
+    public int ViewInventory(String InventoryID){
         AdminSQLOpenHelper admin = new AdminSQLOpenHelper(context);
         SQLiteDatabase db = admin.getWritableDatabase();
 
-        Cursor read= db.rawQuery("SELECT * FROM Inventory WHERE Id="+InventoryID, null);
+        Cursor read= db.rawQuery("SELECT * FROM Inventory WHERE Id='"+InventoryID+"'", null);
         int datos=0;
         if (read.moveToFirst()) {
                 datos = 1;
@@ -99,12 +99,12 @@ public class InventaryRespository {
     }
 
 
-    public boolean inventoryDetailForDevice(int inventoryId){
+    public boolean inventoryDetailForDevice(String inventoryId){
         AdminSQLOpenHelper admin=new AdminSQLOpenHelper(context);
         SQLiteDatabase db=admin.getWritableDatabase();
         boolean result=false;
         try{
-            Cursor querydetail=db.rawQuery("SELECT DetailForDevice FROM Inventory WHERE InventoryStatus=0 AND DetailForDevice='true' AND Id="+inventoryId, null);
+            Cursor querydetail=db.rawQuery("SELECT DetailForDevice FROM Inventory WHERE InventoryStatus=0 AND DetailForDevice='true' AND Id='"+inventoryId+"'", null);
             if(querydetail.getCount()>0){
                 result=true;
             }
@@ -114,11 +114,11 @@ public class InventaryRespository {
         db.close();
         return result;
     }
-    public String inventoryWithTID(int inventoryId){
+    public String inventoryWithTID(String inventoryId){
         AdminSQLOpenHelper admin=new AdminSQLOpenHelper(context);
         SQLiteDatabase db=admin.getWritableDatabase();
         String result="";
-            Cursor querydetail=db.rawQuery("SELECT IncludeTID FROM Inventory WHERE InventoryStatus=0 AND Id="+inventoryId, null);
+            Cursor querydetail=db.rawQuery("SELECT IncludeTID FROM Inventory WHERE InventoryStatus=0 AND Id='"+inventoryId+"'", null);
             if(querydetail.moveToFirst()){
                 result=querydetail.getString(querydetail.getColumnIndex("IncludeTID"));
             }

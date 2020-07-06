@@ -57,7 +57,7 @@ public class UHFReadTagFragment extends KeyDwonFragment {
     ArrayList<String> result;
     private boolean shouldRefreshOnResume =false;
     String code_enterprise, name_inventory_pass;
-    int inventoryID;
+    String inventoryID;
     int codeCompany;
     boolean detailFordevice, detailForDevice;
     ProgressDialog mypDialog;
@@ -110,7 +110,7 @@ public class UHFReadTagFragment extends KeyDwonFragment {
 
         String tr = "";
         result=new ArrayList<>();
-        inventoryID=mContext.getIntent().getIntExtra("inventoryID", 0);
+        inventoryID=mContext.getIntent().getStringExtra("inventoryID");
         BtInventory = (Button) getView().findViewById(R.id.BtInventory);
         LvTags = (ListView) getView().findViewById(R.id.LvTags);
         llContinuous = (LinearLayout) getView().findViewById(R.id.llContinuous);
@@ -500,11 +500,10 @@ public class UHFReadTagFragment extends KeyDwonFragment {
                         addEPCToList(RFIDtagsString, TIDtagsString);
                     }
                 }
-
             }
             adapter.notifyDataSetChanged();
         }catch (Exception ex){
-            Log.i("Error Exception", ex.getLocalizedMessage());
+            Log.i("Error Exception", ""+ex.getLocalizedMessage());
         }
     }
 
@@ -512,7 +511,7 @@ public class UHFReadTagFragment extends KeyDwonFragment {
     @Override
     public void myOnKeyDwon() {
         readTag();
-        }
+    }
     private String getCompany(){
         CompanyRepository companyRepository=new CompanyRepository(mContext);
         InventaryRespository inventaryRespository= new InventaryRespository(mContext);

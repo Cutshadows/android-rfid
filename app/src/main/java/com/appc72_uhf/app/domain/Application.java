@@ -1,7 +1,7 @@
 package com.appc72_uhf.app.domain;
 
 public class Application {
-    private int Id;
+    private String Id;
     private String Description;
     private String ApplicationUserId;
     private String Name;
@@ -32,7 +32,7 @@ public class Application {
 
 
     public Application(
-            int id,
+            String id,
             String name,
             String description,
             String applicationUserId,
@@ -113,7 +113,7 @@ public class Application {
     public String getIsAssigned(){
         return IsAssigned;
     }
-    public int getId() {
+    public String getId() {
         return Id;
     }
     public String getHardwareId() {
@@ -172,7 +172,7 @@ public class Application {
 
     // Setter Methods
 
-    public void setId( int Id ) {
+    public void setId( String Id ) {
         this.Id = Id;
     }
 

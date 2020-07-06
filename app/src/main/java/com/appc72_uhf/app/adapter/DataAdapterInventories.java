@@ -23,17 +23,10 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.android.volley.AuthFailureError;
-import com.android.volley.DefaultRetryPolicy;
-import com.android.volley.NetworkError;
 import com.android.volley.NetworkResponse;
-import com.android.volley.NoConnectionError;
-import com.android.volley.ParseError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
-import com.android.volley.RetryPolicy;
-import com.android.volley.ServerError;
-import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.HttpHeaderParser;
@@ -105,29 +98,50 @@ public class DataAdapterInventories extends ArrayAdapter<DatamodelInventories> i
                                     if(Tags.size()>0){
                                         try{
                                             RequestQueue requestQueue= Volley.newRequestQueue(getContext());
-                                            String URL = PROTOCOL_URLRFID+code_enterprise.toLowerCase()+DOMAIN_URLRFID+"api/inventory/SaveTagReaded";
-                                            Log.e("URL", PROTOCOL_URLRFID+code_enterprise.toLowerCase()+DOMAIN_URLRFID+"api/inventory/SaveTagReaded");
+                                            String URL = "";
                                             JSONArray arregloCodigos = new JSONArray(Tags.toString());
                                             mypDialog = new ProgressDialog(mContext);
                                             mypDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
                                             mypDialog.setMessage("Enviando codigos...");
                                             mypDialog.setCanceledOnTouchOutside(false);
                                             mypDialog.show();
+                                            String IsTypeInventory=datamodelInventories.getId().substring(0, 1);
                                             for(int i=0; i<arregloCodigos.length();i++){
                                                 JSONObject jsonBody=new JSONObject();
                                                 String etags=String.valueOf(Tags.get(i));
                                                 String[] spliTags=etags.split("@");
                                                 String RFIDtagsString=spliTags[0];
                                                 String TIDtagsString=spliTags[1];
-                                                jsonBody.put("InventoryId", String.valueOf(datamodelInventories.getId()));
+                                                String IdInventory=datamodelInventories.getId().substring(1);
+
+                                                jsonBody.put("InventoryId", IdInventory);
                                                 jsonBody.put("TId", TIDtagsString);
                                                 jsonBody.put("IdHardware", android_id);
                                                 jsonBody.put("RFID", RFIDtagsString);
                                                 data.put(jsonBody);
                                             }
                                             Log.e("jsonBody", data.toString());
+                                            switch (IsTypeInventory){
+                                                case "U":
+                                                    URL=PROTOCOL_URLRFID+code_enterprise.toLowerCase()+DOMAIN_URLRFID+"api/inventory/SaveTagReaded";
+                                                    Log.e("URLUBICACION", PROTOCOL_URLRFID+code_enterprise.toLowerCase()+DOMAIN_URLRFID+"api/inventory/SaveTagReaded");
+                                                break;
+                                                case "D":
+                                                    URL=PROTOCOL_URLRFID+code_enterprise.toLowerCase()+DOMAIN_URLRFID+"api/inventoryDoc/SaveTagReaded";
+                                                    Log.e("URLDOC", PROTOCOL_URLRFID+code_enterprise.toLowerCase()+DOMAIN_URLRFID+"api/inventoryDoc/SaveTagReaded");
+                                                 break;
+                                                case "T":
+                                                    URL=PROTOCOL_URLRFID+code_enterprise.toLowerCase()+DOMAIN_URLRFID+"api/inventoryTemplate/SaveTagReaded";
+                                                    Log.e("URLDOC", PROTOCOL_URLRFID+code_enterprise.toLowerCase()+DOMAIN_URLRFID+"api/inventoryTemplate/SaveTagReaded");
+                                                 break;
+                                                case "P":
+                                                    URL=PROTOCOL_URLRFID+code_enterprise.toLowerCase()+DOMAIN_URLRFID+"api/inventoryProduct/SaveTagReaded";
+                                                    Log.e("URLDOC", PROTOCOL_URLRFID+code_enterprise.toLowerCase()+DOMAIN_URLRFID+"api/inventoryProduct/SaveTagReaded");
+                                                break;
+                                            }
+                                            Log.e("URLFINAL", URL);
 
-                                            BooleanRequest booleanRequest = new BooleanRequest(1, URL, data, new Response.Listener<Boolean>() {
+                                            /*BooleanRequest booleanRequest = new BooleanRequest(1, URL, data, new Response.Listener<Boolean>() {
                                                 @Override
                                                 public void onResponse(Boolean response) {
                                                     if(response){
@@ -155,7 +169,7 @@ public class DataAdapterInventories extends ArrayAdapter<DatamodelInventories> i
                                             int socketTimeout = 30000;//30 seconds - change to what you want
                                             RetryPolicy policy = new DefaultRetryPolicy(socketTimeout, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
                                             booleanRequest.setRetryPolicy(policy);
-                                            requestQueue.add(booleanRequest);
+                                            requestQueue.add(booleanRequest);*/
                                         }catch (JSONException ex){
                                             ex.printStackTrace();
                                         }

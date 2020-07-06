@@ -146,7 +146,7 @@ public class inventoryList extends KeyDwonFragment implements View.OnClickListen
             Log.e("RECIP", recip);
             String[] strs = recip.split("@");
             if(strs[3].equals("0")){
-                dataArrayList.add(new DatamodelInventories(Integer.parseInt(strs[0]), strs[1], Boolean.parseBoolean(strs[2]), Integer.parseInt(strs[4])));
+                dataArrayList.add(new DatamodelInventories(strs[0], strs[1], Boolean.parseBoolean(strs[2]), Integer.parseInt(strs[4])));
             }
         }
     }

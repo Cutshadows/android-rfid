@@ -190,7 +190,7 @@ public class HhSyncActivity extends AppCompatActivity implements View.OnClickLis
 
                                     if(apps.getAssignedResponse().equals("true")){
                                         boolean inserT=deviceRepository.DeviceInsert(
-                                                apps.getId(),
+                                               Integer.parseInt(apps.getId()),
                                                 apps.getName(),
                                                 apps.getDescription(),
                                                 apps.getIsActive(),

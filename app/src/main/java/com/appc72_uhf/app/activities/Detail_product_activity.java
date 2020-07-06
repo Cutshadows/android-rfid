@@ -24,7 +24,8 @@ public class Detail_product_activity extends AppCompatActivity implements View.O
     private Button btn_take_inventory, btn_exit_productview;
     ArrayList<DataModelProductDetails> dataArrayProducts;
     AdapterProductDetails adapterProductDetails;
-    int val_inventory, totalFoundEPC, totalFoundEPCFOUND;
+    String val_inventory;
+    int totalFoundEPC, totalFoundEPCFOUND;
     boolean chargeFirstTimeProduct, inventory_type;
     String inventory_name_detail;
     @Override
@@ -45,7 +46,7 @@ public class Detail_product_activity extends AppCompatActivity implements View.O
 
         dataArrayProducts=new ArrayList<DataModelProductDetails>();
 
-        val_inventory=getIntent().getIntExtra("Id", 0);
+        val_inventory=getIntent().getStringExtra("Id");
         inventory_name_detail=getIntent().getStringExtra("Name");
         inventory_type=getIntent().getBooleanExtra("inventoryType", false);
 
@@ -90,7 +91,7 @@ public class Detail_product_activity extends AppCompatActivity implements View.O
         return totalFoundP;
     }
     public void getDataProductMaster(){
-        if(val_inventory!=0){
+        if(!val_inventory.equals("")){
             try{
                 DetailProductRepository detailProductRepository=new DetailProductRepository(this);
                 ArrayList products=detailProductRepository.OrderProductMasterId(val_inventory);

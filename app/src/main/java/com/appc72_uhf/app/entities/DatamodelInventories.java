@@ -1,24 +1,24 @@
 package com.appc72_uhf.app.entities;
 
 public class DatamodelInventories {
-    int Id;
+    String Id;
     private int IsSelect;
     String Name;
     boolean DetailForDevice;
     int InventoryStatus;
     int CodeCompany;
-    boolean IncludeTID, TypeInventory;
-    int LocationId;
+    boolean IncludeTID;
+    int LocationId, TypeInventory;
     int DocumentId;
 
-    public DatamodelInventories(int Id, String Name, boolean DetailForDevice, int inventoryStatus){
+    public DatamodelInventories(String Id, String Name, boolean DetailForDevice, int inventoryStatus){
         this.Id = Id;
         this.Name = Name;
         this.DetailForDevice = DetailForDevice;
         this.InventoryStatus=inventoryStatus;
     }
 
-    public DatamodelInventories(int Id, String Name, boolean DetailForDevice, int inventoryStatus, boolean includeTID, int isSelect, boolean typeInventory, int codeCompany){
+    public DatamodelInventories(String Id, String Name, boolean DetailForDevice, int inventoryStatus, boolean includeTID, int isSelect, int typeInventory, int codeCompany){
         this.Id = Id;
         this.Name = Name;
         this.DetailForDevice = DetailForDevice;
@@ -29,7 +29,7 @@ public class DatamodelInventories {
         this.TypeInventory=typeInventory;
     }
 
-    public boolean isTypeInventory(){return TypeInventory;};
+    public int isTypeInventory(){return TypeInventory;};
     public int getisSelect() {
         return IsSelect;
     }
@@ -44,11 +44,11 @@ public class DatamodelInventories {
         IsSelect = select;
     }
 
-    public int getId() {
+    public String getId() {
         return Id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         Id = id;
     }
 

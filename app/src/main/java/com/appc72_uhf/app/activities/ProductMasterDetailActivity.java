@@ -14,7 +14,8 @@ import com.appc72_uhf.app.repositories.DetailProductRepository;
 import java.util.ArrayList;
 
 public class ProductMasterDetailActivity extends AppCompatActivity {
-    int val_inventory, product_master_id;
+    String val_inventory;
+    int product_master_id;
     TextView title_master_product, tv_code_product;
     ListView lv_products_code;
     ArrayList<DataModelProductDetails> dataArrayMoreProducts;
@@ -32,7 +33,7 @@ public class ProductMasterDetailActivity extends AppCompatActivity {
         lv_products_code=(ListView)findViewById(R.id.lv_products_code);
         dataArrayMoreProducts=new ArrayList<DataModelProductDetails>();
 
-        val_inventory=getIntent().getIntExtra("InventoryId", 0);
+        val_inventory=getIntent().getStringExtra("InventoryId");
         product_master_id=getIntent().getIntExtra("ProductMasterId", 0);
 
         getDetailProduct();

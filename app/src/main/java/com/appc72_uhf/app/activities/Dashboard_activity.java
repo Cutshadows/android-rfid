@@ -92,8 +92,8 @@ public class Dashboard_activity extends AppCompatActivity implements View.OnClic
                 startActivity(goToMain);
                 break;
             case R.id.ibtn_Labelled:
-                //Intent goToMain2=new Intent(Dashboard_activity.this, Make_label_documents_activity.class);
-                //startActivity(goToMain2);
+                Intent goToMain2=new Intent(Dashboard_activity.this, Make_label_documents_activity.class);
+                startActivity(goToMain2);
                 break;
             case R.id.btn_create_recovery:
                 String strSrc = "/data/data/com.appc72_uhf.app/databases/IZYRFID.db";

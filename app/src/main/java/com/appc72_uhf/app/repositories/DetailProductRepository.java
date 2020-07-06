@@ -23,7 +23,7 @@ public class DetailProductRepository {
             String Name,
             String Found,
             int ProductMasterId,
-            int InventoryId
+            String InventoryId
     ){
         AdminSQLOpenHelper admin = new AdminSQLOpenHelper(context);
         SQLiteDatabase db = admin.getWritableDatabase();
@@ -47,12 +47,12 @@ public class DetailProductRepository {
         db.close();
         return result;
     }
-    public ArrayList OrderProductMasterId(int inventoryId){
+    public ArrayList OrderProductMasterId(String inventoryId){
         ArrayList<String> masterProductCount= new ArrayList<>();
         AdminSQLOpenHelper admin=new AdminSQLOpenHelper(context);
         SQLiteDatabase db=admin.getWritableDatabase();
 
-        Cursor queryProducts=db.rawQuery("SELECT COUNT(ProductMasterId) as contador, Code, ProductMasterId, Name FROM DetailForDevice WHERE InventoryId="+inventoryId+" GROUP BY ProductMasterId ORDER BY Found='true' DESC", null);
+        Cursor queryProducts=db.rawQuery("SELECT COUNT(ProductMasterId) as contador, Code, ProductMasterId, Name FROM DetailForDevice WHERE InventoryId='"+inventoryId+"' GROUP BY ProductMasterId ORDER BY Found='true' DESC", null);
         if(queryProducts.moveToFirst()){
             do{
                 masterProductCount.add(queryProducts.getInt(queryProducts.getColumnIndex("contador"))+"@"+queryProducts.getInt(queryProducts.getColumnIndex("ProductMasterId"))+"@"+queryProducts.getString(queryProducts.getColumnIndex("Name"))+"@"+queryProducts.getString(queryProducts.getColumnIndex("Code")));
@@ -62,11 +62,11 @@ public class DetailProductRepository {
         return masterProductCount;
     }
 
-    public int CountProductFoundTrue(int inventoryId, int masterProductId){
+    public int CountProductFoundTrue(String inventoryId, int masterProductId){
         int ProductFoundTrue=0;
         AdminSQLOpenHelper admin=new AdminSQLOpenHelper(context);
         SQLiteDatabase db=admin.getWritableDatabase();
-        Cursor queryCountProduct=db.rawQuery("SELECT COUNT(ProductMasterId) as product FROM DetailForDevice WHERE ProductMasterId="+masterProductId+" AND InventoryId="+inventoryId+" AND Found='true'", null);
+        Cursor queryCountProduct=db.rawQuery("SELECT COUNT(ProductMasterId) as product FROM DetailForDevice WHERE ProductMasterId="+masterProductId+" AND InventoryId='"+inventoryId+"' AND Found='true'", null);
         if(queryCountProduct.moveToFirst()){
             ProductFoundTrue=queryCountProduct.getInt(queryCountProduct.getColumnIndex("product"));
         }
@@ -74,12 +74,12 @@ public class DetailProductRepository {
         return ProductFoundTrue;
     }
 
-    public ArrayList ProductListEPC(int inventoryId, int productMasterId){
+    public ArrayList ProductListEPC(String inventoryId, int productMasterId){
         ArrayList<String> productFields= new ArrayList<>();
         AdminSQLOpenHelper admin=new AdminSQLOpenHelper(context);
         SQLiteDatabase db=admin.getWritableDatabase();
 
-        Cursor queryProducts=db.rawQuery("SELECT EPC, Found, Name, Code FROM DetailForDevice WHERE InventoryId="+inventoryId+" AND ProductMasterId="+productMasterId+" ORDER BY Found='false' ASC", null);
+        Cursor queryProducts=db.rawQuery("SELECT EPC, Found, Name, Code FROM DetailForDevice WHERE InventoryId='"+inventoryId+"' AND ProductMasterId="+productMasterId+" ORDER BY Found='false' ASC", null);
         if(queryProducts.moveToFirst()){
             do{
                 productFields.add(queryProducts.getString(queryProducts.getColumnIndex("EPC"))+"@"+queryProducts.getString(queryProducts.getColumnIndex("Found"))+"@"+queryProducts.getString(queryProducts.getColumnIndex("Name"))+"@"+queryProducts.getString(queryProducts.getColumnIndex("Code")));
@@ -89,12 +89,12 @@ public class DetailProductRepository {
         return productFields;
     }
 
-    public int OrderProductTotalEPC(int inventoryId){
+    public int OrderProductTotalEPC(String inventoryId){
         int productCount=0;
         AdminSQLOpenHelper admin=new AdminSQLOpenHelper(context);
         SQLiteDatabase db=admin.getWritableDatabase();
 
-        Cursor queryProducts=db.rawQuery("SELECT COUNT(EPC) as contadorEPC, EPC FROM DetailForDevice WHERE InventoryId="+inventoryId, null);
+        Cursor queryProducts=db.rawQuery("SELECT COUNT(EPC) as contadorEPC, EPC FROM DetailForDevice WHERE InventoryId='"+inventoryId+"'", null);
         if(queryProducts.moveToFirst()){
             productCount=queryProducts.getInt(queryProducts.getColumnIndex("contadorEPC"));
         }
@@ -102,12 +102,12 @@ public class DetailProductRepository {
         return productCount;
     }
 
-    public int OrderProductTotalEPCFOUND(int inventoryId){
+    public int OrderProductTotalEPCFOUND(String inventoryId){
         int productCountFound=0;
         AdminSQLOpenHelper admin=new AdminSQLOpenHelper(context);
         SQLiteDatabase db=admin.getWritableDatabase();
 
-        Cursor queryProducts=db.rawQuery("SELECT COUNT(EPC) as contadorFound, EPC FROM DetailForDevice WHERE InventoryId="+inventoryId+" AND Found='true'", null);
+        Cursor queryProducts=db.rawQuery("SELECT COUNT(EPC) as contadorFound, EPC FROM DetailForDevice WHERE InventoryId='"+inventoryId+"' AND Found='true'", null);
         if(queryProducts.moveToFirst()){
             productCountFound=queryProducts.getInt(queryProducts.getColumnIndex("contadorFound"));
         }
