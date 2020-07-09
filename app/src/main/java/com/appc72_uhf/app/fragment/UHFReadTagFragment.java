@@ -142,7 +142,6 @@ public class UHFReadTagFragment extends KeyDwonFragment {
                 mContext.playSound(1);
             }
         };
-        UIHelper.ToastMessage(mContext, "INCLUYE TID: "+inventory_include_tid, 10);
         name_inventory_pass=mContext.getIntent().getStringExtra("Name");
         if(inventory_include_tid.equals("true")){
                 tv_TID.setVisibility(View.VISIBLE);
@@ -275,22 +274,15 @@ public class UHFReadTagFragment extends KeyDwonFragment {
             mypDialog.setCanceledOnTouchOutside(false);
             mypDialog.show();
             try{
+                boolean saveRes=false;
                 for(int index=0; index < tagList.size();index++){
                     String strEPC=tagList.get(index).get("tagUii");
                     String strTID=tagList.get(index).get("tagRssi");
-                    boolean saveRes=repositoryTag.InsertTag(strEPC,  inventoryID, android_id, strTID,0);
+                    saveRes=repositoryTag.InsertTag(strEPC,  inventoryID, android_id, strTID,0);
                 }
-            /*JSONArray codeArrays = new JSONArray(tagList.toString());
-            for(int codId=0; codId<codeArrays.length();codId++){
-                JSONObject jsonObject= codeArrays.getJSONObject(codId);
-                String strEPC=jsonObject.getString("tagUii");
-                String strTID=jsonObject.getString("tagRssi");
-                Log.e("AFTER INSERT", "EPC: "+strEPC+"  TID:"+strTID);
-                Log.e("TAGLIST", "TAGLIST: "+tagList.toString());
-                boolean saveRes=repositoryTag.InsertTag(strEPC,  inventoryID, android_id, strTID,0);
-
-            }*/
-                UIHelper.ToastMessage(mContext, "Codigos ingresados correctamente.", 2);
+                if(saveRes){
+                    UIHelper.ToastMessage(mContext, "Codigos ingresados correctamente.", 2);
+                }
                 mypDialog.dismiss();
             }catch (Exception ex){
                 ex.printStackTrace();
@@ -382,12 +374,12 @@ public class UHFReadTagFragment extends KeyDwonFragment {
                         case 1:// 单标签循环  .startInventoryTag((byte) 0, (byte) 0))
                             if(inventory_include_tid.equals("true")){
                                 mContext.mReader.setEPCTIDMode(true);
-                                mContext.mReader.setFastID(true);
-                                //mContext.mReader.setTagFocus(true);
+                                //mContext.mReader.setFastID(true);
+                                mContext.mReader.setTagFocus(true);
                             }else if(inventory_include_tid.equals("false")){
                                 mContext.mReader.setEPCTIDMode(false);
-                                mContext.mReader.setFastID(true);
-                                //mContext.mReader.setTagFocus(false);
+                                //mContext.mReader.setFastID(true);
+                                mContext.mReader.setTagFocus(true);
                             }
                             if (mContext.mReader.startInventoryTag(0,0)) {
                                 BtInventory.setText(mContext

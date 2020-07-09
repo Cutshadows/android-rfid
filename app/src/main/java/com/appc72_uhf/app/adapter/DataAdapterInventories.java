@@ -23,10 +23,17 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.android.volley.AuthFailureError;
+import com.android.volley.DefaultRetryPolicy;
+import com.android.volley.NetworkError;
 import com.android.volley.NetworkResponse;
+import com.android.volley.NoConnectionError;
+import com.android.volley.ParseError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
+import com.android.volley.RetryPolicy;
+import com.android.volley.ServerError;
+import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.HttpHeaderParser;
@@ -124,24 +131,19 @@ public class DataAdapterInventories extends ArrayAdapter<DatamodelInventories> i
                                             switch (IsTypeInventory){
                                                 case "U":
                                                     URL=PROTOCOL_URLRFID+code_enterprise.toLowerCase()+DOMAIN_URLRFID+"api/inventory/SaveTagReaded";
-                                                    Log.e("URLUBICACION", PROTOCOL_URLRFID+code_enterprise.toLowerCase()+DOMAIN_URLRFID+"api/inventory/SaveTagReaded");
                                                 break;
                                                 case "D":
                                                     URL=PROTOCOL_URLRFID+code_enterprise.toLowerCase()+DOMAIN_URLRFID+"api/inventoryDoc/SaveTagReaded";
-                                                    Log.e("URLDOC", PROTOCOL_URLRFID+code_enterprise.toLowerCase()+DOMAIN_URLRFID+"api/inventoryDoc/SaveTagReaded");
                                                  break;
                                                 case "T":
                                                     URL=PROTOCOL_URLRFID+code_enterprise.toLowerCase()+DOMAIN_URLRFID+"api/inventoryTemplate/SaveTagReaded";
-                                                    Log.e("URLDOC", PROTOCOL_URLRFID+code_enterprise.toLowerCase()+DOMAIN_URLRFID+"api/inventoryTemplate/SaveTagReaded");
                                                  break;
                                                 case "P":
                                                     URL=PROTOCOL_URLRFID+code_enterprise.toLowerCase()+DOMAIN_URLRFID+"api/inventoryProduct/SaveTagReaded";
-                                                    Log.e("URLDOC", PROTOCOL_URLRFID+code_enterprise.toLowerCase()+DOMAIN_URLRFID+"api/inventoryProduct/SaveTagReaded");
                                                 break;
                                             }
-                                            Log.e("URLFINAL", URL);
 
-                                            /*BooleanRequest booleanRequest = new BooleanRequest(1, URL, data, new Response.Listener<Boolean>() {
+                                            BooleanRequest booleanRequest = new BooleanRequest(1, URL, data, new Response.Listener<Boolean>() {
                                                 @Override
                                                 public void onResponse(Boolean response) {
                                                     if(response){
@@ -169,7 +171,7 @@ public class DataAdapterInventories extends ArrayAdapter<DatamodelInventories> i
                                             int socketTimeout = 30000;//30 seconds - change to what you want
                                             RetryPolicy policy = new DefaultRetryPolicy(socketTimeout, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
                                             booleanRequest.setRetryPolicy(policy);
-                                            requestQueue.add(booleanRequest);*/
+                                            requestQueue.add(booleanRequest);
                                         }catch (JSONException ex){
                                             ex.printStackTrace();
                                         }

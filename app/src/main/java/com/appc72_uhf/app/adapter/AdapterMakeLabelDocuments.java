@@ -1,6 +1,7 @@
 package com.appc72_uhf.app.adapter;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,7 +16,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.appc72_uhf.app.R;
-import com.appc72_uhf.app.entities.DataModelVirtualDocument;
 import com.appc72_uhf.app.entities.DatamodelDocumentsMakeLabel;
 import com.appc72_uhf.app.repositories.MakeLabelRepository;
 import com.appc72_uhf.app.tools.UIHelper;
@@ -45,45 +45,52 @@ public class AdapterMakeLabelDocuments extends ArrayAdapter<DatamodelDocumentsMa
         Object object=getItem(position);
 
         final DatamodelDocumentsMakeLabel dModelMakeLabel=(DatamodelDocumentsMakeLabel)object;
-        DataModelVirtualDocument dModVirtualDocument=(DataModelVirtualDocument)object;
+        //final DataModelVirtualDocument dModVirtualDocument=(DataModelVirtualDocument)object;
         CheckBox chbx_download_documents=(CheckBox) v.findViewById(R.id.chbx_download_documents);
+        MakeLabelRepository makeLabelRepository=new MakeLabelRepository(getContext());
+
 
         switch (v.getId()){
             case R.id.chbx_download_documents:
                 if(chbx_download_documents.isChecked()){
-                    MakeLabelRepository makeLabelRepository=new MakeLabelRepository(getContext());
+                    try {
+                        UIHelper.ToastMessage(getContext(), "ESTOY ACA");
                     boolean resultDocumentInsert=makeLabelRepository.InsertDocuments(
                             dModelMakeLabel.getDocumentName(),
                             dModelMakeLabel.getDocumentId(),
                             dModelMakeLabel.getDeviceId(),
-                            dModelMakeLabel.getFechaAsignacion(),
-                            dModelMakeLabel.getAsignadoPor(),
-                            dModelMakeLabel.isAllowLabeling(),
-                            dModelMakeLabel.getAssociatedDocumentId(),
-                            dModelMakeLabel.getAssociatedDocNumber(),
-                            dModelMakeLabel.getDocumentTypeId(),
-                            dModelMakeLabel.getDescription(),
-                            dModelMakeLabel.getCreatedDate(),
-                            dModelMakeLabel.getLocationOriginId(),
                             dModelMakeLabel.getLocationOriginName(),
-                            dModelMakeLabel.getDestinationLocationId(),
-                            dModelMakeLabel.getAux1(),
-                            dModelMakeLabel.getAux2(),
-                            dModelMakeLabel.getAux3(),
-                            dModelMakeLabel.getClient(),
                             dModelMakeLabel.getStatus(),
                             dModelMakeLabel.isHasVirtualItems(),
-                            dModelMakeLabel.getReaderId()
+                            1
                     );
-
-                    if(resultDocumentInsert){
-                        for(int indexVirtual=0; indexVirtual<dModelMakeLabel.getDocumentDetailsVirtual().size(); indexVirtual++){
-                            dModVirtualDocument =dModelMakeLabel.getDocumentDetailsVirtual().get(indexVirtual);
+                        ArrayList arregloCodigos = dModelMakeLabel.getDocumentDetailsVirtual();
+                        for(int indexVirtual=0; indexVirtual<arregloCodigos.size(); indexVirtual++){
+                            String resultVirtual=arregloCodigos.get(indexVirtual).toString();
+                            Log.e("getDocumentDetailsVir", resultVirtual);
 
                         }
+                        //for(int indexVirtual=0; indexVirtual<dModelMakeLabel.getDocumentDetailsVirtual().size(); indexVirtual++){
+                            //String valuesDocument=dModelMakeLabel.getDocumentDetailsVirtual().get(indexVirtual).toString();
+                            //dModVirtualDocument =dModelMakeLabel.getDocumentDetailsVirtual().get(indexVirtual);
+                            //Log.e("dModVirtualDocument", valuesDocument);
+
+                        //}
+
+                    /*if(resultDocumentInsert){
+
+                    }*/
+                    }catch (Exception e){
+                        Log.e("Exception", ""+e.getMessage());
+                        e.printStackTrace();
                     }
                 }else{
                     UIHelper.ToastMessage(mContext, "Se elimina los documentos para makelabel "+dModelMakeLabel.getDocumentId(), 4);
+                    //boolean deleteDocument=makeLabelRepository.deleteDocument(dModelMakeLabel.getDocumentId(), dModVirtualDocument.getId());
+                    //if(deleteDocument){
+                      //  UIHelper.ToastMessage(getContext(), "El inventario '"+dModelMakeLabel.getDocumentName()+"' esta deshabilitado!!", 5);
+                    //}
+
 
                 }
                 break;

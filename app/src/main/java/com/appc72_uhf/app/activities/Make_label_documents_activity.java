@@ -76,8 +76,6 @@ public class Make_label_documents_activity extends AppCompatActivity{
     }
 
     public void syncronizedDocuments(){
-        UIHelper.ToastMessage(this, "CARGANDO INFORMACION DE DOCUMENTOS CON ESTE ANDROID ID "+android_id+" access_token:"+token_access+" COMPANYID"+code_enterprise+" ID ENTERPRISE"+codeCompany);
-
         final String URL_COMPLETE=PROTOCOL_URLRFID+code_enterprise.toLowerCase()+DOMAIN_URLRFID;
         mypDialog = new ProgressDialog(this);
         mypDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
@@ -95,8 +93,17 @@ public class Make_label_documents_activity extends AppCompatActivity{
                     Gson gson=new Gson();
                     DatamodelDocumentsMakeLabel[] docsMakelabels=gson.fromJson(response, DatamodelDocumentsMakeLabel[].class);
                     for(int index=0; index<=docsMakelabels.length-1; index++){
-                        Log.e("DATA FOR", "DocumentsId: "+docsMakelabels[index].getDocumentId()+" DeviceId:"+docsMakelabels[index].getDeviceId()+" FechaAsignacion:"+docsMakelabels[index].getFechaAsignacion());
-                        datamodelDocumentsMakeLabelArrayList.add(new DatamodelDocumentsMakeLabel(docsMakelabels[index].getDocumentId(), docsMakelabels[index].getDeviceId(), docsMakelabels[index].getLocationOriginName(), docsMakelabels[index].getDocumentName(), docsMakelabels[index].getDocumentDetailsVirtual()));
+                        Log.e("DATA FOR", "DocumentsId: "+docsMakelabels[index].getDocumentId()+"\n DeviceId:"+docsMakelabels[index].getDeviceId()+" \n FechaAsignacion:"+docsMakelabels[index].getFechaAsignacion()+" \n Document Details Virtual "+docsMakelabels[index].getDocumentDetailsVirtual());
+                        datamodelDocumentsMakeLabelArrayList.add(
+                                new DatamodelDocumentsMakeLabel(
+                                    docsMakelabels[index].getDocumentId(),
+                                    docsMakelabels[index].getDeviceId(),
+                                    docsMakelabels[index].getLocationOriginName(),
+                                    docsMakelabels[index].getDocumentName(),
+                                    docsMakelabels[index].isHasVirtualItems(),
+                                    docsMakelabels[index].getDocumentDetailsVirtual()
+                                )
+                        );
                     }
                     adapterMakeLabelDocuments.notifyDataSetChanged();
                     mypDialog.dismiss();

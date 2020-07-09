@@ -63,7 +63,6 @@ public class DataAdapterInventoryServer extends ArrayAdapter<DatamodelInventorie
             case R.id.chbx_takeInventory:
                 if(chb_takeInventory.isChecked()){
                     if(datamodelInventories.isTypeInventory()==1){
-                            UIHelper.ToastMessage(getContext(), "UBICACION: "+datamodelInventories.isTypeInventory(), 6);
                                 boolean  resultInventoryInsert=inventaryRespository.InventoryInsert("U"+datamodelInventories.getId(), datamodelInventories.getName(), String.valueOf(datamodelInventories.getDetailForDevice()), datamodelInventories.getInventoryStatus(), datamodelInventories.getCodeCompany(), datamodelInventories.getIncludeTID(), 1);
                                 if(datamodelInventories.getDetailForDevice()){
                                     if(resultInventoryInsert){
@@ -132,7 +131,6 @@ public class DataAdapterInventoryServer extends ArrayAdapter<DatamodelInventorie
                                 }
                             }
                     }else if(datamodelInventories.isTypeInventory()==2){
-                        UIHelper.ToastMessage(getContext(), "DOCUMENTO: "+datamodelInventories.isTypeInventory(), 6);
                         boolean  resultInventoryInsert=inventaryRespository.InventoryInsert("D"+datamodelInventories.getId(),
                                                                                                 datamodelInventories.getName(),
                                                                                                 String.valueOf(datamodelInventories.getDetailForDevice()),
@@ -207,8 +205,6 @@ public class DataAdapterInventoryServer extends ArrayAdapter<DatamodelInventorie
                             }
                         }
                     }else if(datamodelInventories.isTypeInventory()==3){
-
-                        UIHelper.ToastMessage(getContext(), "TEMPLATE: "+datamodelInventories.isTypeInventory(), 6);
                         boolean  resultInventoryInsert=inventaryRespository.InventoryInsert("T"+datamodelInventories.getId(),
                                 datamodelInventories.getName(),
                                 String.valueOf(datamodelInventories.getDetailForDevice()),
@@ -284,7 +280,6 @@ public class DataAdapterInventoryServer extends ArrayAdapter<DatamodelInventorie
                         }
 
                     }else if(datamodelInventories.isTypeInventory()==4){
-                        UIHelper.ToastMessage(getContext(), "PRODUCTO : "+datamodelInventories.isTypeInventory(), 6);
                         boolean  resultInventoryInsert=inventaryRespository.InventoryInsert("P"+datamodelInventories.getId(),
                                 datamodelInventories.getName(),
                                 String.valueOf(datamodelInventories.getDetailForDevice()),

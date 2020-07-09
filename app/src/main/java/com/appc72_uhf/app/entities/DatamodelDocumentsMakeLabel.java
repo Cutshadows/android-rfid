@@ -30,6 +30,7 @@ public class DatamodelDocumentsMakeLabel {
     }
     public DatamodelDocumentsMakeLabel(int documentId,
                                        int deviceId,
+                                       int locationOriginId,
                                        String fechaAsignacion,
                                        String asignadoPor,
                                        boolean allowLabeling,
@@ -38,7 +39,6 @@ public class DatamodelDocumentsMakeLabel {
                                        int documentTypeId,
                                        String description,
                                        String createdDate,
-                                       int locationOriginId,
                                        String locationOriginName,
                                        String destinationLocationId,
                                        String aux1,
@@ -48,10 +48,11 @@ public class DatamodelDocumentsMakeLabel {
                                        int status,
                                        boolean hasVirtualItems,
                                        String readerId,
-                                       ArrayList<DataModelVirtualDocument> documentDetailsVirtual
+                                       ArrayList documentDetailsVirtual
     ) {
         DocumentId = documentId;
         DeviceId = deviceId;
+        LocationOriginName=locationOriginName;
         FechaAsignacion = fechaAsignacion;
         AsignadoPor = asignadoPor;
         AllowLabeling = allowLabeling;
@@ -70,14 +71,14 @@ public class DatamodelDocumentsMakeLabel {
         HasVirtualItems = hasVirtualItems;
         ReaderId = readerId;
         DocumentDetailsVirtual = documentDetailsVirtual;
-        LocationOriginName=locationOriginName;
     }
 
-    public DatamodelDocumentsMakeLabel(int documentId, int deviceId, String locationOriginName, String documentName, ArrayList<DataModelVirtualDocument> documentDetailsVirtual) {
+    public DatamodelDocumentsMakeLabel(int documentId, int deviceId, String locationOriginName, String documentName, boolean hasVirtualItems, ArrayList documentDetailsVirtual) {
         DocumentId = documentId;
         DeviceId = deviceId;
         LocationOriginName=locationOriginName;
         DocumentName=documentName;
+        HasVirtualItems=hasVirtualItems;
         DocumentDetailsVirtual=documentDetailsVirtual;
     }
 
@@ -239,11 +240,11 @@ public class DatamodelDocumentsMakeLabel {
         ReaderId = readerId;
     }
 
-    public ArrayList<DataModelVirtualDocument> getDocumentDetailsVirtual() {
+    public ArrayList getDocumentDetailsVirtual() {
         return DocumentDetailsVirtual;
     }
 
-    public void setDocumentDetailsVirtual(ArrayList<DataModelVirtualDocument> documentDetailsVirtual) {
+    public void setDocumentDetailsVirtual(ArrayList documentDetailsVirtual) {
         DocumentDetailsVirtual = documentDetailsVirtual;
     }
 }

@@ -2,6 +2,7 @@ package com.appc72_uhf.app.repositories;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.util.Log;
@@ -20,24 +21,10 @@ public class MakeLabelRepository {
             String documentName,
             int documentId,
             int deviceId,
-            String fechaAsignacion,
-            String asignadoPor,
-            boolean isAllowLabeling,
-            int associatedDocumentId,
-            String associatedDocNumber,
-            int documentTypeId,
-            String description,
-            String createdDate,
-            int locationOriginId,
             String locationOriginName,
-            String destinationLocationId,
-            String aux1,
-            String aux2,
-            String aux3,
-            String client,
             int status,
             boolean hashVirtualItems,
-            String readerId
+            int isSelected
     ){
         AdminSQLOpenHelper admin = new AdminSQLOpenHelper(context);
         SQLiteDatabase db = admin.getWritableDatabase();
@@ -47,24 +34,10 @@ public class MakeLabelRepository {
             valContentDocs.put("DocumentName", documentName);
             valContentDocs.put("DocumentId", documentId);
             valContentDocs.put("DeviceId", deviceId);
-            valContentDocs.put("FechaAsignacion", fechaAsignacion);
-            valContentDocs.put("AsignadoPor", asignadoPor);
-            valContentDocs.put("AllowLabeling", String.valueOf(isAllowLabeling));
-            valContentDocs.put("AssociatedDocumentId", associatedDocumentId);
-            valContentDocs.put("AssociatedDocNumber", associatedDocNumber);
-            valContentDocs.put("DocumentTypeId", documentTypeId);
-            valContentDocs.put("Description", description);
-            valContentDocs.put("CreatedDate", createdDate);
-            valContentDocs.put("LocationOriginId", locationOriginId);
             valContentDocs.put("LocationOriginName", locationOriginName);
-            valContentDocs.put("DestinationLocationId", destinationLocationId);
-            valContentDocs.put("Aux1", aux1);
-            valContentDocs.put("Aux2", aux2);
-            valContentDocs.put("Aux3", aux3);
-            valContentDocs.put("Client", client);
             valContentDocs.put("Status", status);
             valContentDocs.put("HasVirtualItems", String.valueOf(hashVirtualItems));
-            valContentDocs.put("isSelected", readerId);
+            valContentDocs.put("isSelected", isSelected);
 
             resultInsert=db.insert("Documents", null, valContentDocs)>0;
         }catch (SQLiteException sqlEx){
@@ -122,5 +95,27 @@ public class MakeLabelRepository {
         }
         db.close();
         return resultInsertTags;
+    }
+
+    public boolean deleteDocument(int documentId, int virtualId){
+        AdminSQLOpenHelper admin=new AdminSQLOpenHelper(context);
+        SQLiteDatabase db=admin.getWritableDatabase();
+        final String MY_TABLE_DOCUMENT="Documents";
+        final String MY_TABLE_VIRTUAL="Documents";
+        try {
+            db.beginTransaction();
+            boolean result1=db.delete(MY_TABLE_DOCUMENT, "Id="+documentId, null )>0;
+            boolean result2=false;
+            if(result1){
+                result2=db.delete(MY_TABLE_VIRTUAL, "Id"+virtualId+" AND DocumentId"+documentId, null)>0;
+            }
+            db.setTransactionSuccessful();
+            return result2;
+        }catch (SQLException sqlex){
+            throw  sqlex;
+        }finally {
+            db.endTransaction();
+            db.close();
+        }
     }
 }
