@@ -9,7 +9,6 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
-import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -19,6 +18,9 @@ import com.appc72_uhf.app.R;
 import com.appc72_uhf.app.entities.DatamodelDocumentsMakeLabel;
 import com.appc72_uhf.app.repositories.MakeLabelRepository;
 import com.appc72_uhf.app.tools.UIHelper;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 
@@ -34,8 +36,8 @@ public class AdapterMakeLabelDocuments extends ArrayAdapter<DatamodelDocumentsMa
 
 
     private class ViewHolder{
-        TextView tv_document_id, tv_location_document, tv_document_name;
-        ImageButton item_more_details_documents;
+        TextView tv_document_id, tv_location_document, tv_document_name, tv_resumen_document;
+        //ImageButton item_more_details_documents;
         CheckBox chbx_download_documents;
     }
 
@@ -45,57 +47,73 @@ public class AdapterMakeLabelDocuments extends ArrayAdapter<DatamodelDocumentsMa
         Object object=getItem(position);
 
         final DatamodelDocumentsMakeLabel dModelMakeLabel=(DatamodelDocumentsMakeLabel)object;
-        //final DataModelVirtualDocument dModVirtualDocument=(DataModelVirtualDocument)object;
         CheckBox chbx_download_documents=(CheckBox) v.findViewById(R.id.chbx_download_documents);
         MakeLabelRepository makeLabelRepository=new MakeLabelRepository(getContext());
+
 
 
         switch (v.getId()){
             case R.id.chbx_download_documents:
                 if(chbx_download_documents.isChecked()){
-                    try {
-                        UIHelper.ToastMessage(getContext(), "ESTOY ACA");
-                    boolean resultDocumentInsert=makeLabelRepository.InsertDocuments(
-                            dModelMakeLabel.getDocumentName(),
-                            dModelMakeLabel.getDocumentId(),
-                            dModelMakeLabel.getDeviceId(),
-                            dModelMakeLabel.getLocationOriginName(),
-                            dModelMakeLabel.getStatus(),
-                            dModelMakeLabel.isHasVirtualItems(),
-                            1
-                    );
-                        ArrayList arregloCodigos = dModelMakeLabel.getDocumentDetailsVirtual();
-                        for(int indexVirtual=0; indexVirtual<arregloCodigos.size(); indexVirtual++){
-                            String resultVirtual=arregloCodigos.get(indexVirtual).toString();
-                            Log.e("getDocumentDetailsVir", resultVirtual);
+                        boolean resultDocumentInsert=makeLabelRepository.InsertDocuments(
+                                dModelMakeLabel.getDocumentName(),
+                                dModelMakeLabel.getDocumentId(),
+                                dModelMakeLabel.getDeviceId(),
+                                dModelMakeLabel.getLocationOriginName(),
+                                dModelMakeLabel.getStatus(),
+                                dModelMakeLabel.isHasVirtualItems(),
+                                1,
+                                dModelMakeLabel.getCompanyId()
+                        );
 
+                    if(resultDocumentInsert){
+                        boolean inserListTag=false;
+                        for(int indexVirtual=0; indexVirtual < dModelMakeLabel.getDocumentDetailsVirtual().length(); indexVirtual++){
+                            try{
+                                JSONObject jsonObject=dModelMakeLabel.getDocumentDetailsVirtual().getJSONObject(indexVirtual);
+                               int productVirtualId=(jsonObject.getString("ProductVirtualId").equals("null"))?0:jsonObject.getInt("ProductVirtualId");
+                               //int producMasterId=(jsonObject.getString("ProductMaster").equals("null")?0:jsonObject.getInt("ProductMaster"));
+                               int productId=(jsonObject.getString("ProductId").equals("null")?0:jsonObject.getInt("ProductId"));
+                               int productMasterId=(jsonObject.getString("ProductMasterId").equals("null")?0:jsonObject.getInt("ProductMasterId"));
+                                    inserListTag=makeLabelRepository.insertVirtualTag(
+                                            jsonObject.getInt("Id"),
+                                            jsonObject.getString("AssociatedDocNumber"),
+                                            jsonObject.getInt("Status"),
+                                            jsonObject.getString("CreatedDate"),
+                                            jsonObject.getString("ReadDate"),
+                                            productMasterId,
+                                            productVirtualId,
+                                            jsonObject.getInt("DocumentId"),
+                                            //jsonObject.getInt("ProductMaster"),
+                                            //jsonObject.getString("Document"),
+                                            jsonObject.getInt("TypeDocumentVirtual"),
+                                            jsonObject.getString("Cost"),
+                                            jsonObject.getString("wasMoved"),
+                                            jsonObject.getString("LabelAssociated"),
+                                            productId
+                                            //jsonObject.getString("Product")
+                                    );
+
+                            }catch (JSONException jsEx){
+                                Log.e("jsEx", ""+jsEx.getLocalizedMessage());
+                                jsEx.printStackTrace();
+                            }
                         }
-                        //for(int indexVirtual=0; indexVirtual<dModelMakeLabel.getDocumentDetailsVirtual().size(); indexVirtual++){
-                            //String valuesDocument=dModelMakeLabel.getDocumentDetailsVirtual().get(indexVirtual).toString();
-                            //dModVirtualDocument =dModelMakeLabel.getDocumentDetailsVirtual().get(indexVirtual);
-                            //Log.e("dModVirtualDocument", valuesDocument);
-
-                        //}
-
-                    /*if(resultDocumentInsert){
-
-                    }*/
-                    }catch (Exception e){
-                        Log.e("Exception", ""+e.getMessage());
-                        e.printStackTrace();
+                        if(inserListTag){
+                            UIHelper.ToastMessage(getContext(), "Se habilito y descargo los documentos para etiquetado.", 3);
+                        }
                     }
                 }else{
                     UIHelper.ToastMessage(mContext, "Se elimina los documentos para makelabel "+dModelMakeLabel.getDocumentId(), 4);
-                    //boolean deleteDocument=makeLabelRepository.deleteDocument(dModelMakeLabel.getDocumentId(), dModVirtualDocument.getId());
-                    //if(deleteDocument){
-                      //  UIHelper.ToastMessage(getContext(), "El inventario '"+dModelMakeLabel.getDocumentName()+"' esta deshabilitado!!", 5);
-                    //}
+                    boolean deleteDocument=makeLabelRepository.deleteDocument(dModelMakeLabel.getDocumentId());
+                    if(deleteDocument){
+                      UIHelper.ToastMessage(getContext(), "El inventario '"+dModelMakeLabel.getDocumentName()+"' esta deshabilitado!!", 5);
+                    }
 
 
                 }
                 break;
         }
-
     }
 
     private int lastPosition= -1;
@@ -116,7 +134,8 @@ public class AdapterMakeLabelDocuments extends ArrayAdapter<DatamodelDocumentsMa
             holder.tv_document_name=(TextView) convertView.findViewById(R.id.tv_document_name);
             holder.tv_location_document=(TextView) convertView.findViewById(R.id.tv_location_document);
             holder.chbx_download_documents=(CheckBox)convertView.findViewById(R.id.chbx_download_documents);
-            holder.item_more_details_documents=(ImageButton) convertView.findViewById(R.id.item_more_details_documents);
+            //holder.item_more_details_documents=(ImageButton) convertView.findViewById(R.id.item_more_details_documents);
+            holder.tv_resumen_document=(TextView) convertView.findViewById(R.id.tv_resumen_document);
             result=convertView;
             convertView.setTag(holder);
         }else{
@@ -130,13 +149,22 @@ public class AdapterMakeLabelDocuments extends ArrayAdapter<DatamodelDocumentsMa
         holder.tv_document_name.setText(datamodelDocumentsMakeLabel.getDocumentName().toUpperCase());
         holder.tv_document_id.setText("N° Doc: "+datamodelDocumentsMakeLabel.getDocumentId());
         holder.tv_location_document.setText(" "+datamodelDocumentsMakeLabel.getLocationOriginName().toUpperCase());
+        holder.tv_resumen_document.setText(""+datamodelDocumentsMakeLabel.getDocumentDetailsVirtual().length());
         holder.chbx_download_documents.setOnClickListener(this);
         holder.tv_document_name.setTag(position);
         holder.tv_document_id.setTag(position);
         holder.tv_location_document.setTag(position);
+        holder.tv_resumen_document.setTag(position);
         //holder.item_more_details_documents.setBackgroundResource(R.color.color_primary);
-        holder.chbx_download_documents.setTag(position);
         convertView.setBackgroundResource(R.color.lightblue);
+        if(datamodelDocumentsMakeLabel.getIsSelected()==1){
+            holder.chbx_download_documents.setChecked(true);
+        }else if(datamodelDocumentsMakeLabel.getIsSelected()==0){
+            holder.chbx_download_documents.setChecked(false);
+        }
+        holder.chbx_download_documents.setTag(position);
+
+
         return convertView;
     }
 }

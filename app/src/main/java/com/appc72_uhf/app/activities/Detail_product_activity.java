@@ -119,11 +119,13 @@ public class Detail_product_activity extends AppCompatActivity implements View.O
                 fragment.putExtra("Id",  val_inventory);
                 fragment.putExtra("Name",  inventory_name_detail);
                 fragment.putExtra("inventoryType", inventory_type);
+                fragment.putExtra("EntryType", "Inventory");
                 Detail_product_activity.this.startActivity(fragment);
                 Detail_product_activity.this.onBackPressed();
                 break;
             case R.id.btn_exit_productview:
                 Intent MainTo=new Intent(Detail_product_activity.this, MainActivity.class);
+                MainTo.putExtra("EntryType", "Inventory");
                 Detail_product_activity.this.startActivity(MainTo);
                 Detail_product_activity.this.onBackPressed();
                 break;

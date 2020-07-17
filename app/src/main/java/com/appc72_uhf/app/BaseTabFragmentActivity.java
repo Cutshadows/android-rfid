@@ -68,8 +68,6 @@ public class BaseTabFragmentActivity extends FragmentActivity {
 	}
 
 	public void initUHF() {
-
-
 		mActionBar = getActionBar();
 		mActionBar.setDisplayShowTitleEnabled(true);
 		mActionBar.setDisplayShowHomeEnabled(true);
@@ -78,9 +76,7 @@ public class BaseTabFragmentActivity extends FragmentActivity {
 		try {
 			mReader = RFIDWithUHF.getInstance();
 		} catch (Exception ex) {
-
 			toastMessage(ex.getMessage());
-
 			return;
 		}
 

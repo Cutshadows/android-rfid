@@ -241,7 +241,6 @@ public class DataAdapterInventories extends ArrayAdapter<DatamodelInventories> i
                     goToMain.putExtra("Name",  datamodelInventories.getName());
                     goToMain.putExtra("inventoryType", datamodelInventories.getDetailForDevice());
                     mContext.startActivity(goToMain);
-
                 }else{
                     Intent fragment=new Intent(getContext(), MainActivity.class);
                     fragment.putExtra("inventoryBool", true);
@@ -249,6 +248,7 @@ public class DataAdapterInventories extends ArrayAdapter<DatamodelInventories> i
                     fragment.putExtra("inventoryID", datamodelInventories.getId());
                     fragment.putExtra("inventoryName", datamodelInventories.getName());
                     fragment.putExtra("inventoryType", datamodelInventories.getDetailForDevice());
+                    fragment.putExtra("EntryType", "Inventory");
                     mContext.startActivity(fragment);
 
                 }

@@ -1,6 +1,6 @@
 package com.appc72_uhf.app.entities;
 
-import java.util.ArrayList;
+import org.json.JSONArray;
 
 public class DatamodelDocumentsMakeLabel {
         private int DocumentId;
@@ -23,7 +23,9 @@ public class DatamodelDocumentsMakeLabel {
         private int Status;
         private boolean HasVirtualItems;
         private String ReaderId = null;
-        ArrayList< DataModelVirtualDocument > DocumentDetailsVirtual = new ArrayList < DataModelVirtualDocument > ();
+        JSONArray DocumentDetailsVirtual = new JSONArray();
+        public int Selected;
+        private int CompanyId;
 
     public DatamodelDocumentsMakeLabel(){
 
@@ -48,7 +50,8 @@ public class DatamodelDocumentsMakeLabel {
                                        int status,
                                        boolean hasVirtualItems,
                                        String readerId,
-                                       ArrayList documentDetailsVirtual
+                                       JSONArray documentDetailsVirtual,
+                                       int selected
     ) {
         DocumentId = documentId;
         DeviceId = deviceId;
@@ -73,13 +76,28 @@ public class DatamodelDocumentsMakeLabel {
         DocumentDetailsVirtual = documentDetailsVirtual;
     }
 
-    public DatamodelDocumentsMakeLabel(int documentId, int deviceId, String locationOriginName, String documentName, boolean hasVirtualItems, ArrayList documentDetailsVirtual) {
+    public DatamodelDocumentsMakeLabel(String documentName) {
+        DocumentName=documentName;
+    }
+    //                                        , JSONObject documentDetailsVirtual
+
+    public int getCompanyId() {
+        return CompanyId;
+    }
+
+    public void setCompanyId(int companyId) {
+        CompanyId = companyId;
+    }
+
+    public DatamodelDocumentsMakeLabel(int documentId, int deviceId, String locationOriginName, String documentName, int status, boolean hasVirtualItems, JSONArray documentDetailsVirtual, int companyId) {
         DocumentId = documentId;
         DeviceId = deviceId;
         LocationOriginName=locationOriginName;
         DocumentName=documentName;
         HasVirtualItems=hasVirtualItems;
+        Status=status;
         DocumentDetailsVirtual=documentDetailsVirtual;
+        CompanyId=companyId;
     }
 
     public int getDocumentId() {
@@ -219,6 +237,9 @@ public class DatamodelDocumentsMakeLabel {
     public int getStatus() {
         return Status;
     }
+    public int getIsSelected() {
+        return Selected;
+    }
 
     public void setStatus(int status) {
         Status = status;
@@ -240,11 +261,11 @@ public class DatamodelDocumentsMakeLabel {
         ReaderId = readerId;
     }
 
-    public ArrayList getDocumentDetailsVirtual() {
+    public JSONArray getDocumentDetailsVirtual() {
         return DocumentDetailsVirtual;
     }
 
-    public void setDocumentDetailsVirtual(ArrayList documentDetailsVirtual) {
+    public void setDocumentDetailsVirtual(JSONArray documentDetailsVirtual) {
         DocumentDetailsVirtual = documentDetailsVirtual;
     }
 }

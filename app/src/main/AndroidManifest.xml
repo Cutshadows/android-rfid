@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.appc72_uhf.app"
     android:versionCode="1"
-    android:versionName="1.0">
+    android:versionName="1.0" >
 
     <uses-sdk android:targetSdkVersion="29" />
 
@@ -14,50 +14,54 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.mount_unmount_filesystems" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:networkSecurityConfig="@xml/network_security_config"
+        android:requestLegacyExternalStorage="true"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme"
-        android:requestLegacyExternalStorage="true">
+        android:theme="@style/AppTheme" >
+        <activity android:name=".activities.BarcodeActivity"
+            android:configChanges="orientation|screenSize"
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/Theme.AppCompat">
+        </activity>
         <activity
             android:name=".activities.Make_label_documents_activity"
             android:configChanges="orientation|screenSize"
-            android:theme="@style/Theme.AppCompat"
-            android:parentActivityName=".activities.Dashboard_activity"/>
+            android:parentActivityName=".activities.Dashboard_activity"
+            android:theme="@style/Theme.AppCompat" />
         <activity
             android:name=".activities.ProductMasterDetailActivity"
             android:configChanges="orientation|screenSize"
             android:icon="@mipmap/ic_launcher"
-            android:theme="@style/Theme.AppCompat.NoActionBar"
-            android:parentActivityName=".activities.Detail_product_activity"/>
+            android:parentActivityName=".activities.Detail_product_activity"
+            android:theme="@style/Theme.AppCompat.NoActionBar" />
         <activity
             android:name=".activities.Server_inventory_activity"
             android:configChanges="orientation|screenSize"
-            android:theme="@style/Theme.AppCompat"
-            android:parentActivityName=".MainActivity"/>
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/Theme.AppCompat" />
         <activity
             android:name=".activities.Detail_product_activity"
             android:configChanges="orientation|screenSize"
-            android:theme="@style/Theme.AppCompat.NoActionBar"
-            android:parentActivityName=".MainActivity"/>
-
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/Theme.AppCompat.NoActionBar" />
         <activity
             android:name=".activities.Dashboard_activity"
             android:configChanges="orientation|screenSize"
-            android:theme="@style/Theme.AppCompat.NoActionBar"
-            android:parentActivityName=".activities.Dashboard_activity">
-
-        </activity>
+            android:parentActivityName=".activities.Dashboard_activity"
+            android:theme="@style/Theme.AppCompat.NoActionBar" />
         <activity
             android:name=".activities.LoginActivity"
             android:configChanges="orientation|screenSize"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar">
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -68,7 +72,7 @@
         <activity
             android:name=".MainActivity"
             android:configChanges="orientation|screenSize"
-            android:parentActivityName=".activities.Dashboard_activity"/>
+            android:parentActivityName=".activities.Dashboard_activity" />
     </application>
 
 </manifest>

@@ -24,8 +24,11 @@ import com.appc72_uhf.app.adapter.AdapterMakeLabelDocuments;
 import com.appc72_uhf.app.entities.DatamodelDocumentsMakeLabel;
 import com.appc72_uhf.app.helpers.HttpHelpers;
 import com.appc72_uhf.app.repositories.CompanyRepository;
+import com.appc72_uhf.app.repositories.MakeLabelRepository;
 import com.appc72_uhf.app.tools.UIHelper;
-import com.google.gson.Gson;
+
+import org.json.JSONArray;
+import org.json.JSONException;
 
 import java.util.ArrayList;
 
@@ -65,6 +68,7 @@ public class Make_label_documents_activity extends AppCompatActivity{
             token_access=access_token;
         }
         code_enterprise=getCompany();
+        Log.e("COdeCompany", "Codigo de la compania"+codeCompany);
         android_id = Settings.Secure.getString(getBaseContext().getContentResolver(),
                 Settings.Secure.ANDROID_ID);
         syncronizedDocuments();
@@ -77,6 +81,7 @@ public class Make_label_documents_activity extends AppCompatActivity{
 
     public void syncronizedDocuments(){
         final String URL_COMPLETE=PROTOCOL_URLRFID+code_enterprise.toLowerCase()+DOMAIN_URLRFID;
+        final MakeLabelRepository makeLabelRepository=new MakeLabelRepository(Make_label_documents_activity.this);
         mypDialog = new ProgressDialog(this);
         mypDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
         mypDialog.setMessage("Verificando documentos en servidor...");
@@ -90,25 +95,31 @@ public class Make_label_documents_activity extends AppCompatActivity{
             public void onResponse(String response) {
                 Log.e("onRESPONSE PRODUCT", response);
                 try{
-                    Gson gson=new Gson();
-                    DatamodelDocumentsMakeLabel[] docsMakelabels=gson.fromJson(response, DatamodelDocumentsMakeLabel[].class);
-                    for(int index=0; index<=docsMakelabels.length-1; index++){
-                        Log.e("DATA FOR", "DocumentsId: "+docsMakelabels[index].getDocumentId()+"\n DeviceId:"+docsMakelabels[index].getDeviceId()+" \n FechaAsignacion:"+docsMakelabels[index].getFechaAsignacion()+" \n Document Details Virtual "+docsMakelabels[index].getDocumentDetailsVirtual());
-                        datamodelDocumentsMakeLabelArrayList.add(
-                                new DatamodelDocumentsMakeLabel(
-                                    docsMakelabels[index].getDocumentId(),
-                                    docsMakelabels[index].getDeviceId(),
-                                    docsMakelabels[index].getLocationOriginName(),
-                                    docsMakelabels[index].getDocumentName(),
-                                    docsMakelabels[index].isHasVirtualItems(),
-                                    docsMakelabels[index].getDocumentDetailsVirtual()
-                                )
-                        );
+                    //Gson gson=new Gson();
+                    JSONArray docsMakelabels=new JSONArray(response);
+                    for (int index=0; index< docsMakelabels.length(); index++) {
+                        Log.e("DATA FOR", "info: " + docsMakelabels.getJSONObject(index).getJSONArray("DocumentDetailsVirtual"));
+                        int documentFind=makeLabelRepository.ViewDocument(docsMakelabels.getJSONObject(index).getInt("DocumentId"));
+                        if(documentFind==0){
+                                datamodelDocumentsMakeLabelArrayList.add(
+                                        new DatamodelDocumentsMakeLabel(
+                                                docsMakelabels.getJSONObject(index).getInt("DocumentId"),
+                                                docsMakelabels.getJSONObject(index).getInt("DeviceId"),
+                                                docsMakelabels.getJSONObject(index).getString("LocationOriginName"),
+                                                docsMakelabels.getJSONObject(index).getString("DocumentName"),
+                                                docsMakelabels.getJSONObject(index).getInt("Status"),
+                                                docsMakelabels.getJSONObject(index).getBoolean("HasVirtualItems"),
+                                                docsMakelabels.getJSONObject(index).getJSONArray("DocumentDetailsVirtual"),
+                                                codeCompany
+                                        )
+                                );
+                        }
                     }
                     adapterMakeLabelDocuments.notifyDataSetChanged();
                     mypDialog.dismiss();
-                }catch (Exception e){
+                }catch (JSONException e){
                     mypDialog.dismiss();
+                    Log.e("JSONEXECPTIOn", ""+e.getMessage());
                     e.printStackTrace();
                 }
 

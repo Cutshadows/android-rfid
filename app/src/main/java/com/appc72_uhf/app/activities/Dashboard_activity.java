@@ -89,10 +89,12 @@ public class Dashboard_activity extends AppCompatActivity implements View.OnClic
         switch (view.getId()){
             case R.id.ibtn_takeInventory:
                 Intent goToMain=new Intent(Dashboard_activity.this, MainActivity.class);
+                goToMain.putExtra("EntryType", "Inventory");
                 startActivity(goToMain);
                 break;
             case R.id.ibtn_Labelled:
-                Intent goToMain2=new Intent(Dashboard_activity.this, Make_label_documents_activity.class);
+                Intent goToMain2=new Intent(Dashboard_activity.this, MainActivity.class);
+                goToMain2.putExtra("EntryType", "MakeLabel");
                 startActivity(goToMain2);
                 break;
             case R.id.btn_create_recovery:

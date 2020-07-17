@@ -63,7 +63,6 @@ public class inventoryList extends KeyDwonFragment implements View.OnClickListen
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         initComponent();
-
     }
     private void initComponent(){
         mContext = (MainActivity) getActivity();

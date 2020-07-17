@@ -1472,6 +1472,7 @@
 
     <string name="name">Name</string>
     <string name="title_inventory_status" translatable="false">Estado Inventarios</string>
+    <string name="title_local_documents" translatable="false">Documentos Local</string>
     <string name="tv_inventaryofServer" translatable="false">Inventarios en Servidor</string>
     <string name="btn_syncronousInventary" translatable="false">Obtener \n Inventarios</string>
     <string name="txt_inventoryLoad" translatable="false">Obteniendo inventarios...</string>
@@ -1517,7 +1518,6 @@
     <string name="btn_take_inventory" translatable="false">Tomar \n inventario </string>
     <string name="btn_exit_productview" translatable="false">Salir</string>
     <string name="btn_back_product_list" translatable="false">GUARDAR Y VOLVER</string>
-
 
 
     <!--MAKE LABEL -->

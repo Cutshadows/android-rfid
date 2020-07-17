@@ -81,7 +81,7 @@
                 android:textColor="@android:color/white"
                 android:layout_toEndOf="@+id/tv_quantity_document" />
 
-            <ImageButton
+            <!--ImageButton
                 android:id="@+id/item_more_details_documents"
                 android:layout_width="50dp"
                 android:layout_height="65dp"
@@ -96,7 +96,7 @@
                 android:background="@color/full_transparent"
                 android:scaleType="fitCenter"
                 android:src="@drawable/ic_file_make_label"
-                tools:src="@drawable/ic_file_make_label" />
+                tools:src="@drawable/ic_file_make_label" /-->
 
             <!--ImageButton
                 android:id="@+id/ibtn_download_labels"
@@ -119,6 +119,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentTop="true"
                 android:layout_alignParentEnd="true"
+                android:layout_alignParentBottom="true"
                 android:layout_centerVertical="true"
                 android:layout_centerHorizontal="true"
                 android:foregroundGravity="center_vertical"
