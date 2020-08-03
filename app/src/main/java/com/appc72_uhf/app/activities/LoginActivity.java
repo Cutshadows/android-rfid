@@ -32,6 +32,7 @@ import com.appc72_uhf.app.tools.UIHelper;
 import org.json.JSONObject;
 
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -68,7 +69,12 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         initComponent();
-        validate_session();
+        try {
+            validate_session();
+        } catch (ParseException e) {
+            Log.e("ParseException", ""+e.getLocalizedMessage());
+            e.printStackTrace();
+        }
 
     }
 
@@ -269,12 +275,18 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         sp_code.setAdapter(adapterSelect);
         adapterSelect.notifyDataSetChanged();
     }
-    public void validate_session(){
+    public void validate_session() throws ParseException {
         if(userDataPassword!=null && userDataName!=null && expires!=null){
             Date fecha=new Date(expires);
             Date c = Calendar.getInstance().getTime();
             String simpleDateFormatToday= DateFormat.getDateInstance(DateFormat.SHORT).format(c);
             String simpleDateFormatExpire= DateFormat.getDateInstance(DateFormat.SHORT).format(fecha);
+
+            Log.e("simpleDateFormatToday", simpleDateFormatToday);
+            Log.e("eDateFormatExpireSimple", ""+simpleDateFormatExpire);
+
+
+
 
            String[] fechaSpExp=simpleDateFormatExpire.split("/");
             int dayExp=Integer.parseInt(fechaSpExp[0]);
@@ -288,10 +300,11 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             int yearTod=Integer.parseInt(fechaSpToday[2]);
             int concatDateTod=dayTod+mesTod+yearTod;
 
-            if(concatDateTod<=concatDateExp){
+            //if(concatDateTod<=concatDateExp){
+            if(c.before(fecha) || c.equals(fecha)){
                 Intent goToMain=new Intent(LoginActivity.this, Dashboard_activity.class);
                 startActivity(goToMain);
-            }else{
+            }else if(c.after(fecha) || c.equals(fecha)){
                 UIHelper.ToastMessage(LoginActivity.this, "Token expiro, tiene que iniciar sesión nuevamente.", 3);
                 SharedPreferences preferencesExpireDate=getSharedPreferences("expireDate", Context.MODE_PRIVATE);
                 SharedPreferences.Editor obj_expireDate=preferencesExpireDate.edit();

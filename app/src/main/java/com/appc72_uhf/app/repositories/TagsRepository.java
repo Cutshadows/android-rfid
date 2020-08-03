@@ -112,23 +112,54 @@ public class TagsRepository {
     }
 
 
-    public ArrayList ViewAllTags(String inventoryId){
+    public ArrayList ViewAllTags(String inventoryId, boolean includeTID){
         ArrayList<String> datos=new ArrayList<>();
         AdminSQLOpenHelper admin = new AdminSQLOpenHelper(context);
         SQLiteDatabase db = admin.getWritableDatabase();
-
-        Cursor read= db.rawQuery("SELECT RFID, InventoryId, IdHardware, TID, TagStatus FROM Tags WHERE InventoryId='"+inventoryId+"'", null);
-
+        Cursor read= db.rawQuery("SELECT RFID, InventoryId, IdHardware, TID, TagStatus FROM Tags WHERE InventoryId='"+inventoryId+"' LIMIT 100", null); //ORDER BY RFID DESC LIMIT 100
         if (read.moveToFirst()) {
-            do {
-                datos.add(read.getString(read.getColumnIndex("RFID"))+"@"+read.getString(read.getColumnIndex("TID")));
-                //datos.add(read.getString(read.getColumnIndex("TID")));
-                //datos.add(read.getString(2));
-                //datos.add(read.getString(3));
+            Cursor readCount2=db.rawQuery("SELECT COUNT(RFID) as countRFID FROM Tags WHERE InventoryId='"+inventoryId+"'", null);
+            if(readCount2.moveToFirst()){
+                do {
+                    if(includeTID){
+                        datos.add(
+                                read.getString(
+                                        read.getColumnIndex("RFID")
+                                )+"@"+read.getString(
+                                        read.getColumnIndex("TID")
+                                )+"@"+readCount2.getInt(
+                                        readCount2.getColumnIndex("countRFID")
+                                )
+                        );
+                    }else{
+                        datos.add(
+                                read.getString(
+                                        read.getColumnIndex("RFID")
+                                )+"@"+readCount2.getInt(
+                                    readCount2.getColumnIndex("countRFID")
+                                )
+                        );
+                    }
+                    //datos.add(read.getString(read.getColumnIndex("TID")));
+                    //datos.add(read.getString(2));
+                    //datos.add(read.getString(3));
 
-            } while (read.moveToNext());
+                } while (read.moveToNext());
+            }
+
         }
         return datos;
+    }
+    public int countTags(String inventoryId){
+        int tags=0;
+        AdminSQLOpenHelper admin = new AdminSQLOpenHelper(context);
+        SQLiteDatabase db = admin.getWritableDatabase();
+            Cursor readCount2=db.rawQuery("SELECT COUNT(RFID) as countRFID FROM Tags WHERE InventoryId='"+inventoryId+"'", null);
+            if(readCount2.moveToFirst()){
+                    tags=readCount2.getInt(readCount2.getColumnIndex("countRFID"));
+            }
+
+        return tags;
     }
 
 }

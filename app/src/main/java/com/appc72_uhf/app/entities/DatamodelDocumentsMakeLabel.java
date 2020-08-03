@@ -12,10 +12,10 @@ public class DatamodelDocumentsMakeLabel {
         private String AssociatedDocNumber;
         private int DocumentTypeId;
         private String Description = null;
-        private String CreatedDate, DocumentName;
+        private String DocumentName; //CreatedDate,
         private int LocationOriginId;
         private String LocationOriginName;
-        private String DestinationLocationId = null;
+        private int DestinationLocationId = 0;
         private String Aux1 = null;
         private String Aux2 = null;
         private String Aux3 = null;
@@ -26,30 +26,21 @@ public class DatamodelDocumentsMakeLabel {
         JSONArray DocumentDetailsVirtual = new JSONArray();
         public int Selected;
         private int CompanyId;
+        private int CounterEnabled;
 
     public DatamodelDocumentsMakeLabel(){
 
     }
     public DatamodelDocumentsMakeLabel(int documentId,
                                        int deviceId,
-                                       int locationOriginId,
                                        String fechaAsignacion,
-                                       String asignadoPor,
                                        boolean allowLabeling,
                                        int associatedDocumentId,
                                        String associatedDocNumber,
-                                       int documentTypeId,
-                                       String description,
-                                       String createdDate,
                                        String locationOriginName,
-                                       String destinationLocationId,
-                                       String aux1,
-                                       String aux2,
-                                       String aux3,
                                        String client,
                                        int status,
                                        boolean hasVirtualItems,
-                                       String readerId,
                                        JSONArray documentDetailsVirtual,
                                        int selected
     ) {
@@ -57,30 +48,32 @@ public class DatamodelDocumentsMakeLabel {
         DeviceId = deviceId;
         LocationOriginName=locationOriginName;
         FechaAsignacion = fechaAsignacion;
-        AsignadoPor = asignadoPor;
         AllowLabeling = allowLabeling;
         AssociatedDocumentId = associatedDocumentId;
         AssociatedDocNumber = associatedDocNumber;
-        DocumentTypeId = documentTypeId;
-        Description = description;
-        CreatedDate = createdDate;
-        LocationOriginId = locationOriginId;
-        DestinationLocationId = destinationLocationId;
-        Aux1 = aux1;
-        Aux2 = aux2;
-        Aux3 = aux3;
         Client = client;
         Status = status;
         HasVirtualItems = hasVirtualItems;
-        ReaderId = readerId;
         DocumentDetailsVirtual = documentDetailsVirtual;
     }
 
-    public DatamodelDocumentsMakeLabel(String documentName) {
+
+
+    public DatamodelDocumentsMakeLabel(String documentName, String locationOriginName, int documentId, int counterEnabled) {
         DocumentName=documentName;
+        LocationOriginName=locationOriginName;
+        DocumentId=documentId;
+        CounterEnabled=counterEnabled;
+
     }
     //                                        , JSONObject documentDetailsVirtual
+    public int getCounterEnabled() {
+        return CounterEnabled;
+    }
 
+    public void setCounterEnabled(int counterEnabled) {
+        CounterEnabled = counterEnabled;
+    }
     public int getCompanyId() {
         return CompanyId;
     }
@@ -89,12 +82,33 @@ public class DatamodelDocumentsMakeLabel {
         CompanyId = companyId;
     }
 
-    public DatamodelDocumentsMakeLabel(int documentId, int deviceId, String locationOriginName, String documentName, int status, boolean hasVirtualItems, JSONArray documentDetailsVirtual, int companyId) {
+    public DatamodelDocumentsMakeLabel(
+            String documentName,
+            int documentId,
+            int deviceId,
+            String fechaAsignacion,
+            boolean allowLabeling,
+            int associatedDocumentId,
+            String associatedDocNumber,
+            String locationOriginName,
+            int destinationLocationId,
+            String client,
+            int status,
+            boolean hasVirtualItems,
+            JSONArray documentDetailsVirtual,
+            int companyId
+    ) {
         DocumentId = documentId;
         DeviceId = deviceId;
         LocationOriginName=locationOriginName;
+        FechaAsignacion=fechaAsignacion;
         DocumentName=documentName;
         HasVirtualItems=hasVirtualItems;
+        AssociatedDocNumber=associatedDocNumber;
+        AllowLabeling=allowLabeling;
+        AssociatedDocumentId=associatedDocumentId;
+        DestinationLocationId=destinationLocationId;
+        Client=client;
         Status=status;
         DocumentDetailsVirtual=documentDetailsVirtual;
         CompanyId=companyId;
@@ -178,13 +192,13 @@ public class DatamodelDocumentsMakeLabel {
         Description = description;
     }
 
-    public String getCreatedDate() {
-        return CreatedDate;
-    }
+   // public String getCreatedDate() {
+    //    return CreatedDate;
+   // }
 
-    public void setCreatedDate(String createdDate) {
-        CreatedDate = createdDate;
-    }
+    //public void setCreatedDate(String createdDate) {
+     //   CreatedDate = createdDate;
+    //}
 
     public int getLocationOriginId() {
         return LocationOriginId;
@@ -194,11 +208,11 @@ public class DatamodelDocumentsMakeLabel {
         LocationOriginId = locationOriginId;
     }
 
-    public String getDestinationLocationId() {
+    public int getDestinationLocationId() {
         return DestinationLocationId;
     }
 
-    public void setDestinationLocationId(String destinationLocationId) {
+    public void setDestinationLocationId(int destinationLocationId) {
         DestinationLocationId = destinationLocationId;
     }
 

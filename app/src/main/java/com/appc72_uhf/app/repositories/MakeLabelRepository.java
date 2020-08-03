@@ -24,7 +24,13 @@ public class MakeLabelRepository {
             String documentName,
             int documentId,
             int deviceId,
+            String fechaAsignacion,
+            boolean allowLabeling,
+            int associatedDocumentId,
+            String associatedDocNumber,
             String locationOriginName,
+            int destinationLocationId,
+            String client,
             int status,
             boolean hashVirtualItems,
             int isSelected,
@@ -38,7 +44,13 @@ public class MakeLabelRepository {
             valContentDocs.put("DocumentName", documentName.trim());
             valContentDocs.put("DocumentId", documentId);
             valContentDocs.put("DeviceId", deviceId);
+            valContentDocs.put("FechaAsignacion", fechaAsignacion);
+            valContentDocs.put("AllowLabeling", String.valueOf(allowLabeling));
+            valContentDocs.put("AssociatedDocumentId", associatedDocumentId);
+            valContentDocs.put("AssociatedDocNumber", associatedDocNumber);
             valContentDocs.put("LocationOriginName", locationOriginName.trim());
+            valContentDocs.put("DestinationLocationId", destinationLocationId);
+            valContentDocs.put("Client", client);
             valContentDocs.put("Status", status);
             valContentDocs.put("HasVirtualItems", String.valueOf(hashVirtualItems));
             valContentDocs.put("isSelected", isSelected);
@@ -56,21 +68,10 @@ public class MakeLabelRepository {
 
     public boolean insertVirtualTag(
     int id,
-    String associatedDocNumber,
-    int status,
-    String createdDate,
-    String readDate,
-    int productMasterId,
-    int productVirtualId,
+    String productMaster,
+    String productVirtualId,
     int documentId,
-   // int productMaster,
-    //String document,
-    int typeDocumentVirtual,
-    String cost,
-    String wasMoved,
-    String labelAssociated,
-    int productId
-    //String product
+    String codebar
     ){
         AdminSQLOpenHelper admin = new AdminSQLOpenHelper(context);
         SQLiteDatabase db = admin.getWritableDatabase();
@@ -79,21 +80,11 @@ public class MakeLabelRepository {
         try {
             ContentValues valContentVirtualTags= new ContentValues();
             valContentVirtualTags.put("Id", id);
-            valContentVirtualTags.put("AssociatedDocNumber", associatedDocNumber);
-            valContentVirtualTags.put("Status", status);
-            valContentVirtualTags.put("CreatedDate", createdDate);
-            valContentVirtualTags.put("ReadDate", readDate);
-            valContentVirtualTags.put("ProductMasterId", productMasterId);
+            valContentVirtualTags.put("ProductMaster", productMaster);
             valContentVirtualTags.put("ProductVirtualId", productVirtualId);
             valContentVirtualTags.put("DocumentId", documentId);
-            //valContentVirtualTags.put("ProductMaster", productMaster);
-            //valContentVirtualTags.put("Document",document);
-            valContentVirtualTags.put("TypeDocumentVirtual", typeDocumentVirtual);
-            valContentVirtualTags.put("Cost", cost);
-            valContentVirtualTags.put("wasMoved", wasMoved);
-            valContentVirtualTags.put("LabelAssociated", labelAssociated);
-            valContentVirtualTags.put("ProductId", productId);
-            //valContentVirtualTags.put("Product", product);
+            valContentVirtualTags.put("CodeBar", codebar);
+
             resultInsertTags=db.insert("DocumentDetailsVirtual", null,  valContentVirtualTags)>0;
         }catch (SQLiteException sqliEx){
             Log.e("SQLIEX", ""+sqliEx.getLocalizedMessage());
@@ -137,29 +128,63 @@ public class MakeLabelRepository {
         return datos;
     }
 
-    public ArrayList<String> ViewDocumentsMakeLabel(int CompanyId){
+    public ArrayList<String> ViewDocumentsMakeLabel(int companyId){
         ArrayList<String> datosInventory=new ArrayList<>();
         AdminSQLOpenHelper admin = new AdminSQLOpenHelper(context);
         SQLiteDatabase db = admin.getWritableDatabase();
-        Cursor read=db.rawQuery("SELECT DocumentName, DocumentId, DeviceId, LocationOriginName, Status, HasVirtualItems, isSelected FROM Documents WHERE CompanyId="+CompanyId+" AND isSelected=1", null);
+        // Cursor countRead=db.rawQuery("SELECT COUNT(Id) as counterVirtualDoc FROM DocumentDetailsVirtual WHERE DocumentId="+companyId, null); //+" AND ProductVirtualId='0'"
+        Cursor read=db.rawQuery("SELECT DocumentName, DocumentId, DeviceId, LocationOriginName, Status, HasVirtualItems, isSelected FROM Documents WHERE CompanyId="+companyId+" AND isSelected=1", null);
         if (read.moveToFirst()) {
-            do {
-                datosInventory.add(
-                        read.getString(
-                                read.getColumnIndex("DocumentName")
-                        )+"@"+read.getInt(
-                                read.getColumnIndex("DocumentId")
-                        )+"@"+read.getString(
-                                read.getColumnIndex("HasVirtualItems")
-                        )+"@"+read.getInt(
-                                read.getColumnIndex("Status")
-                        )+"@"+read.getInt(
-                                read.getColumnIndex("isSelected")
-                        )+"@"+read.getString(
-                                read.getColumnIndex("LocationOriginName")
-                        )
-                );
-            } while (read.moveToNext());
+            Cursor countRead=db.rawQuery("SELECT COUNT(Id) as counterVirtualDoc FROM DocumentDetailsVirtual WHERE DocumentId="+read.getInt(read.getColumnIndex("DocumentId"))+" AND ProductVirtualId='0'", null); //+" AND ProductVirtualId='0'"
+            if(countRead.moveToFirst()){
+                do {
+                    datosInventory.add(
+                            read.getString(
+                                    read.getColumnIndex("DocumentName")
+                            )+"@"+read.getInt(
+                                    read.getColumnIndex("DocumentId")
+                            )+"@"+read.getString(
+                                    read.getColumnIndex("HasVirtualItems")
+                            )+"@"+read.getInt(
+                                    read.getColumnIndex("Status")
+                            )+"@"+read.getInt(
+                                    read.getColumnIndex("isSelected")
+                            )+"@"+read.getString(
+                                    read.getColumnIndex("LocationOriginName")
+                            )+"@"+countRead.getInt(
+                                    countRead.getColumnIndex("counterVirtualDoc")
+                            )
+                    );
+                } while (read.moveToNext() && countRead.moveToFirst());
+            }
+        }
+        db.close();
+        return datosInventory;
+
+    }
+    public ArrayList<String> ViewVirtualTagsEnabled(int documentId){
+        ArrayList<String> datosInventory=new ArrayList<>();
+        AdminSQLOpenHelper admin = new AdminSQLOpenHelper(context);
+        SQLiteDatabase db = admin.getWritableDatabase();
+        Cursor read=db.rawQuery("SELECT Id, ProductMaster, ProductVirtualId, DocumentId, CodeBar FROM DocumentDetailsVirtual WHERE DocumentId="+documentId, null);
+        if (read.moveToFirst()) {
+                do {
+                    datosInventory.add(
+                            read.getString(
+                                    read.getColumnIndex("DocumentName")
+                            )+"@"+read.getInt(
+                                    read.getColumnIndex("DocumentId")
+                            )+"@"+read.getString(
+                                    read.getColumnIndex("HasVirtualItems")
+                            )+"@"+read.getInt(
+                                    read.getColumnIndex("Status")
+                            )+"@"+read.getInt(
+                                    read.getColumnIndex("isSelected")
+                            )+"@"+read.getString(
+                                    read.getColumnIndex("LocationOriginName")
+                            )
+                    );
+                } while (read.moveToNext());
         }
         db.close();
         return datosInventory;

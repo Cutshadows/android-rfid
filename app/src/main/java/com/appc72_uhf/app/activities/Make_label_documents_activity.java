@@ -100,13 +100,19 @@ public class Make_label_documents_activity extends AppCompatActivity{
                     for (int index=0; index< docsMakelabels.length(); index++) {
                         Log.e("DATA FOR", "info: " + docsMakelabels.getJSONObject(index).getJSONArray("DocumentDetailsVirtual"));
                         int documentFind=makeLabelRepository.ViewDocument(docsMakelabels.getJSONObject(index).getInt("DocumentId"));
-                        if(documentFind==0){
+                        if(documentFind==0 && docsMakelabels.getJSONObject(index).getBoolean("HasVirtualItems")){
                                 datamodelDocumentsMakeLabelArrayList.add(
                                         new DatamodelDocumentsMakeLabel(
+                                                docsMakelabels.getJSONObject(index).getString("DocumentName"),
                                                 docsMakelabels.getJSONObject(index).getInt("DocumentId"),
                                                 docsMakelabels.getJSONObject(index).getInt("DeviceId"),
+                                                docsMakelabels.getJSONObject(index).getString("FechaAsignacion"),
+                                                docsMakelabels.getJSONObject(index).getBoolean("AllowLabeling"),
+                                                docsMakelabels.getJSONObject(index).getInt("AssociatedDocumentId"),
+                                                docsMakelabels.getJSONObject(index).getString("AssociatedDocNumber"),
                                                 docsMakelabels.getJSONObject(index).getString("LocationOriginName"),
-                                                docsMakelabels.getJSONObject(index).getString("DocumentName"),
+                                                docsMakelabels.getJSONObject(index).getInt("DestinationLocationId"),
+                                                docsMakelabels.getJSONObject(index).getString("Client"),
                                                 docsMakelabels.getJSONObject(index).getInt("Status"),
                                                 docsMakelabels.getJSONObject(index).getBoolean("HasVirtualItems"),
                                                 docsMakelabels.getJSONObject(index).getJSONArray("DocumentDetailsVirtual"),
@@ -153,7 +159,8 @@ public class Make_label_documents_activity extends AppCompatActivity{
         if(enterprises_code.isEmpty()){
             Log.e("No data preferences", " Error data no empty "+enterprises_code);
         }else{
-            code_result=enterprises_code;
+            Log.e("code", " code result "+enterprises_code.toLowerCase());
+            code_result=enterprises_code.toLowerCase();
             companyId=companyRepository.getCompanieId(code_result);
             codeCompany=companyId;
         }

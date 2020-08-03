@@ -1,67 +1,74 @@
 <?xml version="1.0" encoding="utf-8"?>
-    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
+<LinearLayout xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <RadioGroup
+        android:id="@+id/RgInventory"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:padding="5dp">
+
+        <TextView
+            android:id="@+id/tv_detail_inventory"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textStyle="bold"
+            android:textSize="@dimen/text_size_12"
+            android:text="Inventario 12 ULTRA MEGA LARasdadsaasdasdasdasdGO"
+            android:textAppearance="?android:attr/textAppearanceLargeInverse"
+            android:textColor="@color/white"/>
+
+    </RadioGroup>
+    <View
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:context=".activities.BarcodeActivity">
-
-    <RelativeLayout
-        android:layout_width="379dp"
-        android:layout_height="522dp"
-        android:layout_marginStart="40dp"
-        android:layout_marginLeft="40dp"
-        android:layout_marginTop="119dp"
-        android:layout_marginEnd="41dp"
-        android:layout_marginRight="41dp"
-        android:layout_marginBottom="120dp"
-        android:orientation="vertical"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.489"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="1.0"
-        tools:ignore="MissingConstraints">
-
+        android:layout_height="12px"
+        android:background="@color/gray1" />
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:paddingTop="30dp">
-
-
-            <ImageView
-                android:id="@+id/imageView"
-                android:layout_width="match_parent"
-                android:layout_height="78dp"
-                android:layout_marginTop="50dp"
-                android:background="@color/gray"
-                android:paddingLeft="50dp"
-                android:paddingRight="50dp"
-                app:srcCompat="@drawable/logo_white_text1"
-                android:contentDescription="TODO" />
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1px"
-                android:background="@color/gray1" />
-
+            android:paddingTop="10dp">
 
                 <RelativeLayout
                     android:id="@+id/Relative_layout_takeInventory"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
                     android:layout_gravity="center_vertical">
 
-                    <TextView
-                        android:id="@+id/tv_input_barcode"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />
+                        <EditText
+                            android:id="@+id/et_searchBarcode"
+                            android:layout_width="200dp"
+                            android:layout_height="40dp"
+                            android:layout_marginLeft="22dp"
+                            android:ems="10"
+                            android:hint="@string/et_barcode"
+                            android:inputType="number"
+                            android:textAllCaps="false" />
+
+                        <Button
+                            android:id="@+id/btn_searchProduct"
+                            android:layout_width="wrap_content"
+                            android:layout_height="40dp"
+                            android:layout_toRightOf="@+id/et_searchBarcode"
+                            android:background="@drawable/button_bg_up"
+                            android:text="@string/btn_searchProduct"
+                            android:textColor="@color/white1"
+                            android:textSize="@dimen/text_size_19" />
                 </RelativeLayout>
+            <View
+                android:layout_width="fill_parent"
+                android:layout_height="1px"
+                android:background="@color/gray1"
+                android:orientation="horizontal" />
+            <ListView
+                android:id="@+id/lv_detail_document"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:scrollingCache="true"
+                android:smoothScrollbar="true" />
             </LinearLayout>
-
-    </RelativeLayout>
-
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    </LinearLayout>

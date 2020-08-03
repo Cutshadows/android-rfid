@@ -65,7 +65,7 @@ public class CompanyRepository {
         AdminSQLOpenHelper admin = new AdminSQLOpenHelper(context);
         SQLiteDatabase db = admin.getWritableDatabase();
 
-        Cursor read= db.rawQuery("SELECT Id FROM Company WHERE Code=\""+companyName+"\"", null);
+        Cursor read= db.rawQuery("SELECT Id FROM Company WHERE Code='"+companyName+"'", null);
         if (read.moveToFirst()) {
             datos=read.getInt(read.getColumnIndex("Id"));
         }

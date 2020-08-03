@@ -831,6 +831,8 @@
     <string name="gps_msg_title_satellite_signal">The satellite signal</string>
     <string name="uhf_msg_tab_scan">Lectura</string>
     <string name="uhf_msg_tab_inventory" translatable="false">Inventario</string>
+    <string name="uhf_msg_tab_barcoderead" translatable="false">Lectura barcode</string>
+
     <string name="uhf_msg_tab_read">Leer</string>
     <string name="uhf_msg_tab_write">Escribir</string>
     <string name="uhf_msg_tab_support" translatable="false">Respaldo</string>
@@ -1529,6 +1531,9 @@
     <string name="tittle_document_make_label" translatable="false">N° Doc: </string>
     <string name="location_documents" translatable="false">Ubicación:</string>
     <string name="btn_add_inventory" translatable="false">Agregar Inventario</string>
+    <string name="et_barcode" translatable="false">Codigo de barra</string>
+    <string name="btn_searchProduct" translatable="false">Buscar</string>
+    <string name="tv_barcode" translatable="false">BARCODE</string>
 
 
 </resources>

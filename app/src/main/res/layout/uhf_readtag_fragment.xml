@@ -245,13 +245,27 @@
     android:paddingTop="5dp"
     android:paddingRight="10dp"
     android:paddingBottom="5dp"></LinearLayout-->
-
+    <!--androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/RvTags"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="2dp"
+        /-->
+    <!--ProgressBar
+        android:id="@+id/main_progress"
+        style="@style/Widget.AppCompat.ProgressBar"
+        android:theme="@style/Widget.AppCompat.ProgressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        /-->
     <ListView
         android:id="@+id/LvTags"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:scrollingCache="true"
         android:smoothScrollbar="true" />
+
 
     <!--ListView
             android:id="@+id/LvTags2"

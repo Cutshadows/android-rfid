@@ -65,32 +65,27 @@ public class AdminSQLOpenHelper extends SQLiteOpenHelper {
                 "InventoryId TEXT);");//String, String, Float
 
         db.execSQL("CREATE TABLE IF NOT EXISTS Documents("+
-                "DocumentName TEXT,"+
                 "DocumentId INTEGER UNIQUE,"+
+                "DocumentName TEXT,"+
                 "DeviceId INTEGER,"+
-                "CompanyId INTEGER,"+
+                "FechaAsignacion TEXT," +
+                "AllowLabeling TEXT," +
+                "AssociatedDocumentId INTEGER," +
+                "AssociatedDocNumber TEXT,"+
                 "LocationOriginName TEXT," +
+                "DestinationLocationId INTEGER," +
+                "Client TEXT," +
                 "Status INTEGER," +
                 "HasVirtualItems TEXT," +
+                "CompanyId INTEGER,"+
                 "isSelected INTEGER" +");");
 
         db.execSQL("CREATE TABLE IF NOT EXISTS DocumentDetailsVirtual("+
                 "Id INTEGER UNIQUE," +
-                "AssociatedDocNumber TEXT," +
-                "Status INTEGER," +
-                "CreatedDate TEXT," +
-                "ReadDate TEXT," +
-                "ProductMasterId INTEGER," +
-                "ProductVirtualId INTEGER," +
+                "ProductMaster TEXT," +
+                "ProductVirtualId TEXT,"+
                 "DocumentId INTEGER," +
-                //"ProductMaster INTEGER," +
-                //"Document TEXT," +
-                "TypeDocumentVirtual INTEGER," +
-                "Cost TEXT," +
-                "wasMoved TEXT," +
-                "LabelAssociated TEXT," +
-                "ProductId INTEGER"+");");
-                //"Product TEXT"+");");
+                "CodeBar TEXT" +");");
     }
 
     @Override

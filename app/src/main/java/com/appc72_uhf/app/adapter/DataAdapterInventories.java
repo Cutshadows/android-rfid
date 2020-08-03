@@ -101,12 +101,13 @@ public class DataAdapterInventories extends ArrayAdapter<DatamodelInventories> i
                             dialog.dismiss();
                                     JSONArray data=new JSONArray();
                                     TagsRepository tagRepo= new TagsRepository(getContext());
-                                    ArrayList Tags=tagRepo.ViewAllTags(datamodelInventories.getId());
+                                    ArrayList Tags=tagRepo.ViewAllTags(datamodelInventories.getId(), false);
                                     if(Tags.size()>0){
                                         try{
                                             RequestQueue requestQueue= Volley.newRequestQueue(getContext());
                                             String URL = "";
                                             JSONArray arregloCodigos = new JSONArray(Tags.toString());
+                                            Log.e("length Tags", "length: "+arregloCodigos.length());
                                             mypDialog = new ProgressDialog(mContext);
                                             mypDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
                                             mypDialog.setMessage("Enviando codigos...");

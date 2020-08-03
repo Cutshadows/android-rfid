@@ -59,7 +59,13 @@ public class AdapterMakeLabelDocuments extends ArrayAdapter<DatamodelDocumentsMa
                                 dModelMakeLabel.getDocumentName(),
                                 dModelMakeLabel.getDocumentId(),
                                 dModelMakeLabel.getDeviceId(),
+                                dModelMakeLabel.getFechaAsignacion(),
+                                dModelMakeLabel.isAllowLabeling(),
+                                dModelMakeLabel.getAssociatedDocumentId(),
+                                dModelMakeLabel.getAssociatedDocNumber(),
                                 dModelMakeLabel.getLocationOriginName(),
+                                dModelMakeLabel.getDestinationLocationId(),
+                                dModelMakeLabel.getClient(),
                                 dModelMakeLabel.getStatus(),
                                 dModelMakeLabel.isHasVirtualItems(),
                                 1,
@@ -71,29 +77,19 @@ public class AdapterMakeLabelDocuments extends ArrayAdapter<DatamodelDocumentsMa
                         for(int indexVirtual=0; indexVirtual < dModelMakeLabel.getDocumentDetailsVirtual().length(); indexVirtual++){
                             try{
                                 JSONObject jsonObject=dModelMakeLabel.getDocumentDetailsVirtual().getJSONObject(indexVirtual);
-                               int productVirtualId=(jsonObject.getString("ProductVirtualId").equals("null"))?0:jsonObject.getInt("ProductVirtualId");
-                               //int producMasterId=(jsonObject.getString("ProductMaster").equals("null")?0:jsonObject.getInt("ProductMaster"));
-                               int productId=(jsonObject.getString("ProductId").equals("null")?0:jsonObject.getInt("ProductId"));
-                               int productMasterId=(jsonObject.getString("ProductMasterId").equals("null")?0:jsonObject.getInt("ProductMasterId"));
-                                    inserListTag=makeLabelRepository.insertVirtualTag(
-                                            jsonObject.getInt("Id"),
-                                            jsonObject.getString("AssociatedDocNumber"),
-                                            jsonObject.getInt("Status"),
-                                            jsonObject.getString("CreatedDate"),
-                                            jsonObject.getString("ReadDate"),
-                                            productMasterId,
-                                            productVirtualId,
-                                            jsonObject.getInt("DocumentId"),
-                                            //jsonObject.getInt("ProductMaster"),
-                                            //jsonObject.getString("Document"),
-                                            jsonObject.getInt("TypeDocumentVirtual"),
-                                            jsonObject.getString("Cost"),
-                                            jsonObject.getString("wasMoved"),
-                                            jsonObject.getString("LabelAssociated"),
-                                            productId
-                                            //jsonObject.getString("Product")
-                                    );
-
+                                Log.e("jsonObject", jsonObject.toString());
+                                int id=jsonObject.getInt("Id");
+                                JSONObject productMasterArray=jsonObject.getJSONObject("ProductMaster");
+                                String productVirtualId=jsonObject.getString("ProductVirtualId");
+                                int documentId=jsonObject.getInt("DocumentId");
+                                String codeBar=jsonObject.getString("CodeBar");
+                                inserListTag=makeLabelRepository.insertVirtualTag(
+                                        id,
+                                        productMasterArray.toString(),
+                                        productVirtualId,
+                                        documentId,
+                                        codeBar
+                                );
                             }catch (JSONException jsEx){
                                 Log.e("jsEx", ""+jsEx.getLocalizedMessage());
                                 jsEx.printStackTrace();
@@ -163,6 +159,34 @@ public class AdapterMakeLabelDocuments extends ArrayAdapter<DatamodelDocumentsMa
             holder.chbx_download_documents.setChecked(false);
         }
         holder.chbx_download_documents.setTag(position);
+        /*Object object=getItem(position);
+        final DatamodelDocumentsMakeLabel dModelMakeLabel=(DatamodelDocumentsMakeLabel)object;
+        for(int indexVirtual=0; indexVirtual < dModelMakeLabel.getDocumentDetailsVirtual().length(); indexVirtual++){
+            try{
+                JSONObject jsonObject=dModelMakeLabel.getDocumentDetailsVirtual().getJSONObject(indexVirtual);
+                Log.e("jsonObject", jsonObject.toString());
+
+                int id=jsonObject.getInt("Id");
+                Log.e("Id", "Id: "+id);
+
+                JSONObject productMasterArray=jsonObject.getJSONObject("ProductMaster");
+                Log.e("ProductMasterArray", ""+productMasterArray.toString());
+
+                String productVirtualId=jsonObject.getString("ProductVirtualId");
+                Log.e("productVirtualId", "productVirtualId: "+productVirtualId);
+
+                int documentId=jsonObject.getInt("DocumentId");
+                Log.e("documentId", "documentId: "+documentId);
+
+                String codeBar=jsonObject.getString("CodeBar");
+                Log.e("codeBar", "codeBar: "+codeBar);
+
+
+            }catch (JSONException jsEx){
+                Log.e("jsEx", ""+jsEx.getLocalizedMessage());
+                jsEx.printStackTrace();
+            }
+        }*/
 
 
         return convertView;

@@ -26,6 +26,64 @@
                 android:textColor="#ffffff"
                 xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_alignParentLeft="true" />
+            <TextView
+                android:id="@+id/tv_location_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:text="@string/location_documents"
+                android:textColor="@android:color/white"
+                android:layout_below="@+id/tv_doument_name"
+                android:layout_marginTop="1sp"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textStyle="bold"
+                android:layout_marginStart="10dp" />
+            <TextView
+                android:id="@+id/tv_location_document"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tv_doument_name"
+                android:layout_toRightOf="@+id/tv_location_view"
+                android:textStyle="normal"
+                android:layout_marginTop="1sp"
+                android:textColor="@android:color/white"
+                android:layout_toEndOf="@+id/tv_location_view" />
+            <TextView
+                android:id="@+id/tv_document_id"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tv_location_view"
+                android:layout_marginTop="1sp"
+                android:layout_marginLeft="10dp"
+                android:text="@string/tittle_document_make_label"
+                android:textColor="@android:color/white"
+                android:textStyle="bold"
+                android:textAppearance="?android:attr/textAppearanceListItemSmall"
+                android:layout_marginStart="10dp" />
+            <TextView
+                android:id="@+id/tv_quantity_document"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tv_document_id"
+                android:layout_marginLeft="10dp"
+                android:text="Disponible: "
+                android:textStyle="normal"
+                android:layout_marginTop="1sp"
+                android:textColor="@android:color/white"
+                android:layout_marginStart="10dp" />
+            <TextView
+                android:id="@+id/tv_resumen_document"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tv_document_id"
+                android:layout_toRightOf="@+id/tv_quantity_document"
+                android:layout_marginLeft="2dp"
+                android:text="99999 / 99999"
+                android:textStyle="normal"
+                android:layout_marginTop="1sp"
+                android:textColor="@android:color/white"
+                android:layout_toEndOf="@+id/tv_quantity_document"
+                android:layout_marginStart="2dp" />
             <ImageButton
                 android:id="@+id/btn_global_detail"
                 android:layout_width="250dp"
@@ -40,14 +98,14 @@
                 android:layout_alignParentRight="true" />
 
             <ImageView
-                android:id="@+id/item_sync"
+                android:id="@+id/item_makeLabel"
                 android:layout_width="30sp"
                 android:layout_height="30sp"
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentRight="true"
                 android:layout_marginRight="50dp"
                 android:layout_centerVertical="true"
-                android:src="@drawable/ic_upload" />
+                android:src="@drawable/ic_etiquetado" />
             <ImageView
                 android:id="@+id/item_delete"
                 android:layout_width="30sp"

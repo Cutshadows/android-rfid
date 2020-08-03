@@ -8,11 +8,9 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 
-import com.appc72_uhf.app.activities.LocalDocumentsMakeLabelActivity;
 import com.appc72_uhf.app.activities.inventoryList;
 import com.appc72_uhf.app.fragment.UHFReadTagFragment;
 import com.appc72_uhf.app.fragment.UHFSetFragment;
-import com.appc72_uhf.app.tools.UIHelper;
 import com.rscja.utility.StringUtility;
 
 import java.util.HashMap;
@@ -28,7 +26,7 @@ public class MainActivity extends BaseTabFragmentActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        if(this.getIntent().getStringExtra("EntryType").equals("Inventory")){
+        //if(this.getIntent().getStringExtra("EntryType").equals("Inventory")){
             if(this.getIntent().hasExtra("inventoryBool")){
                 takeInventory=true;
                 inventaryName= this.getIntent().getStringExtra("inventoryName");
@@ -46,21 +44,21 @@ public class MainActivity extends BaseTabFragmentActivity {
                 initViewPager();
                 initTabs();
             }
-        }else if(this.getIntent().getStringExtra("EntryType").equals("MakeLabel")){
+        /*}else if(this.getIntent().getStringExtra("EntryType").equals("MakeLabel")){
             UIHelper.ToastMessage(this, "MAKELABEL");
             initSound();
             initUHF();
             initViewPageData();
             initViewPager();
             initTabs();
-        }
+        }*/
 
 
     }
 
     @Override
     protected void initViewPageData() {
-        if(this.getIntent().getStringExtra("EntryType").equals("Inventory")){
+        //if(this.getIntent().getStringExtra("EntryType").equals("Inventory")){
             if(takeInventory){
                 lstFrg.add(new UHFReadTagFragment());
                 //lstFrg.add(new UHFWriteFragment());
@@ -78,13 +76,14 @@ public class MainActivity extends BaseTabFragmentActivity {
                 //lstTitles.add(getString(R.string.uhf_msg_tab_write).toUpperCase());
                 lstTitles.add(getString(R.string.uhf_msg_tab_set));
             }
-        }else if(this.getIntent().getStringExtra("EntryType").equals("MakeLabel")){
+        /*}else if(this.getIntent().getStringExtra("EntryType").equals("MakeLabel")){
+            //lstFrg.add(new BarcodeActivity());
             lstFrg.add(new LocalDocumentsMakeLabelActivity());
             lstFrg.add(new UHFSetFragment());
 
-            lstTitles.add(getString(R.string.uhf_msg_tab_inventory));
+            lstTitles.add(getString(R.string.uhf_msg_tab_barcoderead));
             lstTitles.add(getString(R.string.uhf_msg_tab_set));
-        }
+        }*/
         //lstFrg.add(new UHFReadFragment());
         //lstFrg.add(new UHFWriteFragment());
         //lstFrg.add(new UHFKillFragment());

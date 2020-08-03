@@ -90,7 +90,8 @@ public class LocalDocumentsMakeLabelActivity extends KeyDwonFragment implements 
             Log.e("Status[3]", strs[3]);
             Log.e("isSelected[4]", strs[4]);
             Log.e("LocationName[5]", strs[5]);
-            docArraylist.add(new DatamodelDocumentsMakeLabel(strs[0]));
+            Log.e("counterVirtualDoc[6]", strs[6]);
+            docArraylist.add(new DatamodelDocumentsMakeLabel(strs[0], strs[5], Integer.parseInt(strs[1]), Integer.parseInt(strs[6])));
         }
     }
     private String getCompany(){
@@ -102,7 +103,7 @@ public class LocalDocumentsMakeLabelActivity extends KeyDwonFragment implements 
         if(enterprises_code.isEmpty()){
             Log.e("No data preferences", " Error data no empty "+enterprises_code);
         }else{
-            code_result=enterprises_code;
+            code_result=enterprises_code.toLowerCase();
             companyId=companyRepository.getCompanieId(code_result);
             codeCompany=companyId;
         }
