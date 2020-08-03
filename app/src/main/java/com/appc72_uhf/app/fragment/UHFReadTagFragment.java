@@ -323,7 +323,7 @@ public class UHFReadTagFragment extends KeyDwonFragment {
                     LvTags.setAdapter(adapter);
                     int countTagsSQL=tagRepoCount.countTags(inventoryID);
                     int countAdapter=(adapter.getCount()<=100)?adapter.getCount():adapter.getCount()-100;
-                    int contador=(countRfid==1)?countAdapter:countTagsSQL;
+                    int contador=(countRfid==1)?countTagsSQL+countAdapter:countTagsSQL;
                     tv_count.setText(""+contador);
                 } else {
                     int tagcount = Integer.parseInt(tagList.get(index).get("tagCount"), 10) + 1;
@@ -361,7 +361,7 @@ public class UHFReadTagFragment extends KeyDwonFragment {
                     searchTags();
                 }
                 try {
-                    Thread.sleep(1000);
+                    Thread.sleep(2000);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -377,7 +377,12 @@ public class UHFReadTagFragment extends KeyDwonFragment {
                 }
 
             }else{
-                insertTags();
+                boolean insertTags=insertTags();
+                try {
+                    Thread.sleep(2000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
                 Log.e("insertTags", "PASANDO POR ACA");
                 if(saveRestedTags){
                     Intent goToMain=new Intent(mContext, MainActivity.class);

@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 
 import com.appc72_uhf.app.helpers.AdminSQLOpenHelper;
 
@@ -49,6 +50,7 @@ public class TagsRepository {
             reg.put("TagStatus", TagStatus);
 
             db.insert("Tags", null, reg);
+            Log.e("SQLINSERT", "INSERT INTO Tags (RFID, InventoryId, IdHardware, TID, TagStatus ) VALUES("+RFID+", "+idInventory+", "+IdHardware+", "+TID+", "+TagStatus+")");
             result=true;
         }catch (Exception ex){
             result = false;
