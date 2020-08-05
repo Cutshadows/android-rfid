@@ -152,6 +152,40 @@ public class TagsRepository {
         }
         return datos;
     }
+
+    public ArrayList ViewAllTagsSync(String inventoryId, boolean includeTID){
+        ArrayList<String> datos=new ArrayList<>();
+        AdminSQLOpenHelper admin = new AdminSQLOpenHelper(context);
+        SQLiteDatabase db = admin.getWritableDatabase();
+        Cursor read= db.rawQuery("SELECT RFID, InventoryId, IdHardware, TID, TagStatus FROM Tags WHERE InventoryId='"+inventoryId+"'", null); //ORDER BY RFID DESC LIMIT 100
+        if (read.moveToFirst()) {
+                do {
+                    if(includeTID){
+                        datos.add(
+                                read.getString(
+                                        read.getColumnIndex("RFID")
+                                )+"@"+read.getString(
+                                        read.getColumnIndex("TID")
+                                )
+                        );
+                    }else{
+                        datos.add(
+                                read.getString(
+                                        read.getColumnIndex("RFID")
+                                )
+                        );
+                    }
+                    //datos.add(read.getString(read.getColumnIndex("TID")));
+                    //datos.add(read.getString(2));
+                    //datos.add(read.getString(3));
+
+                } while (read.moveToNext());
+
+        }
+        return datos;
+    }
+
+
     public int countTags(String inventoryId){
         int tags=0;
         AdminSQLOpenHelper admin = new AdminSQLOpenHelper(context);

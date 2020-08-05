@@ -46,6 +46,7 @@ import com.appc72_uhf.app.repositories.CompanyRepository;
 import com.appc72_uhf.app.repositories.InventaryRespository;
 import com.appc72_uhf.app.repositories.TagsRepository;
 import com.appc72_uhf.app.tools.UIHelper;
+import com.google.common.collect.Lists;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -53,6 +54,7 @@ import org.json.JSONObject;
 
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
+import java.util.List;
 
 public class DataAdapterInventories extends ArrayAdapter<DatamodelInventories> implements View.OnClickListener {
 
@@ -74,7 +76,7 @@ public class DataAdapterInventories extends ArrayAdapter<DatamodelInventories> i
         int position=(Integer) v.getTag();
         Object object= getItem(position);
         final DatamodelInventories datamodelInventories=(DatamodelInventories)object;
-        InventaryRespository inventaryRespository=new InventaryRespository(getContext());
+        final InventaryRespository inventaryRespository=new InventaryRespository(getContext());
         code_enterprise=getCompany();
         android_id = Settings.Secure.getString(getContext().getContentResolver(),
                 Settings.Secure.ANDROID_ID);
@@ -101,48 +103,127 @@ public class DataAdapterInventories extends ArrayAdapter<DatamodelInventories> i
                             dialog.dismiss();
                                     JSONArray data=new JSONArray();
                                     TagsRepository tagRepo= new TagsRepository(getContext());
-                                    ArrayList Tags=tagRepo.ViewAllTags(datamodelInventories.getId(), false);
+                                    ArrayList Tags=tagRepo.ViewAllTagsSync(datamodelInventories.getId(), false);
+                                    String inventory_include_tid=inventaryRespository.inventoryWithTID(datamodelInventories.getId());
                                     if(Tags.size()>0){
                                         try{
+                                            String IsTypeInventory=datamodelInventories.getId().substring(0, 1);
+                                            JSONArray arregloCodigos = new JSONArray(Tags.toString());
+                                            Log.e("arregloCodigos", arregloCodigos.toString());
+
                                             RequestQueue requestQueue= Volley.newRequestQueue(getContext());
                                             String URL = "";
-                                            JSONArray arregloCodigos = new JSONArray(Tags.toString());
+                                            switch (IsTypeInventory){
+                                                case "U":
+                                                    URL=PROTOCOL_URLRFID+code_enterprise.toLowerCase()+DOMAIN_URLRFID+"api/inventory/SaveTagReaded";
+                                                    break;
+                                                case "D":
+                                                    URL=PROTOCOL_URLRFID+code_enterprise.toLowerCase()+DOMAIN_URLRFID+"api/inventoryDoc/SaveTagReaded";
+                                                    break;
+                                                case "T":
+                                                    URL=PROTOCOL_URLRFID+code_enterprise.toLowerCase()+DOMAIN_URLRFID+"api/inventoryTemplate/SaveTagReaded";
+                                                    break;
+                                                case "P":
+                                                    URL=PROTOCOL_URLRFID+code_enterprise.toLowerCase()+DOMAIN_URLRFID+"api/inventoryProduct/SaveTagReaded";
+                                                    break;
+                                                case "PL":
+                                                    URL=PROTOCOL_URLRFID+code_enterprise.toLowerCase()+DOMAIN_URLRFID+"api/inventoryProductLocation/SaveTagReaded";
+                                                    break;
+                                            }
                                             Log.e("length Tags", "length: "+arregloCodigos.length());
                                             mypDialog = new ProgressDialog(mContext);
                                             mypDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
                                             mypDialog.setMessage("Enviando codigos...");
                                             mypDialog.setCanceledOnTouchOutside(false);
                                             mypDialog.show();
-                                            String IsTypeInventory=datamodelInventories.getId().substring(0, 1);
-                                            for(int i=0; i<arregloCodigos.length();i++){
-                                                JSONObject jsonBody=new JSONObject();
-                                                String etags=String.valueOf(Tags.get(i));
-                                                String[] spliTags=etags.split("@");
-                                                String RFIDtagsString=spliTags[0];
-                                                String TIDtagsString=spliTags[1];
-                                                String IdInventory=datamodelInventories.getId().substring(1);
 
-                                                jsonBody.put("InventoryId", IdInventory);
-                                                jsonBody.put("TId", TIDtagsString);
-                                                jsonBody.put("IdHardware", android_id);
-                                                jsonBody.put("RFID", RFIDtagsString);
-                                                data.put(jsonBody);
+                                            if(Tags.size()>999){
+                                                UIHelper.ToastMessage(getContext(), "aqui entran los millares", 6);
+                                                int millares=Tags.size()/1000;
+
+                                                List bigList=Tags;
+                                                List<List<String>> smallerLists= Lists.partition(bigList, 100);
+                                                    int indexSmallArreglos=0;
+                                                        while(indexSmallArreglos<millares){
+                                                            Log.e("smallerLists", indexSmallArreglos+":  "+smallerLists.get(indexSmallArreglos).toString());
+                                                            for(int i=0; i<smallerLists.get(indexSmallArreglos).size();i++){
+                                                                JSONObject jsonBody=new JSONObject();
+                                                                String etags=String.valueOf(Tags.get(i));
+                                                                String[] spliTags=etags.split("@");
+                                                                String RFIDtagsString=spliTags[0];
+                                                                String TIDtagsString=" ";
+                                                                if(inventory_include_tid.equals("true")){
+                                                                    TIDtagsString=spliTags[1];
+                                                                }
+                                                                String IdInventory=datamodelInventories.getId().substring(1);
+
+                                                                jsonBody.put("InventoryId", IdInventory);
+                                                                jsonBody.put("TId", TIDtagsString);
+                                                                jsonBody.put("IdHardware", android_id);
+                                                                jsonBody.put("RFID", RFIDtagsString);
+                                                                data.put(jsonBody);
+                                                            }
+                                                            Log.e("jsonBody", data.toString());
+
+                                                            BooleanRequest booleanRequest = new BooleanRequest(1, URL, data, new Response.Listener<Boolean>() {
+                                                                @Override
+                                                                public void onResponse(Boolean response) {
+                                                                    if(response){
+                                                                        mypDialog.dismiss();
+                                                                        UIHelper.ToastMessage(getContext(), "Envio de codigos exitoso!!", 3);
+                                                                    }
+                                                                }
+                                                            }, new Response.ErrorListener() {
+                                                                @Override
+                                                                public void onErrorResponse(VolleyError error) {
+                                                                    mypDialog.dismiss();
+                                                                    if (error instanceof NetworkError) {
+                                                                        UIHelper.ToastMessage(getContext(), "Error de conexion, no hay conexion a internet", 3);
+                                                                    } else if (error instanceof ServerError) {
+                                                                        UIHelper.ToastMessage(getContext(), "Error de conexion, credenciales invalidas", 3);
+                                                                    } else if (error instanceof AuthFailureError) {
+                                                                        UIHelper.ToastMessage(getContext(), "Error de conexion, intente mas tarde.", 3);
+                                                                    } else if (error instanceof ParseError) {
+                                                                        UIHelper.ToastMessage(getContext(), "Error desconocido, intente mas tarde", 3);
+                                                                    } else if (error instanceof TimeoutError || error instanceof NoConnectionError) {
+                                                                        UIHelper.ToastMessage(getContext(), "Error con el servidor, intente mas tarde!!!", 3);
+                                                                    }
+                                                                }
+                                                            });
+                                                            int socketTimeout = 30000;//30 seconds - change to what you want
+                                                            RetryPolicy policy = new DefaultRetryPolicy(socketTimeout, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
+                                                            booleanRequest.setRetryPolicy(policy);
+                                                            requestQueue.add(booleanRequest);
+
+                                                            indexSmallArreglos++;
+                                                    }
+                                                //Log.e("smallerLists", smallerLists.get(1).toString());
+                                                //Log.e("smallerLists", smallerLists.get(2).toString());
+
+
+                                            }else{
+                                                for(int i=0; i<arregloCodigos.length();i++){
+                                                    JSONObject jsonBody=new JSONObject();
+                                                    String etags=String.valueOf(Tags.get(i));
+                                                    String[] spliTags=etags.split("@");
+                                                    String RFIDtagsString=spliTags[0];
+                                                    String TIDtagsString=" ";
+                                                    if(inventory_include_tid.equals("true")){
+                                                        TIDtagsString=spliTags[1];
+                                                    }
+                                                    String IdInventory=datamodelInventories.getId().substring(1);
+
+                                                    jsonBody.put("InventoryId", IdInventory);
+                                                    jsonBody.put("TId", TIDtagsString);
+                                                    jsonBody.put("IdHardware", android_id);
+                                                    jsonBody.put("RFID", RFIDtagsString);
+                                                    data.put(jsonBody);
+                                                }
+                                                Log.e("jsonBody", data.toString());
+
                                             }
-                                            Log.e("jsonBody", data.toString());
-                                            switch (IsTypeInventory){
-                                                case "U":
-                                                    URL=PROTOCOL_URLRFID+code_enterprise.toLowerCase()+DOMAIN_URLRFID+"api/inventory/SaveTagReaded";
-                                                break;
-                                                case "D":
-                                                    URL=PROTOCOL_URLRFID+code_enterprise.toLowerCase()+DOMAIN_URLRFID+"api/inventoryDoc/SaveTagReaded";
-                                                 break;
-                                                case "T":
-                                                    URL=PROTOCOL_URLRFID+code_enterprise.toLowerCase()+DOMAIN_URLRFID+"api/inventoryTemplate/SaveTagReaded";
-                                                 break;
-                                                case "P":
-                                                    URL=PROTOCOL_URLRFID+code_enterprise.toLowerCase()+DOMAIN_URLRFID+"api/inventoryProduct/SaveTagReaded";
-                                                break;
-                                            }
+
+                                           /*
 
                                             BooleanRequest booleanRequest = new BooleanRequest(1, URL, data, new Response.Listener<Boolean>() {
                                                 @Override
@@ -172,7 +253,7 @@ public class DataAdapterInventories extends ArrayAdapter<DatamodelInventories> i
                                             int socketTimeout = 30000;//30 seconds - change to what you want
                                             RetryPolicy policy = new DefaultRetryPolicy(socketTimeout, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
                                             booleanRequest.setRetryPolicy(policy);
-                                            requestQueue.add(booleanRequest);
+                                            requestQueue.add(booleanRequest);*/
                                         }catch (JSONException ex){
                                             ex.printStackTrace();
                                         }
@@ -378,5 +459,4 @@ public class DataAdapterInventories extends ArrayAdapter<DatamodelInventories> i
             }
         }
     }
-
 }

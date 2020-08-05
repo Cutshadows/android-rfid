@@ -22,14 +22,14 @@ public class AdminSQLOpenHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         db.execSQL("CREATE TABLE IF  NOT EXISTS Tags(" +
-                "RFID TEXT NOT NULL PRIMARY KEY, " +
+                "RFID TEXT UNIQUE NOT NULL PRIMARY KEY, " +
                 "InventoryId TEXT, " +
                 "IdHardware TEXT, " +
                 "TID TEXT, " +
                 "TagStatus INTEGER);"); //String, String, Float
 
         db.execSQL("CREATE TABLE IF  NOT EXISTS Inventory(" +
-                "Id TEXT UNIQUE, " +
+                "Id TEXT UNIQUE NOT NULL PRIMARY KEY, " +
                 "CompanyId INTEGER, " +
                 "Name TEXT, " +
                 "DetailForDevice TEXT, " +
@@ -38,7 +38,7 @@ public class AdminSQLOpenHelper extends SQLiteOpenHelper {
                 "IsSelect INTEGER);"); //String, String, Float //isSelect=1 true || 0 false
 
         db.execSQL("CREATE TABLE IF  NOT EXISTS Device(" +
-                "Id INTEGER UNIQUE, " +
+                "Id INTEGER UNIQUE NOT NULL PRIMARY KEY, " +
                 "Name TEXT, " +
                 "Description TEXT, " +
                 "IsActive TEXT, " +
@@ -50,13 +50,13 @@ public class AdminSQLOpenHelper extends SQLiteOpenHelper {
                 "MakeLabel TEXT);");
 
         db.execSQL("CREATE TABLE IF  NOT EXISTS Company(" +
-                "Id INTEGER UNIQUE, " +
+                "Id INTEGER UNIQUE NOT NULL PRIMARY KEY, " +
                 "Name TEXT,"+
                 "IsActive TEXT,"+
                 "Code TEXT);");
 
         db.execSQL("CREATE TABLE IF  NOT EXISTS DetailForDevice(" +
-                "Id INTEGER UNIQUE, " +
+                "Id INTEGER UNIQUE NOT NULL PRIMARY KEY, " +
                 "EPC TEXT,"+
                 "Code TEXT,"+
                 "Name TEXT,"+
@@ -65,7 +65,7 @@ public class AdminSQLOpenHelper extends SQLiteOpenHelper {
                 "InventoryId TEXT);");//String, String, Float
 
         db.execSQL("CREATE TABLE IF NOT EXISTS Documents("+
-                "DocumentId INTEGER UNIQUE,"+
+                "DocumentId INTEGER UNIQUE NOT NULL PRIMARY KEY,"+
                 "DocumentName TEXT,"+
                 "DeviceId INTEGER,"+
                 "FechaAsignacion TEXT," +
@@ -81,7 +81,7 @@ public class AdminSQLOpenHelper extends SQLiteOpenHelper {
                 "isSelected INTEGER" +");");
 
         db.execSQL("CREATE TABLE IF NOT EXISTS DocumentDetailsVirtual("+
-                "Id INTEGER UNIQUE," +
+                "Id INTEGER UNIQUE NOT NULL PRIMARY KEY," +
                 "ProductMaster TEXT," +
                 "ProductVirtualId TEXT,"+
                 "DocumentId INTEGER," +

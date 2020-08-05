@@ -150,64 +150,7 @@ public class UHFReadTagFragment extends KeyDwonFragment {
          * Recycle view infinity scroll
          */
         commentList= new ArrayList<>();
-        /*commentList.add(new ListData("Apple Pie"));
-        commentList.add(new ListData("Pineapple"));
-        commentList.add(new ListData("Frambuesa"));
-        commentList.add(new ListData("Frambuesa"));
-        commentList.add(new ListData("Frambuesa"));
-        commentList.add(new ListData("Frambuesa"));
-        commentList.add(new ListData("Frambuesa"));
-        commentList.add(new ListData("Frambuesa"));
-        commentList.add(new ListData("Frambuesa"));
-        commentList.add(new ListData("Frambuesa"));
-        commentList.add(new ListData("Frambuesa"));
-        commentList.add(new ListData("Frambuesa"));
-        commentList.add(new ListData("Frambuesa"));
-        commentList.add(new ListData("Frambuesa"));
-        commentList.add(new ListData("Frambuesa"));
-        commentList.add(new ListData("Frambuesa"));
-        commentList.add(new ListData("Frambuesa"));
-        commentList.add(new ListData("Frambuesa"));
-        commentList.add(new ListData("Frambuesa"));
-        commentList.add(new ListData("Frambuesa"));
-        commentList.add(new ListData("Frambuesa"));
-        commentList.add(new ListData("Frambuesa"));
-        commentList.add(new ListData("Frambuesa"));
-        commentList.add(new ListData("Frambuesa"));
-        commentList.add(new ListData("Frambuesa"));
-        commentList.add(new ListData("Frambuesa"));
-        commentList.add(new ListData("Frambuesa"));
-        commentList.add(new ListData("Frambuesa"));
-        commentList.add(new ListData("Frambuesa"));
-        commentList.add(new ListData("Frambuesa"));
-        commentList.add(new ListData("Frambuesa"));
-        commentList.add(new ListData("Frambuesa"));
-        commentList.add(new ListData("Frambuesa"));
-        commentList.add(new ListData("Frambuesa"));
-        commentList.add(new ListData("Frambuesa"));
-        commentList.add(new ListData("Frambuesa"));
-        commentList.add(new ListData("Frambuesa"));
-        commentList.add(new ListData("Frambuesa"));
-        commentList.add(new ListData("Frambuesa"));
-        commentList.add(new ListData("Frambuesa"));
-        commentList.add(new ListData("Frambuesa"));
-        commentList.add(new ListData("Frambuesa"));
-        commentList.add(new ListData("Frambuesa"));
-        commentList.add(new ListData("Frambuesa"));
-        commentList.add(new ListData("Frambuesa"));
-        commentList.add(new ListData("Frambuesa"));
-        commentList.add(new ListData("Frambuesa"));
-        commentList.add(new ListData("Frambuesa"));
-        commentList.add(new ListData("Frambuesa"));*/
-        //RvTags.setHasFixedSize(true);
-        //layoutManager= new LinearLayoutManager(mContext);
-        //RvTags.setLayoutManager(layoutManager);
-        //recycleAdapter=new RecycleAdapter(commentList);
-        //RvTags.setAdapter(recycleAdapter);
-        //recycleAdapter.notifyDataSetChanged();
-
-
-        LvTags.setAdapter(adapter);
+         LvTags.setAdapter(adapter);
 
 
         //pagination();
@@ -417,8 +360,10 @@ public class UHFReadTagFragment extends KeyDwonFragment {
                 mypDialog.incrementProgressBy(1); // Incremented By Value 2
             }
         };
+
+        int tagSize=(tagList.size()<=100)?tagList.size():tagList.size()-100;
         mypDialog = new ProgressDialog(this.mContext);
-        mypDialog.setMax(tagList.size());
+        mypDialog.setMax(tagSize);
         mypDialog.setMessage("Guardando codigos...");
         mypDialog.setTitle("Mensaje de guardado"); // Setting Title
         mypDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);

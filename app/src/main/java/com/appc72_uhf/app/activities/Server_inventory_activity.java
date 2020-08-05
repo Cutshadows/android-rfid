@@ -223,9 +223,6 @@ public class Server_inventory_activity extends AppCompatActivity {
                     try{
                         Gson gson = new Gson();
                         Application[] inventaryDoc = gson.fromJson(response, Application[].class);
-                        /*layout_server_inventory_load.removeAllViews();
-                        layout_no_data.removeAllViews();
-                        lv_server_inventories.setVisibility(View.VISIBLE);*/
                         for (Application application : inventaryDoc) {
                             Log.e("DATA FOR", "" + application.getId() + "" + application.getName() + " " + Boolean.valueOf(application.getDetailForDevice()) + " INVENTORY STATUS: " + application.getInventoryStatus() + " INCLUDETID: " + application.getIncludeTID());
                             int inventoryFound = inventoryRepo.ViewInventory(application.getId());
@@ -324,6 +321,59 @@ public class Server_inventory_activity extends AppCompatActivity {
             /**
              * FIN DE CARGA POR PRODUCTO
              */
+            /**
+             * INICIO DE INVENTARIO PRODUCTO UBICACION
+             */
+            http.addHeader("Authorization", "Bearer "+token_access);
+            http.client(Request.Method.GET, "/api/inventoryProductLocation/GetAllInventories", "application/json; charset=utf-8", null, new Response.Listener<String>() {
+                @Override
+                public void onResponse(String response) {
+                    Log.e("onResponse PROUBICACION", ""+response);
+                    try{
+                        Gson gson = new Gson();
+                        Application[] inventaryDoc = gson.fromJson(response, Application[].class);
+                        for (Application application : inventaryDoc) {
+                            Log.e("DATA FOR", "" + application.getId() + "" + application.getName() + " " + Boolean.valueOf(application.getDetailForDevice()) + " INVENTORY STATUS: " + application.getInventoryStatus() + " INCLUDETID: " + application.getIncludeTID());
+                            int inventoryFound = inventoryRepo.ViewInventory(application.getId());
+                            Log.e("InventoryStatus", "InventoryStatus: " + application.getInventoryStatus());
+                            if (application.getInventoryStatus() == 0 && inventoryFound == 0) {
+                                dataArrayList.add(
+                                        new DatamodelInventories(
+                                                application.getId(),
+                                                application.getName(),
+                                                Boolean.parseBoolean(application.getDetailForDevice()),
+                                                application.getInventoryStatus(),
+                                                application.getIncludeTID(),
+                                                application.getIsSelect(),
+                                                5,
+                                                codeCompany
+                                        ));
+                            }
+                        }
+                        dataAdapterInventoryServer.notifyDataSetChanged();
+                    }catch (Exception ex){
+                        UIHelper.ToastMessage(Server_inventory_activity.this, "Error : "+ex.getLocalizedMessage(), 5);
+                    }
+                }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    if (error instanceof NetworkError) {
+                        UIHelper.ToastMessage(Server_inventory_activity.this, "Error de conexion, no hay conexion a internet", 3);
+                    } else if (error instanceof ServerError) {
+                        UIHelper.ToastMessage(Server_inventory_activity.this, "Error de conexion, credenciales invalidas", 3);
+                    } else if (error instanceof AuthFailureError) {
+                        UIHelper.ToastMessage(Server_inventory_activity.this, "Error de conexion, intente mas tarde.", 3);
+                    } else if (error instanceof ParseError) {
+                        UIHelper.ToastMessage(Server_inventory_activity.this, "Error desconocido, intente mas tarde", 3);
+                    } else if (error instanceof TimeoutError || error instanceof NoConnectionError) {
+                        UIHelper.ToastMessage(Server_inventory_activity.this, "Error con el servidor, intente mas tarde!!!", 3);
+                        Server_inventory_activity.super.onBackPressed();
+                    }
+                }
+            });
+
+
             dataAdapterInventoryServer.notifyDataSetChanged();
 
         }else{
