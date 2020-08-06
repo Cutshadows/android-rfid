@@ -354,7 +354,7 @@ public class DataAdapterInventoryServer extends ArrayAdapter<DatamodelInventorie
                             }
                         }
                     }else if(datamodelInventories.isTypeInventory()==5){
-                        boolean  resultInventoryInsert=inventaryRespository.InventoryInsert("PL"+datamodelInventories.getId(),
+                        boolean  resultInventoryInsert=inventaryRespository.InventoryInsert("E"+datamodelInventories.getId(),
                                 datamodelInventories.getName(),
                                 String.valueOf(datamodelInventories.getDetailForDevice()),
                                 datamodelInventories.getInventoryStatus(),
@@ -373,7 +373,7 @@ public class DataAdapterInventoryServer extends ArrayAdapter<DatamodelInventorie
                                 HttpHelpers http = new HttpHelpers(getContext(), URL_COMPLETE, "");
                                 http.addHeader("Authorization", "Bearer "+token_access);
                                 //Log.e("INVENTARIO INT", URL_COMPLETE+"/api/inventory/GetDetailForDevice?InventoryId="+datamodelInventories.getId());
-                                http.clientProductDetail(Request.Method.GET, "/api/inventoryProduct/GetDetailForDevice?InventoryId="+datamodelInventories.getId(), null,  new Response.Listener<String>() {
+                                http.clientProductDetail(Request.Method.GET, "/api/inventoryProductLocation/GetDetailForDevice?InventoryId="+datamodelInventories.getId(), null,  new Response.Listener<String>() {
                                     @Override
                                     public void onResponse(String response) {
                                         try{
@@ -387,7 +387,7 @@ public class DataAdapterInventoryServer extends ArrayAdapter<DatamodelInventorie
                                                         products[index].getName(),
                                                         products[index].getFound(),
                                                         products[index].getProductMasterId(),
-                                                        "PL"+datamodelInventories.getId()
+                                                        "E"+datamodelInventories.getId()
                                                 );
                                                 if(resultInsertProduct){
 
@@ -501,7 +501,7 @@ public class DataAdapterInventoryServer extends ArrayAdapter<DatamodelInventorie
                 holder.tv_inventory.setText("[P"+datamodelInventories.getId()+"] "+datamodelInventories.getName());
                 break;
             case 5:
-                holder.tv_inventory.setText("[PL"+datamodelInventories.getId()+"] "+datamodelInventories.getName());
+                holder.tv_inventory.setText("[E"+datamodelInventories.getId()+"] "+datamodelInventories.getName());
                 break;
 
         }
