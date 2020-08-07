@@ -62,7 +62,7 @@ public class DataAdapterInventories extends ArrayAdapter<DatamodelInventories> i
 
     Context mContext;
     ArrayList<DatamodelInventories> datalist;
-    ProgressDialog mypDialog;
+    ProgressDialog mypDialog, myPdialogSingle;
     String code_enterprise;
     private String android_id;
     public static final String PROTOCOL_URLRFID="https://";
@@ -205,6 +205,14 @@ public class DataAdapterInventories extends ArrayAdapter<DatamodelInventories> i
                                                                 indexSmallArreglos++;
                                                             }
                                             }else{
+                                                mypDialog = new ProgressDialog(mContext);
+                                                mypDialog.setMax(Tags.size());
+                                                mypDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+                                                mypDialog.setMessage("Enviando codigos empaquetados...");
+                                                mypDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+                                                mypDialog.setCanceledOnTouchOutside(false);
+                                                mypDialog.setCancelable(false);
+                                                mypDialog.show();
                                                 for(int i=0; i<arregloCodigos.length();i++){
                                                     JSONObject jsonBody=new JSONObject();
                                                     String etags=String.valueOf(Tags.get(i));
@@ -317,16 +325,16 @@ public class DataAdapterInventories extends ArrayAdapter<DatamodelInventories> i
                             dialog.dismiss();
                             TagsRepository tagsRepository=new TagsRepository(getContext());
                             InventaryRespository inventaryRespository=new InventaryRespository(getContext());
-                            mypDialog = new ProgressDialog((Activity) getContext());
-                            mypDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-                            mypDialog.setMessage("Vaciando codigos disponibles...");
-                            mypDialog.setCanceledOnTouchOutside(false);
-                            mypDialog.show();
+                            myPdialogSingle = new ProgressDialog((Activity) getContext());
+                            myPdialogSingle.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+                            myPdialogSingle.setMessage("Vaciando codigos disponibles...");
+                            myPdialogSingle.setCanceledOnTouchOutside(false);
+                            myPdialogSingle.show();
                             try{
                                 boolean res= tagsRepository.DeleteAllTags(datamodelInventories.getId());
                                 boolean resultUpdateFalse=inventaryRespository.DeleteInventory(datamodelInventories.getId());
                                 if(resultUpdateFalse && res){
-                                    mypDialog.dismiss();
+                                    myPdialogSingle.dismiss();
                                     UIHelper.ToastMessage(getContext(), "El inventario '"+datamodelInventories.getName()+"' eliminado!!", 5);
                                     //notifyDataSetChanged();
                                     Intent goToMain=new Intent(getContext(), MainActivity.class);
@@ -335,7 +343,7 @@ public class DataAdapterInventories extends ArrayAdapter<DatamodelInventories> i
                                     //UIHelper.ToastMessage(getContext(), "Codigos elimandos exitosamente!!", 10);
                                 }
                             }catch (Exception e){
-                                mypDialog.dismiss();
+                                myPdialogSingle.dismiss();
                                 UIHelper.ToastMessage(getContext(), "Error al eliminar codigos!!", 10);
                                 e.printStackTrace();
                             }
