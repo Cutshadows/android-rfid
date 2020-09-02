@@ -154,7 +154,7 @@ public class UHFSetFragment extends KeyDwonFragment implements OnClickListener {
         cbFastID.setOnCheckedChangeListener(new OnMyCheckedChangedListener());
         cbEPC_TID.setOnCheckedChangeListener(new OnMyCheckedChangedListener());
 
-        SpSession.setSelection(2);
+        SpSession.setSelection(1); //S0 0 menos intervalo de lecturas por x segundos, S1 1 n intervalor mas rapidos que S1, S2 2 intervalo de tiempo de respuesta alto el mas extenso, S3 3 intervalo de tiempo bajo
        // SpSession.setSelection(1); //viene por defecto 1
         SpInv.setSelection(0);
         String ver = mContext.mReader.getHardwareType();

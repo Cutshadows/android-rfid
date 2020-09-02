@@ -338,7 +338,10 @@ public class DataAdapterInventories extends ArrayAdapter<DatamodelInventories> i
                                     UIHelper.ToastMessage(getContext(), "El inventario '"+datamodelInventories.getName()+"' eliminado!!", 5);
                                     //notifyDataSetChanged();
                                     Intent goToMain=new Intent(getContext(), MainActivity.class);
+                                    goToMain.putExtra("EntryType", "Inventory");
+                                    goToMain.putExtra("inventoryBool", false);
                                     mContext.startActivity(goToMain);
+                                    ((Activity) getContext()).onBackPressed();
 
                                     //UIHelper.ToastMessage(getContext(), "Codigos elimandos exitosamente!!", 10);
                                 }

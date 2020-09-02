@@ -125,7 +125,7 @@ public class Server_inventory_activity extends AppCompatActivity {
                             lv_server_inventories.setVisibility(View.VISIBLE);
                             for( int i=0; i< apps.length; i++){
                                 Log.e("DATA FOR", ""+apps[i].getId()+""+apps[i].getName()+" "+Boolean.valueOf(apps[i].getDetailForDevice())+" INVENTORY STATUS: "+apps[i].getInventoryStatus()+" INCLUDETID: "+apps[i].getIncludeTID());
-                                int inventoryFound=inventoryRepo.ViewInventory(apps[i].getId());
+                                int inventoryFound=inventoryRepo.ViewInventory("U"+apps[i].getId());
                                 if(apps[i].getInventoryStatus()==0 && inventoryFound==0){
                                     dataArrayList.add(
                                             new DatamodelInventories(
@@ -180,7 +180,7 @@ public class Server_inventory_activity extends AppCompatActivity {
                         lv_server_inventories.setVisibility(View.VISIBLE);*/
                         for (Application application : inventaryDoc) {
                             Log.e("DATA FOR", "" + application.getId() + "" + application.getName() + " " + Boolean.valueOf(application.getDetailForDevice()) + " INVENTORY STATUS: " + application.getInventoryStatus() + " INCLUDETID: " + application.getIncludeTID());
-                            int inventoryFound = inventoryRepo.ViewInventory(application.getId());
+                            int inventoryFound = inventoryRepo.ViewInventory("D"+application.getId());
                             Log.e("InventoryStatus", "InventoryStatus: " + application.getInventoryStatus());
                             if (application.getInventoryStatus() == 0 && inventoryFound == 0) {
                                 dataArrayList.add(
@@ -232,7 +232,7 @@ public class Server_inventory_activity extends AppCompatActivity {
                         Application[] inventaryDoc = gson.fromJson(response, Application[].class);
                         for (Application application : inventaryDoc) {
                             Log.e("DATA FOR", "" + application.getId() + "" + application.getName() + " " + Boolean.valueOf(application.getDetailForDevice()) + " INVENTORY STATUS: " + application.getInventoryStatus() + " INCLUDETID: " + application.getIncludeTID());
-                            int inventoryFound = inventoryRepo.ViewInventory(application.getId());
+                            int inventoryFound = inventoryRepo.ViewInventory("T"+application.getId());
                             Log.e("InventoryStatus", "InventoryStatus: " + application.getInventoryStatus());
                             if (application.getInventoryStatus() == 0 && inventoryFound == 0) {
                                 dataArrayList.add(
@@ -287,7 +287,7 @@ public class Server_inventory_activity extends AppCompatActivity {
                         lv_server_inventories.setVisibility(View.VISIBLE);*/
                         for (Application application : inventaryDoc) {
                             Log.e("DATA FOR", "" + application.getId() + "" + application.getName() + " " + Boolean.valueOf(application.getDetailForDevice()) + " INVENTORY STATUS: " + application.getInventoryStatus() + " INCLUDETID: " + application.getIncludeTID());
-                            int inventoryFound = inventoryRepo.ViewInventory(application.getId());
+                            int inventoryFound = inventoryRepo.ViewInventory("P"+application.getId());
                             Log.e("InventoryStatus", "InventoryStatus: " + application.getInventoryStatus());
                             if (application.getInventoryStatus() == 0 && inventoryFound == 0) {
                                 dataArrayList.add(
@@ -341,7 +341,7 @@ public class Server_inventory_activity extends AppCompatActivity {
                         Application[] inventaryDoc = gson.fromJson(response, Application[].class);
                         for (Application application : inventaryDoc) {
                             Log.e("DATA FOR", "" + application.getId() + "" + application.getName() + " " + Boolean.valueOf(application.getDetailForDevice()) + " INVENTORY STATUS: " + application.getInventoryStatus() + " INCLUDETID: " + application.getIncludeTID());
-                            int inventoryFound = inventoryRepo.ViewInventory(application.getId());
+                            int inventoryFound = inventoryRepo.ViewInventory("E"+application.getId());
                             Log.e("InventoryStatus", "InventoryStatus: " + application.getInventoryStatus());
                             if (application.getInventoryStatus() == 0 && inventoryFound == 0) {
                                 dataArrayList.add(

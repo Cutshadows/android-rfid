@@ -30,7 +30,7 @@ public class MainActivity extends BaseTabFragmentActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         if(this.getIntent().getStringExtra("EntryType").equals("Inventory")){
-            if(this.getIntent().hasExtra("inventoryBool")){
+            if(this.getIntent().getBooleanExtra("inventoryBool", false)){
                 takeInventory=true;
                 inventaryName= this.getIntent().getStringExtra("inventoryName");
                 idInventory= this.getIntent().getIntExtra("Id", 0);
