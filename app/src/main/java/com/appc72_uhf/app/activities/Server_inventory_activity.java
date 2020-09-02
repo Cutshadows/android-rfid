@@ -1,6 +1,7 @@
 package com.appc72_uhf.app.activities;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.Network;
@@ -23,6 +24,7 @@ import com.android.volley.Response;
 import com.android.volley.ServerError;
 import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
+import com.appc72_uhf.app.MainActivity;
 import com.appc72_uhf.app.R;
 import com.appc72_uhf.app.adapter.DataAdapterInventoryServer;
 import com.appc72_uhf.app.domain.Application;
@@ -78,6 +80,11 @@ public class Server_inventory_activity extends AppCompatActivity {
         sincronizar();
     }
 
+    public void onBackPressed(){
+        Intent goToMain=new Intent(this, MainActivity.class);
+        goToMain.putExtra("EntryType", "Inventory");
+        super.onBackPressed();
+    }
     public void sincronizar() {
         /**
          * Verify connection to internet
@@ -109,7 +116,7 @@ public class Server_inventory_activity extends AppCompatActivity {
                 http.client(Request.Method.GET, "/api/inventory/GetAllInventories", "application/json; charset=utf-8", null, new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                        Log.e("onResponse UBICACION", ""+response);
+                       // Log.e("onResponse UBICACION", ""+response);
                         try{
                             Gson gson = new Gson();
                             Application[] apps = gson.fromJson(response, Application[].class);

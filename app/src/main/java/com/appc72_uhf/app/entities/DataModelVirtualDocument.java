@@ -17,7 +17,33 @@ public class DataModelVirtualDocument {
     private String LabelAssociated;
     private int ProductId;
     private int Product;
+    private int CountrMaster;
+    private String Def1, Def2;
 
+
+    public String getDef1() {
+        return Def1;
+    }
+
+    public void setDef1(String def1) {
+        Def1 = def1;
+    }
+
+    public String getDef2() {
+        return Def2;
+    }
+
+    public void setDef2(String def2) {
+        Def2 = def2;
+    }
+
+    public DataModelVirtualDocument(int id, int documentId, int countMaster, String def1, String def2 ) {
+        Id=id;
+        DocumentId=documentId;
+        CountrMaster=countMaster;
+        Def1=def1;
+        Def2=def2;
+    }
     public DataModelVirtualDocument(int id, int associatedDocNumber, int status, String createdDate, String readDate, int productMasterId, int productVirtualId, int documentId, String productMaster, String document, int typeDocumentVirtual, int cost, String wasMoved, String labelAssociated, int productId, int product) {
         Id = id;
         AssociatedDocNumber = associatedDocNumber;
@@ -37,6 +63,13 @@ public class DataModelVirtualDocument {
         Product = product;
     }
 
+    public int getCountrMaster() {
+        return CountrMaster;
+    }
+
+    public void setCountrMaster(int countrMaster) {
+        CountrMaster = countrMaster;
+    }
     public int getId() {
         return Id;
     }

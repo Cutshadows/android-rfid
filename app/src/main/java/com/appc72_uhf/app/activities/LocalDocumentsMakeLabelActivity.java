@@ -84,14 +84,8 @@ public class LocalDocumentsMakeLabelActivity extends KeyDwonFragment implements 
             String recip=docs.get(index);
             Log.e("HasVirtualItems", recip);
             String[] strs = recip.split("@");
-            Log.e("DocumentName[0]", strs[0]);
-            Log.e("DocumentId[1]", strs[1]);
-            Log.e("HasVirtualItems[2]", strs[2]);
-            Log.e("Status[3]", strs[3]);
-            Log.e("isSelected[4]", strs[4]);
-            Log.e("LocationName[5]", strs[5]);
-            Log.e("counterVirtualDoc[6]", strs[6]);
-            docArraylist.add(new DatamodelDocumentsMakeLabel(strs[0], strs[5], Integer.parseInt(strs[1]), Integer.parseInt(strs[6])));
+            int countTagEnabled=makeLabelRepository.countTagsVirtualEnabled(Integer.parseInt(strs[1]));
+            docArraylist.add(new DatamodelDocumentsMakeLabel(strs[0], strs[5], Integer.parseInt(strs[1]), countTagEnabled));
         }
     }
     private String getCompany(){

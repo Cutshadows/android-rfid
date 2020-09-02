@@ -85,8 +85,8 @@
                 android:layout_toEndOf="@+id/tv_quantity_document"
                 android:layout_marginStart="2dp" />
             <ImageButton
-                android:id="@+id/btn_global_detail"
-                android:layout_width="250dp"
+                android:id="@+id/btn_make_label_global"
+                android:layout_width="300dp"
                 android:layout_height="match_parent"
                 android:layout_alignParentTop="true"
                 android:layout_alignParentEnd="false"
@@ -98,14 +98,14 @@
                 android:layout_alignParentRight="true" />
 
             <ImageView
-                android:id="@+id/item_makeLabel"
+                android:id="@+id/async_item_makeLabel"
                 android:layout_width="30sp"
                 android:layout_height="30sp"
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentRight="true"
                 android:layout_marginRight="50dp"
                 android:layout_centerVertical="true"
-                android:src="@drawable/ic_etiquetado" />
+                android:src="@drawable/ic_upload" />
             <ImageView
                 android:id="@+id/item_delete"
                 android:layout_width="30sp"

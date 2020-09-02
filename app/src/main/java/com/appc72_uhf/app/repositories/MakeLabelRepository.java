@@ -132,11 +132,10 @@ public class MakeLabelRepository {
         ArrayList<String> datosInventory=new ArrayList<>();
         AdminSQLOpenHelper admin = new AdminSQLOpenHelper(context);
         SQLiteDatabase db = admin.getWritableDatabase();
-        // Cursor countRead=db.rawQuery("SELECT COUNT(Id) as counterVirtualDoc FROM DocumentDetailsVirtual WHERE DocumentId="+companyId, null); //+" AND ProductVirtualId='0'"
         Cursor read=db.rawQuery("SELECT DocumentName, DocumentId, DeviceId, LocationOriginName, Status, HasVirtualItems, isSelected FROM Documents WHERE CompanyId="+companyId+" AND isSelected=1", null);
         if (read.moveToFirst()) {
-            Cursor countRead=db.rawQuery("SELECT COUNT(Id) as counterVirtualDoc FROM DocumentDetailsVirtual WHERE DocumentId="+read.getInt(read.getColumnIndex("DocumentId"))+" AND ProductVirtualId='0'", null); //+" AND ProductVirtualId='0'"
-            if(countRead.moveToFirst()){
+           // Cursor countRead=db.rawQuery("SELECT COUNT(Id) as counterVirtualDoc FROM DocumentDetailsVirtual WHERE DocumentId="+read.getInt(read.getColumnIndex("DocumentId"))+" AND ProductVirtualId='0'", null); //+" AND ProductVirtualId='0'"
+            //if(countRead.moveToNext() ){
                 do {
                     datosInventory.add(
                             read.getString(
@@ -151,43 +150,65 @@ public class MakeLabelRepository {
                                     read.getColumnIndex("isSelected")
                             )+"@"+read.getString(
                                     read.getColumnIndex("LocationOriginName")
-                            )+"@"+countRead.getInt(
-                                    countRead.getColumnIndex("counterVirtualDoc")
                             )
+                            /*+"@"+countRead.getInt(
+                                    countRead.getColumnIndex("counterVirtualDoc")
+                            )*/
                     );
-                } while (read.moveToNext() && countRead.moveToFirst());
-            }
+                } while (read.moveToNext());
+            //}
         }
         db.close();
         return datosInventory;
 
     }
     public ArrayList<String> ViewVirtualTagsEnabled(int documentId){
-        ArrayList<String> datosInventory=new ArrayList<>();
+        ArrayList<String> dataMakeLabelTag=new ArrayList<>();
         AdminSQLOpenHelper admin = new AdminSQLOpenHelper(context);
         SQLiteDatabase db = admin.getWritableDatabase();
-        Cursor read=db.rawQuery("SELECT Id, ProductMaster, ProductVirtualId, DocumentId, CodeBar FROM DocumentDetailsVirtual WHERE DocumentId="+documentId, null);
+        Cursor read=db.rawQuery("SELECT DISTINCT ProductMaster, Id, ProductVirtualId, DocumentId, CodeBar FROM DocumentDetailsVirtual WHERE DocumentId="+documentId, null);
         if (read.moveToFirst()) {
                 do {
-                    datosInventory.add(
+                    dataMakeLabelTag.add(
                             read.getString(
-                                    read.getColumnIndex("DocumentName")
+                                    read.getColumnIndex("ProductMaster")
+                            )+"@"+read.getInt(
+                                    read.getColumnIndex("Id")
+                            )+"@"+read.getString(
+                                    read.getColumnIndex("ProductVirtualId")
                             )+"@"+read.getInt(
                                     read.getColumnIndex("DocumentId")
                             )+"@"+read.getString(
-                                    read.getColumnIndex("HasVirtualItems")
-                            )+"@"+read.getInt(
-                                    read.getColumnIndex("Status")
-                            )+"@"+read.getInt(
-                                    read.getColumnIndex("isSelected")
-                            )+"@"+read.getString(
-                                    read.getColumnIndex("LocationOriginName")
+                                    read.getColumnIndex("CodeBar")
                             )
                     );
                 } while (read.moveToNext());
         }
         db.close();
-        return datosInventory;
+        return dataMakeLabelTag;
 
+    }
+    public int countTagsVirtualEnabled(int documentId){
+        int dataMakeLabelTag=0;
+        AdminSQLOpenHelper admin = new AdminSQLOpenHelper(context);
+        SQLiteDatabase db = admin.getWritableDatabase();
+        Cursor countRead=db.rawQuery("SELECT COUNT(Id) as counterVirtualDoc FROM DocumentDetailsVirtual WHERE DocumentId="+documentId+" AND ProductVirtualId='0'", null); //+" AND ProductVirtualId='0'"
+        if (countRead.moveToFirst()) {
+            dataMakeLabelTag=countRead.getInt(countRead.getColumnIndex("counterVirtualDoc"));
+        }
+        db.close();
+        return dataMakeLabelTag;
+    }
+
+    public int ViewVirtualCount(int productMste, int documentId){
+        int dataMakeLabelTag=0;
+        AdminSQLOpenHelper admin = new AdminSQLOpenHelper(context);
+        SQLiteDatabase db = admin.getWritableDatabase();
+        Cursor read=db.rawQuery("SELECT COUNT(ProductMaster) as countProductMaster FROM DocumentDetailsVirtual WHERE ProductMaster LIKE '%"+productMste+"%' AND DocumentId="+documentId, null);
+        if (read.moveToFirst()) {
+                dataMakeLabelTag=read.getInt(read.getColumnIndex("countProductMaster"));
+        }
+        db.close();
+        return dataMakeLabelTag;
     }
 }

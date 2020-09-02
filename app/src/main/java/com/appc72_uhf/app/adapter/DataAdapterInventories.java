@@ -140,7 +140,7 @@ public class DataAdapterInventories extends ArrayAdapter<DatamodelInventories> i
                                             }
 
                                             if(Tags.size()>999){
-                                                UIHelper.ToastMessage(getContext(), "aqui entran los millares", 6);
+                                               // UIHelper.ToastMessage(getContext(), "aqui entran los millares", 6);
                                                 int millares=Tags.size()/1000;
                                                 Log.e("length Tags", "length: "+arregloCodigos.length());
                                                 mypDialog = new ProgressDialog(mContext);
