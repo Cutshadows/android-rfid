@@ -42,6 +42,7 @@ import com.appc72_uhf.app.tools.StringUtils;
 import com.appc72_uhf.app.tools.UIHelper;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 
 
@@ -50,7 +51,8 @@ public class UHFReadTagFragment extends KeyDwonFragment {
     private boolean loopFlag = false;
     private int inventoryFlag = 1;
     Handler handler;
-    private ArrayList<HashMap<String, String>> tagList;
+    private int sumTag=0;
+    private ArrayList<HashMap<String, String>> tagList, maestroTagList;
     SimpleAdapter adapter;
     TextView tv_count, tv_TID;
     RadioGroup RgInventory;
@@ -82,7 +84,7 @@ public class UHFReadTagFragment extends KeyDwonFragment {
     private RecycleAdapter recycleAdapter;
     private ArrayList commentList=new ArrayList<>();
     private LinearLayoutManager layoutManager;
-    private boolean load;
+    private boolean load, countBoolTags;
 
 
 
@@ -112,6 +114,7 @@ public class UHFReadTagFragment extends KeyDwonFragment {
     private void initComponent(){
         mContext = (MainActivity) getActivity();
         tagList = new ArrayList<HashMap<String, String>>();
+        maestroTagList= new ArrayList<HashMap<String, String>>();
         BtClear = (Button) getView().findViewById(R.id.BtClear);
         //BtSync = (Button) getView().findViewById(R.id.BtSync);
         tv_count = (TextView) getView().findViewById(R.id.tv_count);
@@ -164,7 +167,7 @@ public class UHFReadTagFragment extends KeyDwonFragment {
             public void handleMessage(Message msg) {
                 String result = msg.obj + "";
                 String[] strs = result.split("@");
-                addEPCToList(strs[0], strs[2], 1); //, strs[1]
+                addEPCToList(strs[0], strs[2]); //, strs[1]
                 mContext.playSound(1);
             }
         };
@@ -246,8 +249,8 @@ public class UHFReadTagFragment extends KeyDwonFragment {
      * @param epc
      * Agregar tag a la lista taglist
      */
-    private void addEPCToList(String epc, String tid, int countRfid) {
-        TagsRepository tagRepoCount= new TagsRepository(this.mContext);
+    private void addEPCToList(String epc, String tid) {
+       // TagsRepository tagRepoCount= new TagsRepository(this.mContext);
         try {
             if (!TextUtils.isEmpty(epc)) {
                 int index = checkIsExist(epc);
@@ -260,14 +263,16 @@ public class UHFReadTagFragment extends KeyDwonFragment {
                 //map.put("tagCount", String.valueOf(1));
                 //map.put("tagRssi", rssi);
                 //mContext.getAppContext().uhfQueue.offer(epc + "\t 1");
-
+               // int countTagsSQL=tagRepoCount.countTags(inventoryID);
                 if (index == -1) {
-                    tagList.add(map);
+                    maestroTagList.add(map);
+                    if(tagList.size()<=100){
+                        tagList.add(maestroTagList.get(sumTag));
+                    }
                     LvTags.setAdapter(adapter);
-                    int countTagsSQL=tagRepoCount.countTags(inventoryID);
-                    int countAdapter=(adapter.getCount()<=100)?adapter.getCount():adapter.getCount()-100;
-                    int contador=(countRfid==1)?countTagsSQL+countAdapter:countTagsSQL;
+                    int contador=maestroTagList.size();
                     tv_count.setText(""+contador);
+                    sumTag++;
                 } else {
                     int tagcount = Integer.parseInt(tagList.get(index).get("tagCount"), 10) + 1;
                     map.put("tagCount", String.valueOf(tagcount));
@@ -296,7 +301,7 @@ public class UHFReadTagFragment extends KeyDwonFragment {
     private void verifyDataAfterEnd(){
         //TagsRepository tagsRepository=new TagsRepository(mContext);
         //TagList Vacio o no
-        if(tagList.size()>0){
+        if(maestroTagList.size()>0){
             //Si viene inventario con detalle o sin detalle
             if(detailFordevice){
                 boolean insertTags=insertTags();
@@ -315,6 +320,7 @@ public class UHFReadTagFragment extends KeyDwonFragment {
                     goToDetailProduct.putExtra("Name",  name_inventory_pass);
                     goToDetailProduct.putExtra("inventoryType", detailForDevice);
                     goToDetailProduct.putExtra("EntryType", "Inventory");
+                    goToDetailProduct.putExtra("inventoryBool", true);
                     mContext.startActivity(goToDetailProduct);
                     mContext.onBackPressed();
                 }
@@ -329,6 +335,8 @@ public class UHFReadTagFragment extends KeyDwonFragment {
                 Log.e("insertTags", "PASANDO POR ACA");
                 if(saveRestedTags){
                     Intent goToMain=new Intent(mContext, MainActivity.class);
+                    goToMain.putExtra("EntryType", "Inventory");
+                    goToMain.putExtra("inventoryBool", false);
                     mContext.startActivity(goToMain);
                     mContext.onBackPressed();
                 }
@@ -336,16 +344,19 @@ public class UHFReadTagFragment extends KeyDwonFragment {
         }else{
             UIHelper.ToastMessage(mContext, "No hay codigos en Lectura", 3);
             if(detailFordevice){
+                UIHelper.ToastMessage(mContext, "entrytype: Inventory , inventoryBool: true", 3);
                 Intent goToDetailProduct=new Intent(mContext, Detail_product_activity.class);
                 goToDetailProduct.putExtra("Id",  inventoryID);
                 goToDetailProduct.putExtra("Name",  name_inventory_pass);
-                goToDetailProduct.putExtra("Name",  name_inventory_pass);
                 goToDetailProduct.putExtra("inventoryType", detailForDevice);
                 goToDetailProduct.putExtra("EntryType", "Inventory");
+                goToDetailProduct.putExtra("inventoryBool", true);
                 mContext.startActivity(goToDetailProduct);
                 mContext.onBackPressed();
             }else{
                 Intent goToMain=new Intent(mContext, MainActivity.class);
+                goToMain.putExtra("EntryType", "Inventory");
+                goToMain.putExtra("inventoryBool", false);
                 mContext.startActivity(goToMain);
                 mContext.onBackPressed();
             }
@@ -361,7 +372,8 @@ public class UHFReadTagFragment extends KeyDwonFragment {
             }
         };
 
-        int tagSize=(tagList.size()<=100)?tagList.size():tagList.size()-100;
+        //int tagSize=(tagList.size()<=100)?tagList.size():tagList.size()-100;
+        int tagSize=maestroTagList.size();
         mypDialog = new ProgressDialog(this.mContext);
         mypDialog.setMax(tagSize);
         mypDialog.setMessage("Guardando codigos...");
@@ -370,14 +382,14 @@ public class UHFReadTagFragment extends KeyDwonFragment {
         mypDialog.setCanceledOnTouchOutside(false);
         mypDialog.setCancelable(false);
         mypDialog.show();
-        if(tagList.size()>0){
+        if(maestroTagList.size()>0){
             final TagsRepository repositoryTag= new TagsRepository(mContext);
             try{
                 boolean saveRes=false;
-                for(int index=0; index < tagList.size();index++){
+                for(int index=0; index < maestroTagList.size();index++){
                     if(index<=mypDialog.getMax()){
-                        String strEPC=tagList.get(index).get("tagUii");
-                        String strTID=tagList.get(index).get("tagRssi");
+                        String strEPC=maestroTagList.get(index).get("tagUii");
+                        String strTID=maestroTagList.get(index).get("tagRssi");
                         saveRes=repositoryTag.InsertTag(strEPC,  inventoryID, android_id, strTID,0);
                        // Thread.sleep(1000);
                         handle.sendMessage(handle.obtainMessage());
@@ -403,7 +415,7 @@ public class UHFReadTagFragment extends KeyDwonFragment {
 
     private void searchTags() {
         TagsRepository tagsRepository=new TagsRepository(mContext);
-        if(tagList.size()>0){
+        if(maestroTagList.size()>0){
             if(detailFordevice){
                 try{
                     dialogSearchTags = new ProgressDialog(mContext);
@@ -412,8 +424,8 @@ public class UHFReadTagFragment extends KeyDwonFragment {
                     dialogSearchTags.setCanceledOnTouchOutside(false);
                     dialogSearchTags.show();
                     int contadorFound=0;
-                    for(int tagPosition=0; tagPosition<tagList.size(); tagPosition++){
-                        String strEPC=tagList.get(tagPosition).get("tagUii");
+                    for(int tagPosition=0; tagPosition<maestroTagList.size(); tagPosition++){
+                        String strEPC=maestroTagList.get(tagPosition).get("tagUii");
                         boolean respFound=tagsRepository.UpdateTagsFound(strEPC, inventoryID);
                         if(respFound){
                             contadorFound++;
@@ -458,7 +470,9 @@ public class UHFReadTagFragment extends KeyDwonFragment {
                         mypDialog.dismiss();
                         UIHelper.ToastMessage(getContext(), "Se limpio correctamente", 4);
                         tv_count.setText("0");
+                        sumTag=0;
                         tagList.clear();
+                        maestroTagList.clear();
                         adapter.notifyDataSetChanged();
                     }
 
@@ -548,9 +562,9 @@ public class UHFReadTagFragment extends KeyDwonFragment {
             return existFlag;
         }
         String tempStr = "";
-        for (int i = 0; i < tagList.size(); i++) {
+        for (int i = 0; i < maestroTagList.size(); i++) {
             HashMap<String, String> temp = new HashMap<String, String>();
-            temp = tagList.get(i);
+            temp = maestroTagList.get(i);
             tempStr = temp.get("tagUii");
             if (strEPC.equals(tempStr)) {
                 existFlag = i;
@@ -568,6 +582,7 @@ public class UHFReadTagFragment extends KeyDwonFragment {
             while (loopFlag) {
                 res = mContext.mReader.readTagFromBuffer();
                 if (res != null) {
+                    Log.e("res", ""+ Arrays.toString(res));
                     strTid = res[0];
                     if ((strTid.length() != 0 && strTid.length() <= 24) && !strTid.equals("0000000" + "000000000") && !strTid.equals("000000000000000000000000")) {
                         strResult =strTid;
@@ -575,7 +590,7 @@ public class UHFReadTagFragment extends KeyDwonFragment {
                         strResult = " ";
                     }
                         Message msg = handler.obtainMessage();
-                        Log.e("EPC","EPC:"+ mContext.mReader.convertUiiToEPC(res[1])+"@"+res[2]+"@"+strResult);
+                       // Log.e("EPC","EPC:"+ mContext.mReader.convertUiiToEPC(res[1])+"@"+res[2]+"@"+strResult);
                         msg.obj =mContext.mReader.convertUiiToEPC(res[1])+"@"+ res[2]+"@"+strResult; //+ "EPC:"
                         handler.sendMessage(msg);
                 }
@@ -584,33 +599,31 @@ public class UHFReadTagFragment extends KeyDwonFragment {
     }
 
     public void loadData(){
-        Log.e("LoadData", "Estoy en load data");
+
         TagsRepository tagRepo= new TagsRepository(this.mContext);
         ArrayList Tags=tagRepo.ViewAllTags(inventoryID, inventory_include_tid.equals("true"));
         InventaryRespository inventaryRespository=new InventaryRespository(this.mContext);
         detailFordevice=inventaryRespository.inventoryDetailForDevice(inventoryID);
         try{
             if(Tags.size()!=0){
-                    Log.e("TagsTags", ""+Tags.toString());
                     for(int i=0; i<=Tags.size();i++){
-                        Log.e("index", "index: "+i);
                         String etags=String.valueOf(Tags.get(i));
                         String[] spliTags=etags.split("@");
                         String RFIDtagsString=spliTags[0];
                         String TIDtagsString="";
-                        int countRfid=0;
                         if(inventory_include_tid.equals("true")){
                             TIDtagsString=spliTags[1];
-                            countRfid=Integer.parseInt(spliTags[2]);
                         }
-                        countRfid=Integer.parseInt(spliTags[1]);
                         int index = checkIsExist(RFIDtagsString);
                          if(index == -1 ){
-                             addEPCToList(RFIDtagsString, TIDtagsString, countRfid);
-                                  //commentList.add(new ListData(RFIDtagsString, TIDtagsString));
-                        }
+                             addEPCToList(RFIDtagsString, TIDtagsString);
+                        }/*else {
+                             int tagcount = Integer.parseInt(tagList.get(index).get("tagCount"), 10) + 1;
+                             map.put("tagCount", String.valueOf(tagcount));
+                             tagList.set(index, map);
+                         }
+                        adapter.notifyDataSetChanged();*/
                     }
-                //recycleAdapter.notifyDataSetChanged();
             }
             adapter.notifyDataSetChanged();
         }catch (Exception ex){

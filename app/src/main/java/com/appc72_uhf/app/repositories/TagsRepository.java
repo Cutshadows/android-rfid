@@ -118,10 +118,10 @@ public class TagsRepository {
         ArrayList<String> datos=new ArrayList<>();
         AdminSQLOpenHelper admin = new AdminSQLOpenHelper(context);
         SQLiteDatabase db = admin.getWritableDatabase();
-        Cursor read= db.rawQuery("SELECT RFID, InventoryId, IdHardware, TID, TagStatus FROM Tags WHERE InventoryId='"+inventoryId+"' LIMIT 100", null); //ORDER BY RFID DESC LIMIT 100
+        Cursor read= db.rawQuery("SELECT RFID, InventoryId, IdHardware, TID, TagStatus FROM Tags WHERE InventoryId='"+inventoryId+"'", null); //ORDER BY RFID DESC LIMIT 100
         if (read.moveToFirst()) {
-            Cursor readCount2=db.rawQuery("SELECT COUNT(RFID) as countRFID FROM Tags WHERE InventoryId='"+inventoryId+"'", null);
-            if(readCount2.moveToFirst()){
+            //Cursor readCount2=db.rawQuery("SELECT COUNT(RFID) as countRFID FROM Tags WHERE InventoryId='"+inventoryId+"'", null);
+            //if(readCount2.moveToFirst()){
                 do {
                     if(includeTID){
                         datos.add(
@@ -129,25 +129,21 @@ public class TagsRepository {
                                         read.getColumnIndex("RFID")
                                 )+"@"+read.getString(
                                         read.getColumnIndex("TID")
-                                )+"@"+readCount2.getInt(
+                                )/*+"@"+readCount2.getInt(
                                         readCount2.getColumnIndex("countRFID")
-                                )
+                                )*/
                         );
                     }else{
                         datos.add(
                                 read.getString(
                                         read.getColumnIndex("RFID")
-                                )+"@"+readCount2.getInt(
+                                )/*+"@"+readCount2.getInt(
                                     readCount2.getColumnIndex("countRFID")
-                                )
+                                )*/
                         );
                     }
-                    //datos.add(read.getString(read.getColumnIndex("TID")));
-                    //datos.add(read.getString(2));
-                    //datos.add(read.getString(3));
-
                 } while (read.moveToNext());
-            }
+            //}
 
         }
         return datos;

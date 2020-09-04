@@ -45,7 +45,7 @@ public class DataAdapterInventoryServer extends ArrayAdapter<DatamodelInventorie
     String token_access;
     String code_enterprise;
 
-    public DataAdapterInventoryServer(@NonNull Context context, ArrayList<DatamodelInventories> datalist) {
+    public  DataAdapterInventoryServer(@NonNull Context context, ArrayList<DatamodelInventories> datalist) {
         super(context, R.layout.smple_list_inventory_server, datalist);
         this.datalist = datalist;
         this.mContext = context;
