@@ -196,6 +196,7 @@ public class HhSyncActivity extends AppCompatActivity implements View.OnClickLis
                                                 apps.getIsActive(),
                                                 apps.getIsAssigned(),
                                                 apps.getCompanyId(),
+                                                apps.getCompanyCodeRFID(),
                                                 apps.getHardwareId(),
                                                 apps.getTakingInventory(),
                                                 apps.getMakeLabel(),

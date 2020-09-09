@@ -27,7 +27,6 @@ import android.widget.RelativeLayout;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -179,37 +178,6 @@ public class UHFReadTagFragment extends KeyDwonFragment {
         }
 
     }
-    private void pagination(){
-        RvTags.addOnScrollListener(new RecyclerView.OnScrollListener() {
-            @Override
-            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
-                super.onScrollStateChanged(recyclerView, newState);
-            }
-
-            @Override
-            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
-                super.onScrolled(recyclerView, dx, dy);
-                visibleItemCount=layoutManager.getChildCount();
-                totalItemCount=layoutManager.getItemCount();
-                firstVisibleItem=layoutManager.findFirstVisibleItemPosition();
-                if(load){
-                    if (totalItemCount > previousTotal) {
-                        previousTotal=totalItemCount;
-                        page_number++;
-                        load=false;
-                    }
-                }
-                if(!load && (firstVisibleItem+ visibleItemCount)>=totalItemCount){
-                        getNext();
-                        load=true;
-                        Log.e("SCROLLING", "Page Number: "+page_number);
-                }
-            }
-        });
-    }
-    private void getNext(){
-
-    }
     @Override
     public void onResume(){
         super.onResume();
@@ -308,11 +276,6 @@ public class UHFReadTagFragment extends KeyDwonFragment {
                 if(insertTags){
                     searchTags();
                 }
-                try {
-                    Thread.sleep(2000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
                 if(saveRestedTags){
                     Intent goToDetailProduct=new Intent(mContext, Detail_product_activity.class);
                     goToDetailProduct.putExtra("Id",  inventoryID);
@@ -391,6 +354,7 @@ public class UHFReadTagFragment extends KeyDwonFragment {
                         String strEPC=maestroTagList.get(index).get("tagUii");
                         String strTID=maestroTagList.get(index).get("tagRssi");
                         saveRes=repositoryTag.InsertTag(strEPC,  inventoryID, android_id, strTID,0);
+                        Log.e("SaveRes", ""+saveRes);
                        // Thread.sleep(1000);
                         handle.sendMessage(handle.obtainMessage());
                         if(index==mypDialog.getMax()){
@@ -401,14 +365,18 @@ public class UHFReadTagFragment extends KeyDwonFragment {
                 if(saveRes){
                     UIHelper.ToastMessage(mContext, "Codigos ingresados correctamente.", 2);
                     btn_back_product_list.setBackgroundResource(R.color.red);
-                    saveRestedTags=true;
+                    if(!detailFordevice){
+                        saveRestedTags=true;
+                    }
                     insertagsReturn=true;
+                }else{
+                    insertagsReturn=false;
                 }
-                insertagsReturn=false;
             }catch (Exception ex){
                 ex.printStackTrace();
             }
         }
+        Log.e("insertagsReturn", ""+insertagsReturn);
         return insertagsReturn;
 
     }
@@ -432,6 +400,7 @@ public class UHFReadTagFragment extends KeyDwonFragment {
                         }
                     }
                     UIHelper.ToastMessage(mContext, "Lectura finalizado con exito, se encontraron "+contadorFound+" codigos", 5);
+                    saveRestedTags=true;
                     dialogSearchTags.dismiss();
                 }catch (Exception e){
                     dialogSearchTags.dismiss();

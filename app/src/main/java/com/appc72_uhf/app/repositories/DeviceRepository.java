@@ -20,6 +20,7 @@ public class DeviceRepository {
             String IsActive,
             String IsAssigned,
             int CompanyId,
+            String CompanyCodeRfid,
             String  HardwareId,
             String TakingInventory,
             String AssignedResponse,
@@ -37,6 +38,7 @@ public class DeviceRepository {
             reg.put("IsActive", IsActive);
             reg.put("IsAssigned", IsAssigned);
             reg.put("CompanyId", CompanyId);
+            reg.put("CompanyCodeRFID", CompanyCodeRfid);
             reg.put("HardwareId", HardwareId);
             reg.put("TakingInventory", TakingInventory);
             reg.put("AssignedResponse", AssignedResponse);
@@ -63,6 +65,18 @@ public class DeviceRepository {
                 }
             db.close();
             return result_code;
+    }
+
+    public String FindRFIDCode(int companyId){
+        AdminSQLOpenHelper admin = new AdminSQLOpenHelper(context);
+        SQLiteDatabase db = admin.getWritableDatabase();
+        String codeRfid="";
+        Cursor querycodeRfid=db.rawQuery("SELECT CompanyCodeRFID FROM Device WHERE CompanyId="+companyId, null);
+        if(querycodeRfid.moveToFirst()){
+            codeRfid=querycodeRfid.getString(querycodeRfid.getColumnIndex("CompanyCodeRFID"));
+        }
+        db.close();
+        return codeRfid;
     }
 
     public String PermissionDevice(String hardwareId, int companyId){
