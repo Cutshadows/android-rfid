@@ -155,6 +155,7 @@ public class Server_inventory_activity extends AppCompatActivity {
                             UIHelper.ToastMessage(Server_inventory_activity.this, "Error de conexion, credenciales invalidas", 3);
                         } else if (error instanceof AuthFailureError) {
                             UIHelper.ToastMessage(Server_inventory_activity.this, "Error de conexion, intente mas tarde.", 3);
+                            authSession();
                         } else if (error instanceof ParseError) {
                             UIHelper.ToastMessage(Server_inventory_activity.this, "Error desconocido, intente mas tarde", 3);
                         } else if (error instanceof TimeoutError || error instanceof NoConnectionError) {
@@ -210,6 +211,7 @@ public class Server_inventory_activity extends AppCompatActivity {
                         UIHelper.ToastMessage(Server_inventory_activity.this, "Error de conexion, credenciales invalidas", 3);
                     } else if (error instanceof AuthFailureError) {
                         UIHelper.ToastMessage(Server_inventory_activity.this, "Error de conexion, intente mas tarde.", 3);
+                        authSession();
                     } else if (error instanceof ParseError) {
                         UIHelper.ToastMessage(Server_inventory_activity.this, "Error desconocido, intente mas tarde", 3);
                     } else if (error instanceof TimeoutError || error instanceof NoConnectionError) {
@@ -262,6 +264,7 @@ public class Server_inventory_activity extends AppCompatActivity {
                         UIHelper.ToastMessage(Server_inventory_activity.this, "Error de conexion, credenciales invalidas", 3);
                     } else if (error instanceof AuthFailureError) {
                         UIHelper.ToastMessage(Server_inventory_activity.this, "Error de conexion, intente mas tarde.", 3);
+                        authSession();
                     } else if (error instanceof ParseError) {
                         UIHelper.ToastMessage(Server_inventory_activity.this, "Error desconocido, intente mas tarde", 3);
                     } else if (error instanceof TimeoutError || error instanceof NoConnectionError) {
@@ -317,6 +320,7 @@ public class Server_inventory_activity extends AppCompatActivity {
                         UIHelper.ToastMessage(Server_inventory_activity.this, "Error de conexion, credenciales invalidas", 3);
                     } else if (error instanceof AuthFailureError) {
                         UIHelper.ToastMessage(Server_inventory_activity.this, "Error de conexion, intente mas tarde.", 3);
+                        authSession();
                     } else if (error instanceof ParseError) {
                         UIHelper.ToastMessage(Server_inventory_activity.this, "Error desconocido, intente mas tarde", 3);
                     } else if (error instanceof TimeoutError || error instanceof NoConnectionError) {
@@ -370,7 +374,8 @@ public class Server_inventory_activity extends AppCompatActivity {
                     } else if (error instanceof ServerError) {
                         UIHelper.ToastMessage(Server_inventory_activity.this, "Error de conexion, credenciales invalidas", 3);
                     } else if (error instanceof AuthFailureError) {
-                        UIHelper.ToastMessage(Server_inventory_activity.this, "Error de conexion, intente mas tarde.", 3);
+                        UIHelper.ToastMessage(Server_inventory_activity.this, "Fallo en la autenticacion, vuelva a iniciar sesion.", 3);
+                        authSession();
                     } else if (error instanceof ParseError) {
                         UIHelper.ToastMessage(Server_inventory_activity.this, "Error desconocido, intente mas tarde", 3);
                     } else if (error instanceof TimeoutError || error instanceof NoConnectionError) {
@@ -403,5 +408,15 @@ public class Server_inventory_activity extends AppCompatActivity {
             codeCompany=companyId;
         }
         return code_result;
+    }
+
+    private void authSession(){
+        SharedPreferences preferenesExpireDate=getSharedPreferences("expireDate", Context.MODE_PRIVATE);
+        SharedPreferences.Editor edit=preferenesExpireDate.edit();
+        edit.clear();
+        edit.apply();
+        Intent goToMain=new Intent(Server_inventory_activity.this, LoginActivity.class);
+        Server_inventory_activity.this.onBackPressed();
+        startActivity(goToMain);
     }
 }

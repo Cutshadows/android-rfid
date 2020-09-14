@@ -25,6 +25,7 @@ public class Application {
     private String AssignedResponse;
     private boolean IncludeTID;
     private int DocumentId;
+    private String CompanyCodeRFID;
     public Application() {
     }
 
@@ -55,7 +56,8 @@ public class Application {
             boolean includeTID,
             int isSelect,
             String assignedResponse,
-            int documentId
+            int documentId,
+            String companyCodeRFID
     ) {
         Id = id;
         Name = name;
@@ -81,6 +83,7 @@ public class Application {
         AssignedResponse=assignedResponse;
         IncludeTID=includeTID;
         DocumentId=documentId;
+        CompanyCodeRFID=companyCodeRFID;
 
     }
     public int getIsSelect() {
@@ -214,5 +217,12 @@ public class Application {
 
     public void setCloseUserId( String CloseUserId ) {
         this.CloseUserId = CloseUserId;
+    }
+    public String getCompanyCodeRFID() {
+        return CompanyCodeRFID;
+    }
+
+    public void setCompanyCodeRFID(String companyCodeRFID) {
+        CompanyCodeRFID = companyCodeRFID;
     }
 }

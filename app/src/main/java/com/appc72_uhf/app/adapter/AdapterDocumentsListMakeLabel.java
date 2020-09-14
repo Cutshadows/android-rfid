@@ -46,6 +46,7 @@ public class AdapterDocumentsListMakeLabel extends ArrayAdapter<DatamodelDocumen
             case R.id.btn_make_label_global:
                 Intent goToMain=new Intent(getContext(), BarcodeActivity.class);
                 goToMain.putExtra("DocumentId", datamodelDocumentsMakeLabel.getDocumentId());
+                goToMain.putExtra("makeLabelBool", 0);
                 mContext.startActivity(goToMain);
                 break;
             case R.id.async_item_makeLabel:

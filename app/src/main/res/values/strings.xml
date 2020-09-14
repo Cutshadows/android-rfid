@@ -204,7 +204,7 @@
     <string name="btUii">Read EPC</string>
     <string name="ckWithUii">Use EPC</string>
     <string name="tvTagUii_Read">EPC：</string>
-    <string name="tvBank">Bank：</string>
+    <string name="tvBank">Tipo Etiquetado：</string>
     <string name="tvPtr">Ptr：</string>
     <string name="tvLen">Len：</string>
     <string name="tvAccessPwd">Access Pwd：</string>
@@ -226,7 +226,7 @@
     <string name="uhf_title_user" translatable="false">USER:</string>
 
     <string name="uhf_title_read">Read</string>
-    <string name="uhf_title_write">Write</string>
+    <string name="uhf_title_write">Escritura Etiquetado</string>
 
     <string name="uhf_title_filter">FILTRAR</string>
 
@@ -239,10 +239,10 @@
     <string name="btGetSession">Get Session</string>
     <string name="btSetSession">Set Session</string>
     <string-array name="arrayBank">
-        <item>RESERVED</item>
+        <!--item>RESERVED</item-->
         <item>EPC</item>
-        <item>TID</item>
-        <item>USER</item>
+        <!--item>TID</item>
+        <item>USER</item-->
     </string-array>
     <string-array name="arrayBank2">
         <item>EPC</item>
@@ -361,8 +361,8 @@
     <!-- write -->
     <string name="tvTagUii_Write">EPC：</string>
     <string name="tvOption_Write">Write Mode：</string>
-    <string name="tvData_Write">Write Data：</string>
-    <string name="btWrite">Write Data</string>
+    <string name="tvData_Write">Etiqueta：</string>
+    <string name="btWrite">Etiquetar</string>
 
     <string-array name="arrayOption_Write">
         <item>Singleword</item>
@@ -832,6 +832,7 @@
     <string name="uhf_msg_tab_scan">Lectura</string>
     <string name="uhf_msg_tab_inventory" translatable="false">Inventario</string>
     <string name="uhf_msg_tab_barcoderead" translatable="false">Lectura barcode</string>
+    <string name="uhf_msg_tab_verificationEPC" translatable="false">Verificación EPC</string>
 
     <string name="uhf_msg_tab_read">Leer</string>
     <string name="uhf_msg_tab_write">Escribir</string>
@@ -1433,6 +1434,7 @@
     <string name="EPC_TID_off">Close the EPC and TID</string>
     <string name="btErase">Erase</string>
     <string name="inputData">Please enter the stored data</string>
+    <string name="inputBarcode" translatable="false">Escanear codigo de barra</string>
     <string name="setAgreement_succ">Set success</string>
     <string name="setAgreement_fail">Set fail</string>
     <string name="setQTParams_succ">Set QT parameters successfully</string>
@@ -1494,6 +1496,9 @@
     <string name="ap_dialog_configuration_entry" translatable="false">Configuración</string>
     <string name="ap_dialog_delete_inventory" translatable="false">Eliminar</string>
     <string name="ap_dialog_sync_inventory" translatable="false">Enviar</string>
+    <string name="ap_dialog_makelabel_coderfid" translatable="false">Verificación de etiqueta</string>
+    <string name="ap_dialog_acept_mklabel" translatable="false">continuar</string>
+    <string name="ap_dialog_cancel_mklabel" translatable="false">volver</string>
     <string name="ap_dialog_acept" translatable="false">aceptar</string>
     <string name="ap_dialog_cancel" translatable="false">cancelar</string>
 

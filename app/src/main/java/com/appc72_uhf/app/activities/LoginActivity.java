@@ -286,19 +286,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             Log.e("eDateFormatExpireSimple", ""+simpleDateFormatExpire);
 
 
-         /*  String[] fechaSpExp=simpleDateFormatExpire.split("/");
-            int dayExp=Integer.parseInt(fechaSpExp[0]);
-            int mesExp=Integer.parseInt(fechaSpExp[1]);
-            int yearExp=Integer.parseInt(fechaSpExp[2]);
-            int concatDateExp=dayExp+mesExp+yearExp;
 
-            String[] fechaSpToday=simpleDateFormatToday.split("/");
-            int dayTod=Integer.parseInt(fechaSpToday[0]);
-            int mesTod=Integer.parseInt(fechaSpToday[1]);
-            int yearTod=Integer.parseInt(fechaSpToday[2]);
-            int concatDateTod=dayTod+mesTod+yearTod;*/
-
-            //if(concatDateTod<=concatDateExp){
             if(c.before(fecha)){// || c.equals(fecha)){
                 Intent goToMain=new Intent(LoginActivity.this, Dashboard_activity.class);
                 startActivity(goToMain);

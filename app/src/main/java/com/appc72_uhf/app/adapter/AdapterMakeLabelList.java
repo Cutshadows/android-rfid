@@ -33,12 +33,16 @@ public class AdapterMakeLabelList extends ArrayAdapter<DataModelVirtualDocument>
     @Override
     public void onClick(View v) {
         int position=(Integer) v.getTag();
+        Object object= getItem(position);
+        DataModelVirtualDocument dataModelVirtualDocument= (DataModelVirtualDocument)object;
         switch (v.getId()){
             case R.id.item_make_label:
-                UIHelper.ToastMessage(getContext(), "estoy entrando en makelabel");
+                UIHelper.ToastMessage(getContext(), "ProductMasterId: "+dataModelVirtualDocument.getProductMasterId(), 10);
                 Intent fragment=new Intent(getContext(), MainActivity.class);
+                fragment.putExtra("ProductMasterId", dataModelVirtualDocument.getProductMasterId());
+                fragment.putExtra("DocumentId", dataModelVirtualDocument.getDocumentId());
                 fragment.putExtra("EntryType", "MakeLabel");
-                fragment.putExtra("makeLabelBool", true);
+                fragment.putExtra("makeLabelBool", 1);
                 mContext.startActivity(fragment);
                 break;
         }
@@ -76,7 +80,7 @@ public class AdapterMakeLabelList extends ArrayAdapter<DataModelVirtualDocument>
         Animation animation = AnimationUtils.loadAnimation(mContext, (position > lastPosition) ? R.anim.up_from_bottom : R.anim.down_from_top);
         result.startAnimation(animation);
         lastPosition=position;
-        holder.tv_productId.setText("Id: "+dataModelVirtualDocument.getId());
+        holder.tv_productId.setText("Producto Maestro: "+dataModelVirtualDocument.getProductMasterId());
         holder.tv_document_id.setText("Documento: "+dataModelVirtualDocument.getDocumentId());
         holder.tv_document_name.setText(dataModelVirtualDocument.getDef2()+"  "+dataModelVirtualDocument.getDef1());
         holder.tv_count_productMaster.setText(""+dataModelVirtualDocument.getCountrMaster());

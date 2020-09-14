@@ -295,7 +295,6 @@ public class UHFReadTagFragment extends KeyDwonFragment {
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-                Log.e("insertTags", "PASANDO POR ACA");
                 if(saveRestedTags){
                     Intent goToMain=new Intent(mContext, MainActivity.class);
                     goToMain.putExtra("EntryType", "Inventory");
@@ -355,8 +354,8 @@ public class UHFReadTagFragment extends KeyDwonFragment {
                         String strTID=maestroTagList.get(index).get("tagRssi");
                         saveRes=repositoryTag.InsertTag(strEPC,  inventoryID, android_id, strTID,0);
                         Log.e("SaveRes", ""+saveRes);
-                       // Thread.sleep(1000);
                         handle.sendMessage(handle.obtainMessage());
+                        //Thread.sleep(1000);
                         if(index==mypDialog.getMax()){
                             mypDialog.dismiss();
                         }
@@ -376,7 +375,6 @@ public class UHFReadTagFragment extends KeyDwonFragment {
                 ex.printStackTrace();
             }
         }
-        Log.e("insertagsReturn", ""+insertagsReturn);
         return insertagsReturn;
 
     }

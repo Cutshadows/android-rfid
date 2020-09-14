@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.util.Log;
 
 import com.appc72_uhf.app.activities.LocalDocumentsMakeLabelActivity;
+import com.appc72_uhf.app.activities.VerificateEPCActivity;
 import com.appc72_uhf.app.activities.inventoryList;
 import com.appc72_uhf.app.fragment.UHFReadTagFragment;
 import com.appc72_uhf.app.fragment.UHFSetFragment;
@@ -21,7 +22,8 @@ import java.util.HashMap;
 
 public class MainActivity extends BaseTabFragmentActivity {
     private final static String TAG ="MainActivity";
-    boolean takeInventory, makelabel;
+    boolean takeInventory;
+    int makelabel;
     String inventaryName;
     int idInventory;
 
@@ -48,24 +50,34 @@ public class MainActivity extends BaseTabFragmentActivity {
                 initTabs();
             }
         }else if(this.getIntent().getStringExtra("EntryType").equals("MakeLabel")){
-            if(this.getIntent().hasExtra("makeLabelBool")){
-                makelabel=false;
-                UIHelper.ToastMessage(this, "Make Label Data local");
-                initSound();
-                initUHF();
-                initViewPageData();
-                initViewPager();
-                initTabs();
-            }else {
-                makelabel=true;
-                UIHelper.ToastMessage(this, "Make Label Burn tag");
-                initSound();
-                initUHF();
-                initViewPageData();
-                initViewPager();
-                initTabs();
+            Log.e("makeLabelBool", ""+this.getIntent().getIntExtra("makeLabelBool", 0));
+            switch(this.getIntent().getIntExtra("makeLabelBool", 0)){
+                case 1:
+                    UIHelper.ToastMessage(this, "aca validador", 3);
+                    makelabel=1;
+                    initSound();
+                    initUHF();
+                    initViewPageData();
+                    initViewPager();
+                    initTabs();
+                break;
+                case 2:
+                    makelabel=2;
+                    initSound();
+                    initUHF();
+                    initViewPageData();
+                    initViewPager();
+                    initTabs();
+                    break;
+                case 0:
+                    makelabel=0;
+                    initSound();
+                    initUHF();
+                    initViewPageData();
+                    initViewPager();
+                    initTabs();
+                    break;
             }
-
         }
 
 
@@ -92,20 +104,31 @@ public class MainActivity extends BaseTabFragmentActivity {
                 lstTitles.add(getString(R.string.uhf_msg_tab_set));
             }
         }else if(this.getIntent().getStringExtra("EntryType").equals("MakeLabel")){
-            if(makelabel){
-                //lstFrg.add(new BarcodeActivity());
-                lstFrg.add(new LocalDocumentsMakeLabelActivity());
-                lstFrg.add(new UHFSetFragment());
+            switch (makelabel){
+                case 1:
+                    //lstFrg.add(new BarcodeActivity());
+                    lstFrg.add(new VerificateEPCActivity());
+                    lstFrg.add(new UHFSetFragment());
 
-                lstTitles.add(getString(R.string.uhf_msg_tab_barcoderead));
-                lstTitles.add(getString(R.string.uhf_msg_tab_set));
-            }else{
-                //lstFrg.add(new BarcodeActivity());
-                lstFrg.add(new UHFWriteFragment());
-                lstFrg.add(new UHFSetFragment());
+                    lstTitles.add(getString(R.string.uhf_msg_tab_verificationEPC));
+                    lstTitles.add(getString(R.string.uhf_msg_tab_set));
+                    break;
+                case 2:
+                    //lstFrg.add(new BarcodeActivity());
+                    lstFrg.add(new UHFWriteFragment());
+                    lstFrg.add(new UHFSetFragment());
 
-                lstTitles.add(getString(R.string.uhf_title_write));
-                lstTitles.add(getString(R.string.uhf_msg_tab_set));
+                    lstTitles.add(getString(R.string.uhf_title_write));
+                    lstTitles.add(getString(R.string.uhf_msg_tab_set));
+                break;
+                case 0:
+                    //lstFrg.add(new BarcodeActivity());
+                    lstFrg.add(new LocalDocumentsMakeLabelActivity());
+                    lstFrg.add(new UHFSetFragment());
+
+                    lstTitles.add(getString(R.string.uhf_msg_tab_barcoderead));
+                    lstTitles.add(getString(R.string.uhf_msg_tab_set));
+                    break;
             }
 
         }

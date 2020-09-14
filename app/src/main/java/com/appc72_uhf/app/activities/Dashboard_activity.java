@@ -90,6 +90,7 @@ public class Dashboard_activity extends AppCompatActivity implements View.OnClic
             case R.id.ibtn_takeInventory:
                 Intent goToMain=new Intent(Dashboard_activity.this, MainActivity.class);
                 goToMain.putExtra("EntryType", "Inventory");
+                goToMain.putExtra("makeLabelBool", 0);
                 startActivity(goToMain);
                 break;
             case R.id.ibtn_Labelled:

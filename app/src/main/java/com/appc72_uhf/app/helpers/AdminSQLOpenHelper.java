@@ -45,6 +45,7 @@ public class AdminSQLOpenHelper extends SQLiteOpenHelper {
                 "IsAssigned TEXT, " +
                 "CompanyId INTEGER, " +
                 "HardwareId TEXT, " +
+                "CompanyCodeRFID TEXT,"+
                 "TakingInventory TEXT, " +
                 "AssignedResponse TEXT, " +
                 "MakeLabel TEXT);");
