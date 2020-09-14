@@ -76,7 +76,7 @@ public class AdapterMakeLabelList extends ArrayAdapter<DataModelVirtualDocument>
         Animation animation = AnimationUtils.loadAnimation(mContext, (position > lastPosition) ? R.anim.up_from_bottom : R.anim.down_from_top);
         result.startAnimation(animation);
         lastPosition=position;
-        holder.tv_productId.setText("Id: "+dataModelVirtualDocument.getId());
+        holder.tv_productId.setText("Product Master: "+dataModelVirtualDocument.getProductMasterId());
         holder.tv_document_id.setText("Documento: "+dataModelVirtualDocument.getDocumentId());
         holder.tv_document_name.setText(dataModelVirtualDocument.getDef2()+"  "+dataModelVirtualDocument.getDef1());
         holder.tv_count_productMaster.setText(""+dataModelVirtualDocument.getCountrMaster());

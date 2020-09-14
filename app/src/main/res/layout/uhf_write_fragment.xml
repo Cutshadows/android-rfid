@@ -21,7 +21,7 @@
             android:background="@drawable/rectangle_bg"
             android:orientation="vertical"
             android:padding="8dp">
-            <CheckBox
+            <!--CheckBox
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/cb_filter_wt"
@@ -65,9 +65,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="(bit)" />
-            </LinearLayout>
+            </LinearLayout-->
 <!--dd-->
-                <LinearLayout
+                <!--LinearLayout
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     >
@@ -84,9 +84,9 @@
                         android:hint=""
                         android:inputType="textNoSuggestions"
                         android:singleLine="true" />
-                </LinearLayout>
+                </LinearLayout-->
 
-                <RadioGroup
+                <!--RadioGroup
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
 
@@ -129,7 +129,7 @@
                         android:text="USER"
                         android:textColor="@drawable/check_text_color" />
 
-                </RadioGroup>
+                </RadioGroup-->
 <!---->
         </LinearLayout>
 
@@ -138,7 +138,7 @@
 
 
 
-        <LinearLayout
+        <!--LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:padding="5dp" >
@@ -154,7 +154,7 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:entries="@array/arrayBank" />
-        </LinearLayout>
+        </LinearLayout-->
 
         <LinearLayout
             android:layout_width="fill_parent"

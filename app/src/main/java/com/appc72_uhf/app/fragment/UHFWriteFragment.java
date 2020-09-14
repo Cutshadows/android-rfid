@@ -5,16 +5,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.Spinner;
 
-import com.appc72_uhf.app.R;
 import com.appc72_uhf.app.MainActivity;
+import com.appc72_uhf.app.R;
 import com.appc72_uhf.app.tools.StringUtils;
 import com.appc72_uhf.app.tools.UIHelper;
 import com.rscja.deviceapi.RFIDWithUHF.BankEnum;
@@ -53,30 +51,30 @@ public class UHFWriteFragment extends KeyDwonFragment implements OnClickListener
         super.onActivityCreated(savedInstanceState);
 
         mContext = (MainActivity) getActivity();
-        SpinnerBank_Write = (Spinner) getView().findViewById(R.id.SpinnerBank_Write);
+        //SpinnerBank_Write = (Spinner) getView().findViewById(R.id.SpinnerBank_Write);
         EtPtr_Write = (EditText) getView().findViewById(R.id.EtPtr_Write);
         EtLen_Write = (EditText) getView().findViewById(R.id.EtLen_Write);
         EtData_Write = (EditText) getView().findViewById(R.id.EtData_Write);
         EtAccessPwd_Write = (EditText) getView().findViewById(R.id.EtAccessPwd_Write);
-        etLen_filter_wt= (EditText) getView().findViewById(R.id.etLen_filter_wt);
+       // etLen_filter_wt= (EditText) getView().findViewById(R.id.etLen_filter_wt);
         BtWrite = (Button) getView().findViewById(R.id.BtWrite);
 
         cb_QT_W= (CheckBox) getView().findViewById(R.id.cb_QT_W);
-        cb_filter_wt = (CheckBox) getView().findViewById(R.id.cb_filter_wt);
-        etPtr_filter_wt = (EditText) getView().findViewById(R.id.etPtr_filter_wt);
-        etData_filter_wt = (EditText) getView().findViewById(R.id.etData_filter_wt);
-        rbEPC_filter_wt = (RadioButton) getView().findViewById(R.id.rbEPC_filter_wt);
-        rbTID_filter_wt = (RadioButton) getView().findViewById(R.id.rbTID_filter_wt);
-        rbUser_filter_wt = (RadioButton) getView().findViewById(R.id.rbUser_filter_wt);
+        //cb_filter_wt = (CheckBox) getView().findViewById(R.id.cb_filter_wt);
+        //etPtr_filter_wt = (EditText) getView().findViewById(R.id.etPtr_filter_wt);
+        //etData_filter_wt = (EditText) getView().findViewById(R.id.etData_filter_wt);
+        //rbEPC_filter_wt = (RadioButton) getView().findViewById(R.id.rbEPC_filter_wt);
+        //rbTID_filter_wt = (RadioButton) getView().findViewById(R.id.rbTID_filter_wt);
+        //rbUser_filter_wt = (RadioButton) getView().findViewById(R.id.rbUser_filter_wt);
 
-        rbEPC_filter_wt.setOnClickListener(this);
-        rbTID_filter_wt.setOnClickListener(this);
-        rbUser_filter_wt.setOnClickListener(this);
+        //rbEPC_filter_wt.setOnClickListener(this);
+        //rbTID_filter_wt.setOnClickListener(this);
+        //rbUser_filter_wt.setOnClickListener(this);
         BtWrite.setOnClickListener(this);
 
 
 
-        cb_filter_wt.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+       /* cb_filter_wt.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if(isChecked) {
@@ -105,13 +103,13 @@ public class UHFWriteFragment extends KeyDwonFragment implements OnClickListener
             public void onNothingSelected(AdapterView<?> adapterView) {
 
             }
-        });
+        });*/
     }
 
     @Override
     public void onClick(View view) {
         switch (view.getId()){
-            case  R.id.rbEPC_filter_wt:
+            /*case  R.id.rbEPC_filter_wt:
                 etPtr_filter_wt.setText("32");
                 break;
             case  R.id.rbTID_filter_wt:
@@ -119,7 +117,7 @@ public class UHFWriteFragment extends KeyDwonFragment implements OnClickListener
                 break;
             case  R.id.rbUser_filter_wt:
                 etPtr_filter_wt.setText("0");
-                break;
+                break;*/
             case R.id.BtWrite:
                 write();
                 break;
@@ -127,7 +125,7 @@ public class UHFWriteFragment extends KeyDwonFragment implements OnClickListener
     }
 
  private void write(){
-     String strPtr = EtPtr_Write.getText().toString().trim();
+     /*String strPtr = EtPtr_Write.getText().toString().trim();
      if (StringUtils.isEmpty(strPtr)) {
          UIHelper.ToastMessage(mContext, R.string.uhf_msg_addr_not_null);
          return;
@@ -135,7 +133,7 @@ public class UHFWriteFragment extends KeyDwonFragment implements OnClickListener
          UIHelper.ToastMessage(mContext,
                  R.string.uhf_msg_addr_must_decimal);
          return;
-     }
+     }*/
 
      String strPWD = EtAccessPwd_Write.getText().toString().trim();// 访问密码
      if (StringUtils.isNotEmpty(strPWD)) {
@@ -152,7 +150,7 @@ public class UHFWriteFragment extends KeyDwonFragment implements OnClickListener
          strPWD = "00000000";
      }
 
-     String strData = EtData_Write.getText().toString().trim();// 要写入的内容
+     /*String strData = EtData_Write.getText().toString().trim();// 要写入的内容
      if (StringUtils.isEmpty(strData)) {
          UIHelper.ToastMessage(mContext,
                  R.string.uhf_msg_write_must_not_null);
@@ -160,7 +158,7 @@ public class UHFWriteFragment extends KeyDwonFragment implements OnClickListener
      } else if (!mContext.vailHexInput(strData)) {
          UIHelper.ToastMessage(mContext, R.string.rfid_mgs_error_nohex);
          return;
-     }
+     }*/
 
      // 多字单次
      String cntStr = EtLen_Write.getText().toString().trim();
@@ -173,7 +171,7 @@ public class UHFWriteFragment extends KeyDwonFragment implements OnClickListener
          return;
      }
 
-     if ((strData.length()) % 4 != 0) {
+     /*if ((strData.length()) % 4 != 0) {
          UIHelper.ToastMessage(mContext,
                  R.string.uhf_msg_write_must_len4x);
 
@@ -181,11 +179,11 @@ public class UHFWriteFragment extends KeyDwonFragment implements OnClickListener
      } else if (!mContext.vailHexInput(strData)) {
          UIHelper.ToastMessage(mContext, R.string.rfid_mgs_error_nohex);
          return;
-     }
+     }*/
 
 
      boolean result=false;
-     String Bank="";
+     /*String Bank="";
      if(SpinnerBank_Write.getSelectedItemPosition()==1){
          Bank="UII";
      }else{
@@ -196,10 +194,10 @@ public class UHFWriteFragment extends KeyDwonFragment implements OnClickListener
          if(etPtr_filter_wt.getText().toString()==null || etPtr_filter_wt.getText().toString().isEmpty()){
              etPtr_filter_wt.setText("0");
          }
-         if(etLen_filter_wt.getText().toString()==null || etLen_filter_wt.getText().toString().isEmpty()){
-             UIHelper.ToastMessage(mContext,"La longitud de los datos del filtro no puede estar vacía");
-             return;
-         }
+         //if(etLen_filter_wt.getText().toString()==null || etLen_filter_wt.getText().toString().isEmpty()){
+         //    UIHelper.ToastMessage(mContext,"La longitud de los datos del filtro no puede estar vacía");
+         //    return;
+         //}
 
          int filterPtr= Integer.parseInt(etPtr_filter_wt.getText().toString());
          String filterData=etData_filter_wt.getText().toString();
@@ -243,18 +241,22 @@ public class UHFWriteFragment extends KeyDwonFragment implements OnClickListener
              result=false;
          }
 
-     } else {
-         boolean r=false;
+     } else {*/
+         boolean r;
          if(cb_QT_W.isChecked()){
             r= mContext.mReader.writeDataWithQT_Ex(strPWD,
-                    BankEnum.valueOf(Bank),
-                    Integer.parseInt(strPtr),
-                    Integer.valueOf(cntStr), strData);
+                    BankEnum.valueOf("UII"),
+                    //Integer.parseInt(strPtr),
+                    2,
+                   // Integer.valueOf(cntStr),
+                    4,
+                    "1111222233331111222233331");
          }else{
              r= mContext.mReader.writeData_Ex(strPWD,
-                     BankEnum.valueOf(Bank),
-                     Integer.parseInt(strPtr),
-                     Integer.valueOf(cntStr), strData);// 返回的UII
+                     BankEnum.valueOf("UII"),
+                     2,
+                     4,
+                     "1111222233331111222233331");// 返回的UII strData
          }
 
          if (r) {
@@ -263,7 +265,7 @@ public class UHFWriteFragment extends KeyDwonFragment implements OnClickListener
          } else {
              UIHelper.ToastMessage(mContext, R.string.uhf_msg_write_fail);
          }
-     }
+    // }
      if(!result){
          mContext.playSound(2);
      }else{
