@@ -37,8 +37,8 @@ public class DataModelVirtualDocument {
         Def2 = def2;
     }
 
-    public DataModelVirtualDocument(int id, int documentId, int countMaster, String def1, String def2 ) {
-        Id=id;
+    public DataModelVirtualDocument(int productMasterId, int documentId, int countMaster, String def1, String def2 ) {
+        ProductMasterId=productMasterId;
         DocumentId=documentId;
         CountrMaster=countMaster;
         Def1=def1;

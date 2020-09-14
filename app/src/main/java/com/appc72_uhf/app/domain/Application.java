@@ -25,11 +25,18 @@ public class Application {
     private String AssignedResponse;
     private boolean IncludeTID;
     private int DocumentId;
+    private String CompanyCodeRFID;
     public Application() {
     }
 
 
+    public String getCompanyCodeRFID() {
+        return CompanyCodeRFID;
+    }
 
+    public void setCompanyCodeRFID(String companyCodeRFID) {
+        CompanyCodeRFID = companyCodeRFID;
+    }
 
     public Application(
             String id,
@@ -45,6 +52,7 @@ public class Application {
             String closeUserId,
             int companyId,
             String hardwareId,
+            String companyCodeRFID,
             String isActive,
             String isAssigned,
             String takingInventory,
@@ -81,6 +89,8 @@ public class Application {
         AssignedResponse=assignedResponse;
         IncludeTID=includeTID;
         DocumentId=documentId;
+        CompanyCodeRFID=companyCodeRFID;
+
 
     }
     public int getIsSelect() {
@@ -215,4 +225,5 @@ public class Application {
     public void setCloseUserId( String CloseUserId ) {
         this.CloseUserId = CloseUserId;
     }
+
 }

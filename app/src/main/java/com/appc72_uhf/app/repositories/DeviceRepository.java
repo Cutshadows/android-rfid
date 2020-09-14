@@ -21,6 +21,7 @@ public class DeviceRepository {
             String IsAssigned,
             int CompanyId,
             String  HardwareId,
+            String companyCodeRFID,
             String TakingInventory,
             String AssignedResponse,
             String MakeLabel
@@ -38,6 +39,7 @@ public class DeviceRepository {
             reg.put("IsAssigned", IsAssigned);
             reg.put("CompanyId", CompanyId);
             reg.put("HardwareId", HardwareId);
+            reg.put("CompanyCodeRFID", companyCodeRFID);
             reg.put("TakingInventory", TakingInventory);
             reg.put("AssignedResponse", AssignedResponse);
             reg.put("MakeLabel", MakeLabel);
@@ -74,6 +76,17 @@ public class DeviceRepository {
             response=queryDevice.getString(queryDevice.getColumnIndex("TakingInventory"))+"@"+queryDevice.getString(queryDevice.getColumnIndex("MakeLabel"));
         }
         return response;
+    }
+    public String FindRFIDCode(int companyId){
+        AdminSQLOpenHelper admin = new AdminSQLOpenHelper(context);
+        SQLiteDatabase db = admin.getWritableDatabase();
+        String codeRfid="";
+        Cursor querycodeRfid=db.rawQuery("SELECT CompanyCodeRFID FROM Device WHERE CompanyId="+companyId, null);
+        if(querycodeRfid.moveToFirst()){
+            codeRfid=querycodeRfid.getString(querycodeRfid.getColumnIndex("CompanyCodeRFID"));
+        }
+        db.close();
+        return codeRfid;
     }
 
 

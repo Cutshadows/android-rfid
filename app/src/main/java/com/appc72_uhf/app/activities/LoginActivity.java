@@ -31,7 +31,6 @@ import com.appc72_uhf.app.tools.UIHelper;
 
 import org.json.JSONObject;
 
-import java.text.DateFormat;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -279,27 +278,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         if(userDataPassword!=null && userDataName!=null && expires!=null){
             Date fecha=new Date(expires);
             Date c = Calendar.getInstance().getTime();
-            String simpleDateFormatToday= DateFormat.getDateInstance(DateFormat.SHORT).format(c);
-            String simpleDateFormatExpire= DateFormat.getDateInstance(DateFormat.SHORT).format(fecha);
 
-            Log.e("simpleDateFormatToday", simpleDateFormatToday);
-            Log.e("eDateFormatExpireSimple", ""+simpleDateFormatExpire);
-
-
-         /*  String[] fechaSpExp=simpleDateFormatExpire.split("/");
-            int dayExp=Integer.parseInt(fechaSpExp[0]);
-            int mesExp=Integer.parseInt(fechaSpExp[1]);
-            int yearExp=Integer.parseInt(fechaSpExp[2]);
-            int concatDateExp=dayExp+mesExp+yearExp;
-
-            String[] fechaSpToday=simpleDateFormatToday.split("/");
-            int dayTod=Integer.parseInt(fechaSpToday[0]);
-            int mesTod=Integer.parseInt(fechaSpToday[1]);
-            int yearTod=Integer.parseInt(fechaSpToday[2]);
-            int concatDateTod=dayTod+mesTod+yearTod;*/
-
-            //if(concatDateTod<=concatDateExp){
-            if(c.before(fecha)){// || c.equals(fecha)){
+            if(c.before(fecha)){
                 Intent goToMain=new Intent(LoginActivity.this, Dashboard_activity.class);
                 startActivity(goToMain);
             }else if(c.after(fecha) || c.equals(fecha)){

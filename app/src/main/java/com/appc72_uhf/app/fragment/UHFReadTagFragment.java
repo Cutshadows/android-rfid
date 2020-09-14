@@ -27,7 +27,6 @@ import android.widget.RelativeLayout;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -153,7 +152,7 @@ public class UHFReadTagFragment extends KeyDwonFragment {
          * Recycle view infinity scroll
          */
         commentList= new ArrayList<>();
-         LvTags.setAdapter(adapter);
+        LvTags.setAdapter(adapter);
 
 
         //pagination();
@@ -173,41 +172,10 @@ public class UHFReadTagFragment extends KeyDwonFragment {
         };
         name_inventory_pass=mContext.getIntent().getStringExtra("Name");
         if(inventory_include_tid.equals("true")){
-                tv_TID.setVisibility(View.VISIBLE);
+            tv_TID.setVisibility(View.VISIBLE);
         }else {
             tv_TID.setVisibility(View.INVISIBLE);
         }
-
-    }
-    private void pagination(){
-        RvTags.addOnScrollListener(new RecyclerView.OnScrollListener() {
-            @Override
-            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
-                super.onScrollStateChanged(recyclerView, newState);
-            }
-
-            @Override
-            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
-                super.onScrolled(recyclerView, dx, dy);
-                visibleItemCount=layoutManager.getChildCount();
-                totalItemCount=layoutManager.getItemCount();
-                firstVisibleItem=layoutManager.findFirstVisibleItemPosition();
-                if(load){
-                    if (totalItemCount > previousTotal) {
-                        previousTotal=totalItemCount;
-                        page_number++;
-                        load=false;
-                    }
-                }
-                if(!load && (firstVisibleItem+ visibleItemCount)>=totalItemCount){
-                        getNext();
-                        load=true;
-                        Log.e("SCROLLING", "Page Number: "+page_number);
-                }
-            }
-        });
-    }
-    private void getNext(){
 
     }
     @Override
@@ -250,7 +218,7 @@ public class UHFReadTagFragment extends KeyDwonFragment {
      * Agregar tag a la lista taglist
      */
     private void addEPCToList(String epc, String tid) {
-       // TagsRepository tagRepoCount= new TagsRepository(this.mContext);
+        // TagsRepository tagRepoCount= new TagsRepository(this.mContext);
         try {
             if (!TextUtils.isEmpty(epc)) {
                 int index = checkIsExist(epc);
@@ -263,7 +231,7 @@ public class UHFReadTagFragment extends KeyDwonFragment {
                 //map.put("tagCount", String.valueOf(1));
                 //map.put("tagRssi", rssi);
                 //mContext.getAppContext().uhfQueue.offer(epc + "\t 1");
-               // int countTagsSQL=tagRepoCount.countTags(inventoryID);
+                // int countTagsSQL=tagRepoCount.countTags(inventoryID);
                 if (index == -1) {
                     maestroTagList.add(map);
                     if(tagList.size()<=100){
@@ -308,11 +276,6 @@ public class UHFReadTagFragment extends KeyDwonFragment {
                 if(insertTags){
                     searchTags();
                 }
-                try {
-                    Thread.sleep(2000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
                 if(saveRestedTags){
                     Intent goToDetailProduct=new Intent(mContext, Detail_product_activity.class);
                     goToDetailProduct.putExtra("Id",  inventoryID);
@@ -332,7 +295,6 @@ public class UHFReadTagFragment extends KeyDwonFragment {
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-                Log.e("insertTags", "PASANDO POR ACA");
                 if(saveRestedTags){
                     Intent goToMain=new Intent(mContext, MainActivity.class);
                     goToMain.putExtra("EntryType", "Inventory");
@@ -391,8 +353,9 @@ public class UHFReadTagFragment extends KeyDwonFragment {
                         String strEPC=maestroTagList.get(index).get("tagUii");
                         String strTID=maestroTagList.get(index).get("tagRssi");
                         saveRes=repositoryTag.InsertTag(strEPC,  inventoryID, android_id, strTID,0);
-                       // Thread.sleep(1000);
+                        Log.e("SaveRes", ""+saveRes);
                         handle.sendMessage(handle.obtainMessage());
+                        //Thread.sleep(1000);
                         if(index==mypDialog.getMax()){
                             mypDialog.dismiss();
                         }
@@ -401,10 +364,13 @@ public class UHFReadTagFragment extends KeyDwonFragment {
                 if(saveRes){
                     UIHelper.ToastMessage(mContext, "Codigos ingresados correctamente.", 2);
                     btn_back_product_list.setBackgroundResource(R.color.red);
-                    saveRestedTags=true;
+                    if(!detailFordevice){
+                        saveRestedTags=true;
+                    }
                     insertagsReturn=true;
+                }else{
+                    insertagsReturn=false;
                 }
-                insertagsReturn=false;
             }catch (Exception ex){
                 ex.printStackTrace();
             }
@@ -432,6 +398,7 @@ public class UHFReadTagFragment extends KeyDwonFragment {
                         }
                     }
                     UIHelper.ToastMessage(mContext, "Lectura finalizado con exito, se encontraron "+contadorFound+" codigos", 5);
+                    saveRestedTags=true;
                     dialogSearchTags.dismiss();
                 }catch (Exception e){
                     dialogSearchTags.dismiss();
@@ -493,40 +460,40 @@ public class UHFReadTagFragment extends KeyDwonFragment {
 
     private void readTag() {
         if (BtInventory.getText().equals(mContext.getString(R.string.btInventory))){
-                    switch (inventoryFlag) {
-                        case 1:// 单标签循环  .startInventoryTag((byte) 0, (byte) 0))
-                            if(inventory_include_tid.equals("true")){
-                                mContext.mReader.setEPCTIDMode(true);
-                                //mContext.mReader.setFastID(true);
-                                mContext.mReader.setTagFocus(true);
-                            }else if(inventory_include_tid.equals("false")){
-                                mContext.mReader.setEPCTIDMode(false);
-                                //mContext.mReader.setFastID(true);
-                                mContext.mReader.setTagFocus(true);
-                            }
-                            if (mContext.mReader.startInventoryTag(0,0)) {
-                                BtInventory.setText(mContext
-                                        .getString(R.string.title_stop_Inventory));
-                                loopFlag = true;
-                                setViewEnabled(false);
-                                //ACA SET IMAGEN
-                                imgbtn_indicator.setBackgroundResource(R.drawable.circle_indicator_on);
-                                new TagThread().start();
-                            } else {
-                                imgbtn_indicator.setBackgroundResource(R.drawable.circle_indicator_stop);
-                                mContext.mReader.stopInventory();
-                                Log.e("UHFReadTagFragment", "Open Failure");
-                                //UIHelper.ToastMessage(mContext, R.string.uhf_msg_inventory_open_fail);
-        //					mContext.playSound(2);
-                            }
-                        break;
-                        default:
-                            break;
-                }
+            switch (inventoryFlag) {
+                case 1:// 单标签循环  .startInventoryTag((byte) 0, (byte) 0))
+                    if(inventory_include_tid.equals("true")){
+                        mContext.mReader.setEPCTIDMode(true);
+                        //mContext.mReader.setFastID(true);
+                        mContext.mReader.setTagFocus(true);
+                    }else if(inventory_include_tid.equals("false")){
+                        mContext.mReader.setEPCTIDMode(false);
+                        //mContext.mReader.setFastID(true);
+                        mContext.mReader.setTagFocus(true);
+                    }
+                    if (mContext.mReader.startInventoryTag(0,0)) {
+                        BtInventory.setText(mContext
+                                .getString(R.string.title_stop_Inventory));
+                        loopFlag = true;
+                        setViewEnabled(false);
+                        //ACA SET IMAGEN
+                        imgbtn_indicator.setBackgroundResource(R.drawable.circle_indicator_on);
+                        new TagThread().start();
+                    } else {
+                        imgbtn_indicator.setBackgroundResource(R.drawable.circle_indicator_stop);
+                        mContext.mReader.stopInventory();
+                        Log.e("UHFReadTagFragment", "Open Failure");
+                        //UIHelper.ToastMessage(mContext, R.string.uhf_msg_inventory_open_fail);
+                        //					mContext.playSound(2);
+                    }
+                    break;
+                default:
+                    break;
+            }
         } else {
 
-                stopInventory();
-                UIHelper.ToastMessage(mContext, "Lectura detenida", 3);
+            stopInventory();
+            UIHelper.ToastMessage(mContext, "Lectura detenida", 3);
         }
     }
 
@@ -539,18 +506,18 @@ public class UHFReadTagFragment extends KeyDwonFragment {
         //BtSync.setEnabled(enabled);
     }
     private void stopInventory() {
-            if (loopFlag) {
-                loopFlag = false;
-                setViewEnabled(true);
-                if (mContext.mReader.stopInventory()) {
-                    BtInventory.setText(mContext.getString(R.string.btInventory));
-                    imgbtn_indicator.setBackgroundResource(R.drawable.circle_indicator_stop);
-                } else {
-                    //UIHelper.ToastMessage(mContext,
-                      //      R.string.uhf_msg_inventory_stop_fail);
-                    Log.e("UHFReadTagFragment", "Stop fail");
-                }
+        if (loopFlag) {
+            loopFlag = false;
+            setViewEnabled(true);
+            if (mContext.mReader.stopInventory()) {
+                BtInventory.setText(mContext.getString(R.string.btInventory));
+                imgbtn_indicator.setBackgroundResource(R.drawable.circle_indicator_stop);
+            } else {
+                //UIHelper.ToastMessage(mContext,
+                //      R.string.uhf_msg_inventory_stop_fail);
+                Log.e("UHFReadTagFragment", "Stop fail");
             }
+        }
     }
     /**
      * @param strEPC 索引
@@ -589,10 +556,10 @@ public class UHFReadTagFragment extends KeyDwonFragment {
                     } else {
                         strResult = " ";
                     }
-                        Message msg = handler.obtainMessage();
-                       // Log.e("EPC","EPC:"+ mContext.mReader.convertUiiToEPC(res[1])+"@"+res[2]+"@"+strResult);
-                        msg.obj =mContext.mReader.convertUiiToEPC(res[1])+"@"+ res[2]+"@"+strResult; //+ "EPC:"
-                        handler.sendMessage(msg);
+                    Message msg = handler.obtainMessage();
+                    // Log.e("EPC","EPC:"+ mContext.mReader.convertUiiToEPC(res[1])+"@"+res[2]+"@"+strResult);
+                    msg.obj =mContext.mReader.convertUiiToEPC(res[1])+"@"+ res[2]+"@"+strResult; //+ "EPC:"
+                    handler.sendMessage(msg);
                 }
             }
         }
@@ -606,24 +573,24 @@ public class UHFReadTagFragment extends KeyDwonFragment {
         detailFordevice=inventaryRespository.inventoryDetailForDevice(inventoryID);
         try{
             if(Tags.size()!=0){
-                    for(int i=0; i<=Tags.size();i++){
-                        String etags=String.valueOf(Tags.get(i));
-                        String[] spliTags=etags.split("@");
-                        String RFIDtagsString=spliTags[0];
-                        String TIDtagsString="";
-                        if(inventory_include_tid.equals("true")){
-                            TIDtagsString=spliTags[1];
-                        }
-                        int index = checkIsExist(RFIDtagsString);
-                         if(index == -1 ){
-                             addEPCToList(RFIDtagsString, TIDtagsString);
-                        }/*else {
+                for(int i=0; i<=Tags.size();i++){
+                    String etags=String.valueOf(Tags.get(i));
+                    String[] spliTags=etags.split("@");
+                    String RFIDtagsString=spliTags[0];
+                    String TIDtagsString="";
+                    if(inventory_include_tid.equals("true")){
+                        TIDtagsString=spliTags[1];
+                    }
+                    int index = checkIsExist(RFIDtagsString);
+                    if(index == -1 ){
+                        addEPCToList(RFIDtagsString, TIDtagsString);
+                    }/*else {
                              int tagcount = Integer.parseInt(tagList.get(index).get("tagCount"), 10) + 1;
                              map.put("tagCount", String.valueOf(tagcount));
                              tagList.set(index, map);
                          }
                         adapter.notifyDataSetChanged();*/
-                    }
+                }
             }
             adapter.notifyDataSetChanged();
         }catch (Exception ex){
