@@ -1,6 +1,11 @@
 package com.appc72_uhf.app.fragment;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -8,38 +13,40 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
-import android.widget.RadioButton;
-import android.widget.Spinner;
 
 import com.appc72_uhf.app.MainActivity;
 import com.appc72_uhf.app.R;
+import com.appc72_uhf.app.repositories.CompanyRepository;
+import com.appc72_uhf.app.repositories.DeviceRepository;
 import com.appc72_uhf.app.tools.StringUtils;
 import com.appc72_uhf.app.tools.UIHelper;
 import com.rscja.deviceapi.RFIDWithUHF.BankEnum;
 import com.rscja.utility.StringUtility;
 
+import java.util.TimeZone;
+
 public class UHFWriteFragment extends KeyDwonFragment implements OnClickListener {
 
     private static final String TAG = "UHFWriteFragment";
-
+    private boolean loopFlag = false;
     private MainActivity mContext;
+    Handler handler;
+    private EditText EtPtr_Write;
+    private EditText EtLen_Write;
+    private EditText EtData_Write;
+    private EditText EtAccessPwd_Write;
 
+    private Button BtWrite;
 
-    Spinner SpinnerBank_Write;
-    EditText EtPtr_Write;
-    EditText EtLen_Write;
-    EditText EtData_Write;
-    EditText EtAccessPwd_Write;
-    EditText etLen_filter_wt;
+    private CheckBox cb_QT_W;
+    private String codeRfidCompany, Barcode;
+    private int ProductMasterId, DocumentId, switchTypeAway;
+    private String EntryType;
+    private boolean makeLabelBool;
+    private static final long TICKS_AT_EPOCH = 621355968000000000L;
+    private static final long TICKS_PER_MILLISECOND = 10000;
+    public static final int ILLUM_AIAM_OFF=0;
 
-    Button BtWrite;
-
-    CheckBox cb_filter_wt,cb_QT_W;
-    EditText etPtr_filter_wt;
-    EditText etData_filter_wt;
-    RadioButton rbEPC_filter_wt;
-    RadioButton rbTID_filter_wt;
-    RadioButton rbUser_filter_wt;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -49,80 +56,83 @@ public class UHFWriteFragment extends KeyDwonFragment implements OnClickListener
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-
         mContext = (MainActivity) getActivity();
-        //SpinnerBank_Write = (Spinner) getView().findViewById(R.id.SpinnerBank_Write);
         EtPtr_Write = (EditText) getView().findViewById(R.id.EtPtr_Write);
         EtLen_Write = (EditText) getView().findViewById(R.id.EtLen_Write);
         EtData_Write = (EditText) getView().findViewById(R.id.EtData_Write);
         EtAccessPwd_Write = (EditText) getView().findViewById(R.id.EtAccessPwd_Write);
-       // etLen_filter_wt= (EditText) getView().findViewById(R.id.etLen_filter_wt);
         BtWrite = (Button) getView().findViewById(R.id.BtWrite);
 
         cb_QT_W= (CheckBox) getView().findViewById(R.id.cb_QT_W);
-        //cb_filter_wt = (CheckBox) getView().findViewById(R.id.cb_filter_wt);
-        //etPtr_filter_wt = (EditText) getView().findViewById(R.id.etPtr_filter_wt);
-        //etData_filter_wt = (EditText) getView().findViewById(R.id.etData_filter_wt);
-        //rbEPC_filter_wt = (RadioButton) getView().findViewById(R.id.rbEPC_filter_wt);
-        //rbTID_filter_wt = (RadioButton) getView().findViewById(R.id.rbTID_filter_wt);
-        //rbUser_filter_wt = (RadioButton) getView().findViewById(R.id.rbUser_filter_wt);
-
-        //rbEPC_filter_wt.setOnClickListener(this);
-        //rbTID_filter_wt.setOnClickListener(this);
-        //rbUser_filter_wt.setOnClickListener(this);
         BtWrite.setOnClickListener(this);
+        loopFlag = false;
+        ProductMasterId= mContext.getIntent().getIntExtra("ProductMasterId", 0);
+        DocumentId=mContext.getIntent().getIntExtra("DocumentId", 0);
+        Barcode=mContext.getIntent().getStringExtra("Barcode");
+        EntryType=mContext.getIntent().getStringExtra("EntryType");
+        makeLabelBool=mContext.getIntent().getBooleanExtra("makeLabelBool", false);
 
-
-
-       /* cb_filter_wt.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if(isChecked) {
-                    String data = etData_filter_wt.getText().toString().trim();
-                    String rex = "[\\da-fA-F]*"; //匹配正则表达式，数据为十六进制格式
-                    if(data==null || data.isEmpty() || !data.matches(rex)) {
-                        UIHelper.ToastMessage(mContext,"Los datos filtrados deben ser datos hexadecimales.");
-                        cb_filter_wt.setChecked(false);
-                        return;
-                    }
-                }
-            }
-        });
-        SpinnerBank_Write.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                String element = adapterView.getItemAtPosition(i).toString();// 得到spanner的值
-                if(element.equals("EPC")){
-                    EtPtr_Write.setText("2");
-                }else{
-                    EtPtr_Write.setText("0");
-                }
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
-
-            }
-        });*/
+        Log.e("ProDuctMasterId", ""+ ProductMasterId);
+        Log.e("codeRfidCompany", ""+ codeRfidCompany);
+        Log.e("DocumentId", ""+ DocumentId);
+        Log.e("Barcode", ""+ Barcode);
+        Log.e("EntryType", ""+ EntryType);
+        Log.e("makeLabelBool", ""+ makeLabelBool);
+        getCompany();
+        generateEPC();
     }
 
     @Override
     public void onClick(View view) {
         switch (view.getId()){
-            /*case  R.id.rbEPC_filter_wt:
-                etPtr_filter_wt.setText("32");
-                break;
-            case  R.id.rbTID_filter_wt:
-                etPtr_filter_wt.setText("0");
-                break;
-            case  R.id.rbUser_filter_wt:
-                etPtr_filter_wt.setText("0");
-                break;*/
             case R.id.BtWrite:
                 write();
                 break;
        }
     }
+    private void generateEPC() {
+        /**
+         * READ BARCODE
+         * */
+        String barcodeText=Barcode;
+        Log.e("tamBarcode", ""+barcodeText.length());
+        /**
+         * TIMESTAMP
+         */
+        long ts=((System.currentTimeMillis() + TimeZone.getDefault().getRawOffset())*TICKS_PER_MILLISECOND)+TICKS_AT_EPOCH;
+        String timstamp=String.valueOf(ts).substring(3, 7);
+        /**
+         * FIN TIMESTAMP
+         * PRODUCTMASTER HEXADECIMAL
+         */
+        String ProductMasterRefactor = String.format("%8s", ProductMasterId).replace(' ', '0');
+        String barcodeado=(barcodeText.length()>7)?barcodeText.substring(0, 8):String.format("%8s", barcodeText).replace(' ', '0');
+        String rfid=codeRfidCompany+""+timstamp+""+barcodeado+""+ProductMasterRefactor;
+
+
+        Log.e("ts", ""+ts);
+        Log.e("Timestamp", ""+timstamp);
+        Log.e("barcodeText", ""+barcodeado);
+        Log.e("ProductMasterId", ""+ProductMasterId);
+
+        Log.e("EPC", rfid+" el tamano es:"+rfid.length());
+
+        EtData_Write.setText(rfid);
+        switchTypeAway=3;
+        //EtData_Barcode.requestFocus();
+        handler = new Handler() {
+            @Override
+            public void handleMessage(Message msg) {
+                String EPCCaptura = msg.obj + "";
+                //String[] strs = result.split("@");
+                Log.e("EPCCaptura", EPCCaptura);
+                validateEPC(EPCCaptura);
+                mContext.playSound(1);
+            }
+        };
+    }
+
+
 
  private void write(){
      /*String strPtr = EtPtr_Write.getText().toString().trim();
@@ -150,7 +160,7 @@ public class UHFWriteFragment extends KeyDwonFragment implements OnClickListener
          strPWD = "00000000";
      }
 
-     /*String strData = EtData_Write.getText().toString().trim();// 要写入的内容
+     String strData = EtData_Write.getText().toString().trim();// 要写入的内容
      if (StringUtils.isEmpty(strData)) {
          UIHelper.ToastMessage(mContext,
                  R.string.uhf_msg_write_must_not_null);
@@ -158,7 +168,7 @@ public class UHFWriteFragment extends KeyDwonFragment implements OnClickListener
      } else if (!mContext.vailHexInput(strData)) {
          UIHelper.ToastMessage(mContext, R.string.rfid_mgs_error_nohex);
          return;
-     }*/
+     }
 
      // 多字单次
      String cntStr = EtLen_Write.getText().toString().trim();
@@ -171,7 +181,7 @@ public class UHFWriteFragment extends KeyDwonFragment implements OnClickListener
          return;
      }
 
-     /*if ((strData.length()) % 4 != 0) {
+     if ((strData.length()) % 4 != 0) {
          UIHelper.ToastMessage(mContext,
                  R.string.uhf_msg_write_must_len4x);
 
@@ -179,84 +189,23 @@ public class UHFWriteFragment extends KeyDwonFragment implements OnClickListener
      } else if (!mContext.vailHexInput(strData)) {
          UIHelper.ToastMessage(mContext, R.string.rfid_mgs_error_nohex);
          return;
-     }*/
+     }
 
 
      boolean result=false;
-     /*String Bank="";
-     if(SpinnerBank_Write.getSelectedItemPosition()==1){
-         Bank="UII";
-     }else{
-         Bank=SpinnerBank_Write.getSelectedItem().toString();
-     }
-     if (cb_filter_wt.isChecked())// 指定标签
-     {
-         if(etPtr_filter_wt.getText().toString()==null || etPtr_filter_wt.getText().toString().isEmpty()){
-             etPtr_filter_wt.setText("0");
-         }
-         //if(etLen_filter_wt.getText().toString()==null || etLen_filter_wt.getText().toString().isEmpty()){
-         //    UIHelper.ToastMessage(mContext,"La longitud de los datos del filtro no puede estar vacía");
-         //    return;
-         //}
-
-         int filterPtr= Integer.parseInt(etPtr_filter_wt.getText().toString());
-         String filterData=etData_filter_wt.getText().toString();
-         int filterCnt= Integer.parseInt(etLen_filter_wt.getText().toString());
-         String filterBank="UII";
-         if(rbEPC_filter_wt.isChecked()){
-             filterBank="UII";
-         }else if(rbTID_filter_wt.isChecked()){
-             filterBank="TID";
-         }else if(rbUser_filter_wt.isChecked()){
-             filterBank="USER";
-         }
-         boolean r=false;
-         if(cb_QT_W.isChecked()){
-               r =mContext.mReader.writeDataWithQT(strPWD,
-                     BankEnum.valueOf(filterBank),
-                     filterPtr,
-                     filterCnt,
-                     filterData,
-                     BankEnum.valueOf(Bank),
-                     Integer.parseInt(strPtr),
-                     Integer.parseInt(cntStr),
-                     strData
-             );
-         }else{
-            r=mContext.mReader.writeData(strPWD,
-                     BankEnum.valueOf(filterBank),
-                     filterPtr,
-                     filterCnt,
-                     filterData,
-                     BankEnum.valueOf(Bank),
-                     Integer.parseInt(strPtr),
-                     Integer.parseInt(cntStr),
-                     strData
-             );
-         }
-
-         if(r){
-             result=true;
-         }else{
-             result=false;
-         }
-
-     } else {*/
          boolean r;
          if(cb_QT_W.isChecked()){
             r= mContext.mReader.writeDataWithQT_Ex(strPWD,
                     BankEnum.valueOf("UII"),
-                    //Integer.parseInt(strPtr),
                     2,
-                   // Integer.valueOf(cntStr),
                     4,
-                    "1111222233331111222233331");
+                    strData);
          }else{
              r= mContext.mReader.writeData_Ex(strPWD,
                      BankEnum.valueOf("UII"),
                      2,
                      4,
-                     "1111222233331111222233331");// 返回的UII strData
+                     strData);// 返回的UII strData
          }
 
          if (r) {
@@ -265,13 +214,54 @@ public class UHFWriteFragment extends KeyDwonFragment implements OnClickListener
          } else {
              UIHelper.ToastMessage(mContext, R.string.uhf_msg_write_fail);
          }
-    // }
      if(!result){
          mContext.playSound(2);
      }else{
          mContext.playSound(1);
      }
  }
+
+ private boolean validateEPC(String EPC){
+        boolean response=false;
+
+        return response;
+ }
+    private void getCompany(){
+        DeviceRepository deviceRepository=new DeviceRepository(mContext);
+        CompanyRepository companyRepository=new CompanyRepository(mContext);
+        SharedPreferences preferenceCodeActive= getContext().getSharedPreferences("code_activate", Context.MODE_PRIVATE);
+        String enterprises_code=preferenceCodeActive.getString("code_activate", "");
+        String code_result="";
+        int companyId=0;
+
+        if(enterprises_code.isEmpty()){
+            Log.e("No data preferences", " Error data no empty "+enterprises_code);
+        }else{
+            code_result=enterprises_code.toLowerCase();
+            companyId=companyRepository.getCompanieId(code_result);
+            codeRfidCompany=deviceRepository.FindRFIDCode(companyId);
+        }
+    }
+
+    class TagThread extends Thread {
+        public void run() {
+            String strTid;
+            String strResult;
+            String[] res = null;
+            if(loopFlag) {
+                res = mContext.mReader.readTagFromBuffer();
+                if (res != null) {
+                    String EPCCaptura=mContext.mReader.convertUiiToEPC(res[1]);
+                    Log.e("EPC","EPC:"+ EPCCaptura);
+                    Message msg = handler.obtainMessage();
+                    // Log.e("EPC","EPC:"+ mContext.mReader.convertUiiToEPC(res[1])+"@"+res[2]+"@"+strResult);
+                    msg.obj =EPCCaptura; //+ "EPC:"
+                    handler.sendMessage(msg);
+                    loopFlag=false;
+                }
+            }
+        }
+    }
 
 
 }

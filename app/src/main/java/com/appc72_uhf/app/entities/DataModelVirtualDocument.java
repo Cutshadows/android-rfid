@@ -18,7 +18,7 @@ public class DataModelVirtualDocument {
     private int ProductId;
     private int Product;
     private int CountrMaster;
-    private String Def1, Def2;
+    private String Def1, Def2, CodeBar;
 
 
     public String getDef1() {

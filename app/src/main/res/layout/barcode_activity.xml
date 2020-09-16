@@ -36,18 +36,15 @@
                 <RelativeLayout
                     android:id="@+id/Relative_layout_takeInventory"
                     android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:layout_gravity="center_vertical">
+                    android:layout_height="50dp">
 
                         <EditText
                             android:id="@+id/et_searchBarcode"
                             android:layout_width="200dp"
-                            android:layout_height="40dp"
-                            android:layout_marginLeft="22dp"
                             android:ems="10"
-                            android:hint="@string/et_barcode"
-                            android:inputType="number"
-                            android:textAllCaps="false" />
+                            android:maxLength="7"
+                            android:singleLine="true"
+                            android:layout_height="40dp" />
 
                         <Button
                             android:id="@+id/btn_searchProduct"

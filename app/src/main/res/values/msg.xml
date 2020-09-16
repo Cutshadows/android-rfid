@@ -4,7 +4,7 @@
     <string name="rfid_mgs_error_config">Device configuration error</string>
     <string name="rfid_mgs_error_init">Device initialization failed</string>
     <string name="rfid_mgs_error_lessthan12">The key length should be 12</string>
-    <string name="rfid_mgs_error_nohex">Please enter the hexadecimal number content</string>
+    <string name="rfid_mgs_error_nohex">Por favor ingrese un numero hexadecimal valido</string>
     <string name="rfid_mgs_error_nopwd">Password cannot be empty</string>
     <string name="rfid_mgs_error_nolockcode">Lock code cannot be empty</string>
     <string name="rfid_mgs_kill_fail">Kill failure</string>
@@ -41,8 +41,8 @@
     <string name="uhf_msg_write_must_not_null">Write data can not be empty</string>
     <string name="uhf_msg_write_must_len4">Write the length of the data string must be 4</string>
     <string name="uhf_msg_tag_must_not_null">EPC cannot be empty</string>
-    <string name="uhf_msg_write_succ">Write data successfully</string>
-    <string name="uhf_msg_write_fail">Write data failure</string>
+    <string name="uhf_msg_write_succ">Escritura exitosa!</string>
+    <string name="uhf_msg_write_fail">Error al escribir etiqueta</string>
     <string name="uhf_msg_len_not_null">Length cannot be empty</string>
     <string name="uhf_msg_len_must_decimal">Length must be a decimal data</string>
     <string name="uhf_msg_write_must_len4x">Write data of the length of the string must be in multiples of four</string>

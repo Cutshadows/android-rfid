@@ -3,10 +3,12 @@ package com.appc72_uhf.app.activities;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -22,12 +24,12 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 public class BarcodeActivity extends AppCompatActivity {
-    TextView et_searchBarcode;
+    EditText et_searchBarcode;
     Button btn_searchProduct;
     ListView lv_detail_document;
     int documentId;
     private int codeCompany;
-    private String code_enterprise;
+    private String code_enterprise, code_bar;
     Context mContext;
 
     DataModelVirtualDocument dvdVirtual;
@@ -42,8 +44,10 @@ public class BarcodeActivity extends AppCompatActivity {
 
     }
     public void initComponent(){
+
         mContext = BarcodeActivity.this;
-        et_searchBarcode=(TextView) findViewById(R.id.et_searchBarcode);
+        et_searchBarcode=(EditText) findViewById(R.id.et_searchBarcode);
+
         btn_searchProduct=(Button) findViewById(R.id.btn_searchProduct);
         lv_detail_document=(ListView) findViewById(R.id.lv_detail_document);
         dataVirtualDocuments=new ArrayList<DataModelVirtualDocument>();
@@ -56,7 +60,44 @@ public class BarcodeActivity extends AppCompatActivity {
         adapterMakeLabelList=new AdapterMakeLabelList(mContext, dataVirtualDocuments);
         lv_detail_document.setAdapter(adapterMakeLabelList);
         adapterMakeLabelList.notifyDataSetChanged();
+        et_searchBarcode.addTextChangedListener(new TextChangedListener<EditText> (et_searchBarcode){
+            @Override
+            public void beforeTextChanged(CharSequence barcodeSecuence, int start, int contador, int after) {
+                super.beforeTextChanged(barcodeSecuence, start, contador, after);
+                Log.e("beforeTextChanged", "Charsecuence"+barcodeSecuence+" Inicio"+start+" Contador"+contador+" Despues"+after);
+                if(barcodeSecuence.length()>0){
+                    ReadtBarCode(et_searchBarcode.getText().toString().trim());
+                }else{
+                    et_searchBarcode.clearFocus();
+                }
 
+            }
+            @Override
+            public void onTextChanged(EditText target, Editable s) {
+
+            }
+        });
+
+    }
+    public abstract class TextChangedListener<T> implements TextWatcher {
+        private T target;
+
+        public TextChangedListener(T target) {
+            this.target = target;
+        }
+
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count) {}
+
+        @Override
+        public void afterTextChanged(Editable s) {
+            this.onTextChanged(target, s);
+        }
+
+        public abstract void onTextChanged(T target, Editable s);
     }
     private void getData() {
         MakeLabelRepository makeLabelRepository = new MakeLabelRepository(this.mContext);
@@ -96,6 +137,19 @@ public class BarcodeActivity extends AppCompatActivity {
         }catch (JSONException jse){
             Log.e("JSONException", ""+jse.getLocalizedMessage());
         }
+    }
+    public void ReadtBarCode(String bar_code){
+            SharedPreferences savePreferencesBarcode=getSharedPreferences("barcode", Context.MODE_PRIVATE);
+            String barcode_request=savePreferencesBarcode.getString("barcode", "");
+            if(barcode_request.isEmpty()){
+                SharedPreferences.Editor obj_edite_barcode=savePreferencesBarcode.edit();
+                obj_edite_barcode.putString("barcode", bar_code);
+                obj_edite_barcode.apply();
+                Log.e("exito", "se guardo como localstorage");
+            }else {
+                Log.e("fail", "tiene un barcode asignado");
+            }
+
     }
     public static boolean isReply(ArrayList<String> array, int valor) {
         boolean repetido = false;

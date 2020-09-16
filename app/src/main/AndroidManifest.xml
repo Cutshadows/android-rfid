@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.appc72_uhf.app"
     android:versionCode="1"
-    android:versionName="1.0" >
+    android:versionName="1.0">
 
     <uses-sdk android:targetSdkVersion="29" />
 
@@ -14,6 +14,7 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.mount_unmount_filesystems" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -22,12 +23,16 @@
         android:requestLegacyExternalStorage="true"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme" >
-        <activity android:name=".activities.BarcodeActivity"
+        android:theme="@style/AppTheme">
+        <activity android:name=".activities.CaptureBarcodeActivity"
             android:configChanges="orientation|screenSize"
             android:parentActivityName=".MainActivity"
-            android:theme="@style/Theme.AppCompat">
-        </activity>
+            android:theme="@style/Theme.AppCompat"></activity>
+        <activity
+            android:name=".activities.BarcodeActivity"
+            android:configChanges="orientation|screenSize"
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/Theme.AppCompat"></activity>
         <activity
             android:name=".activities.Make_label_documents_activity"
             android:configChanges="orientation|screenSize"
@@ -42,8 +47,7 @@
         <activity
             android:name=".activities.Server_inventory_activity"
             android:configChanges="orientation|screenSize"
-            android:theme="@style/Theme.AppCompat" />
-        <!-- android:parentActivityName=".MainActivity" -->
+            android:theme="@style/Theme.AppCompat" /> <!-- android:parentActivityName=".MainActivity" -->
         <activity
             android:name=".activities.Detail_product_activity"
             android:configChanges="orientation|screenSize"
@@ -57,7 +61,7 @@
         <activity
             android:name=".activities.LoginActivity"
             android:configChanges="orientation|screenSize"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar" >
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
