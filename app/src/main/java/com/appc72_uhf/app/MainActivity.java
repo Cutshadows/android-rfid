@@ -28,6 +28,13 @@ public class MainActivity extends BaseTabFragmentActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        initComponent();
+
+
+
+    }
+    private void initComponent(){
         setContentView(R.layout.activity_main);
         if(this.getIntent().getStringExtra("EntryType").equals("Inventory")){
             if(this.getIntent().getBooleanExtra("inventoryBool", false)){
@@ -67,7 +74,6 @@ public class MainActivity extends BaseTabFragmentActivity {
             }
 
         }
-
 
     }
 

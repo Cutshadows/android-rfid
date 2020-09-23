@@ -361,8 +361,8 @@
     <!-- write -->
     <string name="tvTagUii_Write">EPC：</string>
     <string name="tvOption_Write">Write Mode：</string>
-    <string name="tvData_Write">Write Data：</string>
-    <string name="btWrite">Write Data</string>
+    <string name="tvData_Write">EPC: </string>
+    <string name="btWrite">Escribir etiqueta</string>
 
     <string-array name="arrayOption_Write">
         <item>Singleword</item>

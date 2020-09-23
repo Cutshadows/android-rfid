@@ -34,7 +34,7 @@ public class UHFWriteFragment extends KeyDwonFragment implements OnClickListener
     private EditText EtPtr_Write;
     private EditText EtLen_Write;
     private EditText EtData_Write;
-    private EditText EtAccessPwd_Write;
+    //private EditText EtAccessPwd_Write;
 
     private Button BtWrite;
 
@@ -62,7 +62,7 @@ public class UHFWriteFragment extends KeyDwonFragment implements OnClickListener
         EtPtr_Write = (EditText) getView().findViewById(R.id.EtPtr_Write);
         EtLen_Write = (EditText) getView().findViewById(R.id.EtLen_Write);
         EtData_Write = (EditText) getView().findViewById(R.id.EtData_Write);
-        EtAccessPwd_Write = (EditText) getView().findViewById(R.id.EtAccessPwd_Write);
+       // EtAccessPwd_Write = (EditText) getView().findViewById(R.id.EtAccessPwd_Write);
         BtWrite = (Button) getView().findViewById(R.id.BtWrite);
 
         cb_QT_W= (CheckBox) getView().findViewById(R.id.cb_QT_W);
@@ -81,6 +81,8 @@ public class UHFWriteFragment extends KeyDwonFragment implements OnClickListener
         Log.e("makeLabelBool", ""+ makeLabelBool);
         getCompany();
         generateEPC();
+        EtData_Write.setEnabled(false);
+        EtData_Write.clearFocus();
     }
 
     @Override
@@ -156,19 +158,13 @@ public class UHFWriteFragment extends KeyDwonFragment implements OnClickListener
         }
     }
     private void validateEPC(){
-
-        Log.e("EPC", "EPC VALIDATE"+codeRfidCompany);
         String firstFourdWordsEPC=EPCCaptura.substring(0, 4);
-        Log.e("firstFourdWordsEPC", "firstFourdWordsEPC VALIDATE"+firstFourdWordsEPC);
-
         boolean validation= codeRfidCompany.equals(firstFourdWordsEPC);
         if(validation){
             Log.e("EQUALS", "Son iguales por lo tanto no etiqueta");
-            mContext.playSound(1);
+            mContext.playSound(2);
         }else {
-            Log.e("EQUALS", "No son iguales, se etiqueta");
             write();
-            mContext.playSound(1);
         }
     }
 
@@ -181,15 +177,22 @@ public class UHFWriteFragment extends KeyDwonFragment implements OnClickListener
                 res = mContext.mReader.readTagFromBuffer();
                 if (res != null) {
                     String EPCCapture=mContext.mReader.convertUiiToEPC(res[1]);
-                    Log.e("EPC","EPC:"+ EPCCapture);
                     Message msg = handler.obtainMessage();
                     // Log.e("EPC","EPC:"+ mContext.mReader.convertUiiToEPC(res[1])+"@"+res[2]+"@"+strResult);
                     msg.obj =EPCCapture; //+ "EPC:"
                     handler.sendMessage(msg);
                     mContext.mReader.stopInventory();
+                    mContext.playSound(1);
                     if(mContext.mReader.stopInventory()){
                         Log.i("Stop Inventory", "handheld stop inventory call with class");
                     }
+                }else {
+                    mContext.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            UIHelper.ToastMessage(mContext, "No hay lectura de etiqueta, intente nuevamente", 2);
+                        }
+                    });
                 }
             }
         }
@@ -208,11 +211,9 @@ public class UHFWriteFragment extends KeyDwonFragment implements OnClickListener
         Thread tagtread=new TagThread();
         if (INVENTORY_FLAG == 1) {// 单标签循环  .startInventoryTag((byte) 0, (byte) 0))
             if (mContext.mReader.startInventoryTag(0, 0)) {
-                Log.e("Pas1", "pasare por aca1");
              tagtread.start();
             } else {
                 tagtread.destroy();
-                Log.e("Pas2", "pasare por aca2");
                 mContext.mReader.stopInventory();
                 Log.e("UHFReadTagFragment", "Open Failure");
             }
@@ -224,14 +225,10 @@ public class UHFWriteFragment extends KeyDwonFragment implements OnClickListener
         Log.e("switchTypeAway", ""+switchTypeAway);
         switch(switchTypeAway){
             case 1:
-                //readBarcode();
-                UIHelper.ToastMessage(mContext, "ME ENCUENTRO EN ESTA ETAPA 1");
                 readTag();
                 break;
         }
     }
-
-
 
     private void write(){
      /*String strPtr = EtPtr_Write.getText().toString().trim();
@@ -244,7 +241,7 @@ public class UHFWriteFragment extends KeyDwonFragment implements OnClickListener
          return;
      }*/
 
-        String strPWD = EtAccessPwd_Write.getText().toString().trim();// 访问密码
+        /*String strPWD = EtAccessPwd_Write.getText().toString().trim();// 访问密码
         if (StringUtils.isNotEmpty(strPWD)) {
             if (strPWD.length() != 8) {
                 mContext.runOnUiThread(new Runnable() {
@@ -265,9 +262,9 @@ public class UHFWriteFragment extends KeyDwonFragment implements OnClickListener
                 });
                 return;
             }
-        } else {
-            strPWD = "00000000";
-        }
+        } else {*/
+         String strPWD = "00000000";
+       // }
 
         String strData = EtData_Write.getText().toString().trim();// 要写入的内容
         if (StringUtils.isEmpty(strData)) {

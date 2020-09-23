@@ -83,6 +83,7 @@ public class Dashboard_activity extends AppCompatActivity implements View.OnClic
             token_access=access_token;
         }
         btn_create_recovery.setOnClickListener(this);
+
     }
     @Override
     public void onClick(View view) {

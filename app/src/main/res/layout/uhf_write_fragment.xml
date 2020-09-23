@@ -165,6 +165,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/tvPtr"
+                android:visibility="invisible"
                 android:textSize="16sp" />
 
             <EditText
@@ -173,6 +174,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:inputType="numberSigned"
+                android:visibility="invisible"
                 android:text="0"
                 android:textSize="15sp"
                 android:textColor="@color/red1"
@@ -181,11 +183,13 @@
                 android:layout_marginRight="10dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:visibility="invisible"
                 android:text="(word)" />
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/tvLen"
+                android:visibility="invisible"
                 android:textSize="16sp" />
 
             <EditText
@@ -194,6 +198,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:inputType="numberSigned"
+                android:visibility="invisible"
                 android:text="4"
                 android:textSize="15sp"
                 android:textColor="@color/red1"
@@ -201,6 +206,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:visibility="invisible"
                 android:text="(word)" />
         </LinearLayout>
 
@@ -209,7 +215,7 @@
             android:layout_height="wrap_content"
             android:padding="5dp" >
 
-            <TextView
+            <!--TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/tvAccessPwd"
@@ -220,7 +226,7 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:hint="00000000"
-                android:textSize="15sp" />
+                android:textSize="15sp" /-->
         </LinearLayout>
 
         <LinearLayout
@@ -247,6 +253,7 @@
             android:text="QT"
             android:id="@+id/cb_QT_W"
             android:layout_width="match_parent"
+            android:visibility="invisible"
             android:layout_height="wrap_content" />
         <LinearLayout
             android:layout_width="fill_parent"
