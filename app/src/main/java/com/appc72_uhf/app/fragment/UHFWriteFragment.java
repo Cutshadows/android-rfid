@@ -28,7 +28,7 @@ import java.util.TimeZone;
 public class UHFWriteFragment extends KeyDwonFragment implements OnClickListener {
 
     private static final String TAG = "UHFWriteFragment";
-    private boolean loopFlag = false;
+    private boolean loopFlag = true;
     private MainActivity mContext;
     Handler handler;
     private EditText EtPtr_Write;
@@ -46,6 +46,8 @@ public class UHFWriteFragment extends KeyDwonFragment implements OnClickListener
     private static final long TICKS_AT_EPOCH = 621355968000000000L;
     private static final long TICKS_PER_MILLISECOND = 10000;
     public static final int ILLUM_AIAM_OFF=0;
+    private int INVENTORY_FLAG = 1;
+    private String EPCCaptura;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -65,7 +67,6 @@ public class UHFWriteFragment extends KeyDwonFragment implements OnClickListener
 
         cb_QT_W= (CheckBox) getView().findViewById(R.id.cb_QT_W);
         BtWrite.setOnClickListener(this);
-        loopFlag = false;
         ProductMasterId= mContext.getIntent().getIntExtra("ProductMasterId", 0);
         DocumentId=mContext.getIntent().getIntExtra("DocumentId", 0);
         Barcode=mContext.getIntent().getStringExtra("Barcode");
@@ -118,15 +119,17 @@ public class UHFWriteFragment extends KeyDwonFragment implements OnClickListener
         Log.e("EPC", rfid+" el tamano es:"+rfid.length());
 
         EtData_Write.setText(rfid);
-        switchTypeAway=3;
+        switchTypeAway=1;
         //EtData_Barcode.requestFocus();
         handler = new Handler() {
             @Override
             public void handleMessage(Message msg) {
-                String EPCCaptura = msg.obj + "";
+                EPCCaptura = msg.obj + "";
                 //String[] strs = result.split("@");
                 Log.e("EPCCaptura", EPCCaptura);
-                validateEPC(EPCCaptura);
+                Thread validateEPCThread= new Thread(new validationEPCThread());
+                validateEPCThread.start();
+                //validateEPC(EPCCaptura);
                 mContext.playSound(1);
             }
         };
@@ -134,98 +137,8 @@ public class UHFWriteFragment extends KeyDwonFragment implements OnClickListener
 
 
 
- private void write(){
-     /*String strPtr = EtPtr_Write.getText().toString().trim();
-     if (StringUtils.isEmpty(strPtr)) {
-         UIHelper.ToastMessage(mContext, R.string.uhf_msg_addr_not_null);
-         return;
-     } else if (!StringUtility.isDecimal(strPtr)) {
-         UIHelper.ToastMessage(mContext,
-                 R.string.uhf_msg_addr_must_decimal);
-         return;
-     }*/
-
-     String strPWD = EtAccessPwd_Write.getText().toString().trim();// 访问密码
-     if (StringUtils.isNotEmpty(strPWD)) {
-         if (strPWD.length() != 8) {
-             UIHelper.ToastMessage(mContext,
-                     R.string.uhf_msg_addr_must_len8);
-             return;
-         } else if (!mContext.vailHexInput(strPWD)) {
-             UIHelper.ToastMessage(mContext,
-                     R.string.rfid_mgs_error_nohex);
-             return;
-         }
-     } else {
-         strPWD = "00000000";
-     }
-
-     String strData = EtData_Write.getText().toString().trim();// 要写入的内容
-     if (StringUtils.isEmpty(strData)) {
-         UIHelper.ToastMessage(mContext,
-                 R.string.uhf_msg_write_must_not_null);
-         return;
-     } else if (!mContext.vailHexInput(strData)) {
-         UIHelper.ToastMessage(mContext, R.string.rfid_mgs_error_nohex);
-         return;
-     }
-
-     // 多字单次
-     String cntStr = EtLen_Write.getText().toString().trim();
-     if (StringUtils.isEmpty(cntStr)) {
-         UIHelper.ToastMessage(mContext, R.string.uhf_msg_len_not_null);
-         return;
-     } else if (!StringUtility.isDecimal(cntStr)) {
-         UIHelper.ToastMessage(mContext,
-                 R.string.uhf_msg_len_must_decimal);
-         return;
-     }
-
-     if ((strData.length()) % 4 != 0) {
-         UIHelper.ToastMessage(mContext,
-                 R.string.uhf_msg_write_must_len4x);
-
-         return;
-     } else if (!mContext.vailHexInput(strData)) {
-         UIHelper.ToastMessage(mContext, R.string.rfid_mgs_error_nohex);
-         return;
-     }
 
 
-     boolean result=false;
-         boolean r;
-         if(cb_QT_W.isChecked()){
-            r= mContext.mReader.writeDataWithQT_Ex(strPWD,
-                    BankEnum.valueOf("UII"),
-                    2,
-                    4,
-                    strData);
-         }else{
-             r= mContext.mReader.writeData_Ex(strPWD,
-                     BankEnum.valueOf("UII"),
-                     2,
-                     4,
-                     strData);// 返回的UII strData
-         }
-
-         if (r) {
-             result=true;
-             UIHelper.ToastMessage(mContext, getString(R.string.uhf_msg_write_succ));
-         } else {
-             UIHelper.ToastMessage(mContext, R.string.uhf_msg_write_fail);
-         }
-     if(!result){
-         mContext.playSound(2);
-     }else{
-         mContext.playSound(1);
-     }
- }
-
- private boolean validateEPC(String EPC){
-        boolean response=false;
-
-        return response;
- }
     private void getCompany(){
         DeviceRepository deviceRepository=new DeviceRepository(mContext);
         CompanyRepository companyRepository=new CompanyRepository(mContext);
@@ -242,26 +155,213 @@ public class UHFWriteFragment extends KeyDwonFragment implements OnClickListener
             codeRfidCompany=deviceRepository.FindRFIDCode(companyId);
         }
     }
+    private void validateEPC(){
+
+        Log.e("EPC", "EPC VALIDATE"+codeRfidCompany);
+        String firstFourdWordsEPC=EPCCaptura.substring(0, 4);
+        Log.e("firstFourdWordsEPC", "firstFourdWordsEPC VALIDATE"+firstFourdWordsEPC);
+
+        boolean validation= codeRfidCompany.equals(firstFourdWordsEPC);
+        if(validation){
+            Log.e("EQUALS", "Son iguales por lo tanto no etiqueta");
+            mContext.playSound(1);
+        }else {
+            Log.e("EQUALS", "No son iguales, se etiqueta");
+            write();
+            mContext.playSound(1);
+        }
+    }
+
+
 
     class TagThread extends Thread {
         public void run() {
-            String strTid;
-            String strResult;
-            String[] res = null;
+            String[] res=null;
             if(loopFlag) {
                 res = mContext.mReader.readTagFromBuffer();
                 if (res != null) {
-                    String EPCCaptura=mContext.mReader.convertUiiToEPC(res[1]);
-                    Log.e("EPC","EPC:"+ EPCCaptura);
+                    String EPCCapture=mContext.mReader.convertUiiToEPC(res[1]);
+                    Log.e("EPC","EPC:"+ EPCCapture);
                     Message msg = handler.obtainMessage();
                     // Log.e("EPC","EPC:"+ mContext.mReader.convertUiiToEPC(res[1])+"@"+res[2]+"@"+strResult);
-                    msg.obj =EPCCaptura; //+ "EPC:"
+                    msg.obj =EPCCapture; //+ "EPC:"
                     handler.sendMessage(msg);
-                    loopFlag=false;
+                    mContext.mReader.stopInventory();
+                    if(mContext.mReader.stopInventory()){
+                        Log.i("Stop Inventory", "handheld stop inventory call with class");
+                    }
                 }
             }
         }
     }
 
+
+
+    private class validationEPCThread implements Runnable{
+        @Override
+        public void run() {
+           validateEPC();
+        }
+    }
+
+    private void readTag() {
+        Thread tagtread=new TagThread();
+        if (INVENTORY_FLAG == 1) {// 单标签循环  .startInventoryTag((byte) 0, (byte) 0))
+            if (mContext.mReader.startInventoryTag(0, 0)) {
+                Log.e("Pas1", "pasare por aca1");
+             tagtread.start();
+            } else {
+                tagtread.destroy();
+                Log.e("Pas2", "pasare por aca2");
+                mContext.mReader.stopInventory();
+                Log.e("UHFReadTagFragment", "Open Failure");
+            }
+        }
+    }
+
+    @Override
+    public void myOnKeyDwon() {
+        Log.e("switchTypeAway", ""+switchTypeAway);
+        switch(switchTypeAway){
+            case 1:
+                //readBarcode();
+                UIHelper.ToastMessage(mContext, "ME ENCUENTRO EN ESTA ETAPA 1");
+                readTag();
+                break;
+        }
+    }
+
+
+
+    private void write(){
+     /*String strPtr = EtPtr_Write.getText().toString().trim();
+     if (StringUtils.isEmpty(strPtr)) {
+         UIHelper.ToastMessage(mContext, R.string.uhf_msg_addr_not_null);
+         return;
+     } else if (!StringUtility.isDecimal(strPtr)) {
+         UIHelper.ToastMessage(mContext,
+                 R.string.uhf_msg_addr_must_decimal);
+         return;
+     }*/
+
+        String strPWD = EtAccessPwd_Write.getText().toString().trim();// 访问密码
+        if (StringUtils.isNotEmpty(strPWD)) {
+            if (strPWD.length() != 8) {
+                mContext.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                            UIHelper.ToastMessage(mContext,
+                                    R.string.uhf_msg_addr_must_len8);
+                    }
+                });
+                return;
+            } else if (!mContext.vailHexInput(strPWD)) {
+                mContext.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                            UIHelper.ToastMessage(mContext,
+                                    R.string.rfid_mgs_error_nohex);
+                    }
+                });
+                return;
+            }
+        } else {
+            strPWD = "00000000";
+        }
+
+        String strData = EtData_Write.getText().toString().trim();// 要写入的内容
+        if (StringUtils.isEmpty(strData)) {
+            mContext.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    UIHelper.ToastMessage(mContext,
+                            R.string.uhf_msg_write_must_not_null);
+                }
+            });
+            return;
+        } else if (!mContext.vailHexInput(strData)) {
+            mContext.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                    UIHelper.ToastMessage(mContext, R.string.rfid_mgs_error_nohex);
+                }
+            });
+            return;
+        }
+
+        // 多字单次
+        String cntStr = EtLen_Write.getText().toString().trim();
+        if (StringUtils.isEmpty(cntStr)) {
+            UIHelper.ToastMessage(mContext, R.string.uhf_msg_len_not_null);
+            return;
+        } else if (!StringUtility.isDecimal(cntStr)) {
+            mContext.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    UIHelper.ToastMessage(mContext,
+                         R.string.uhf_msg_len_must_decimal);
+                }
+            });
+            return;
+        }
+
+        if ((strData.length()) % 4 != 0) {
+            mContext.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    UIHelper.ToastMessage(mContext, R.string.uhf_msg_write_must_len4x);
+                    }
+                });
+            return;
+        } else if (!mContext.vailHexInput(strData)) {
+            mContext.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                UIHelper.ToastMessage(mContext, R.string.rfid_mgs_error_nohex);
+                }
+            });
+            return;
+        }
+
+
+        boolean result=false;
+        boolean r;
+        if(cb_QT_W.isChecked()){
+            r= mContext.mReader.writeDataWithQT_Ex(strPWD,
+                    BankEnum.valueOf("UII"),
+                    2,
+                    4,
+                    strData);
+        }else{
+            r= mContext.mReader.writeData_Ex(strPWD,
+                    BankEnum.valueOf("UII"),
+                    2,
+                    4,
+                    strData);// 返回的UII strData
+        }
+
+        if (r) {
+            result=true;
+            mContext.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    UIHelper.ToastMessage(mContext, getString(R.string.uhf_msg_write_succ));
+                }
+            });
+
+        } else {
+            mContext.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    UIHelper.ToastMessage(mContext, R.string.uhf_msg_write_fail);
+                }
+            });
+        }
+        if(!result){
+            mContext.playSound(2);
+        }else{
+            mContext.playSound(1);
+        }
+    }
 
 }

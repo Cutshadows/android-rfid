@@ -273,7 +273,8 @@ public class BaseTabFragmentActivity extends FragmentActivity {
 		Toast.makeText(this, resId, Toast.LENGTH_SHORT).show();
 	}
 
-	/**
+
+    /**
 	 * @author liuruifeng
 	 */
 	public class InitTask extends AsyncTask<String, Integer, Boolean> {

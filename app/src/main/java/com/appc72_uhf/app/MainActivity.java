@@ -129,6 +129,8 @@ public class MainActivity extends BaseTabFragmentActivity {
         }
         super.onDestroy();
     }
+
+
     @SuppressLint("StaticFieldLeak")
     public class InitTask extends AsyncTask<String, Integer, Boolean> {
         ProgressDialog mypDialog;
