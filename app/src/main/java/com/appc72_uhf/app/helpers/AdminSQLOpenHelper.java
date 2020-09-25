@@ -86,6 +86,7 @@ public class AdminSQLOpenHelper extends SQLiteOpenHelper {
                 "ProductMaster TEXT," +
                 "ProductVirtualId TEXT,"+
                 "DocumentId INTEGER," +
+                "Status INTEGER," +
                 "CodeBar TEXT" +");");
     }
 

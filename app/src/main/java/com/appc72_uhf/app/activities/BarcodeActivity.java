@@ -53,6 +53,10 @@ public class BarcodeActivity extends AppCompatActivity {
         dataVirtualDocuments=new ArrayList<DataModelVirtualDocument>();
 
         code_enterprise=getCompany();
+        SharedPreferences prefereneceBarcode=this.getSharedPreferences("barcode", Context.MODE_PRIVATE);
+        SharedPreferences.Editor barcode_request=prefereneceBarcode.edit();
+        barcode_request.clear();
+        barcode_request.apply();
         documentId=getIntent().getIntExtra("DocumentId", 0);
 
         getData();
@@ -60,13 +64,34 @@ public class BarcodeActivity extends AppCompatActivity {
         adapterMakeLabelList=new AdapterMakeLabelList(mContext, dataVirtualDocuments);
         lv_detail_document.setAdapter(adapterMakeLabelList);
         adapterMakeLabelList.notifyDataSetChanged();
-        et_searchBarcode.addTextChangedListener(new TextChangedListener<EditText> (et_searchBarcode){
+        et_searchBarcode.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence barcodeSecuence, int start, int contador, int after) {
+                Log.e("beforeTextChanged", "Charsecuence"+barcodeSecuence+" Inicio"+start+" Contador"+contador+" Despues"+after);
+
+            }
+            @Override
+            public void onTextChanged(CharSequence barcodeSecuence, int start, int before, int count) {
+                Log.e("beforeTextChanged", "Charsecuence"+barcodeSecuence+" Inicio"+start+" Contador"+count+" Despues"+before);
+                if(count>0){
+                    Log.e("et_searchBarcode", "se guardo como localstorage"+et_searchBarcode.getText().toString());
+                    ReadtBarCode(et_searchBarcode.getText().toString().trim());
+                }else{
+                    et_searchBarcode.clearFocus();
+                }
+            }
+            @Override
+            public void afterTextChanged(Editable s) {
+            }
+        });
+        /*et_searchBarcode.addTextChangedListener(new TextChangedListener<EditText> (et_searchBarcode){
             @Override
             public void beforeTextChanged(CharSequence barcodeSecuence, int start, int contador, int after) {
                 super.beforeTextChanged(barcodeSecuence, start, contador, after);
                 Log.e("beforeTextChanged", "Charsecuence"+barcodeSecuence+" Inicio"+start+" Contador"+contador+" Despues"+after);
-                if(barcodeSecuence.length()>0){
-                    ReadtBarCode(et_searchBarcode.getText().toString().trim());
+                if(after>0){
+                    Log.e("et_searchBarcode", "se guardo como localstorage"+et_searchBarcode.getText().toString().trim());
+                        ReadtBarCode(et_searchBarcode.getText().toString().trim());
                 }else{
                     et_searchBarcode.clearFocus();
                 }
@@ -76,7 +101,7 @@ public class BarcodeActivity extends AppCompatActivity {
             public void onTextChanged(EditText target, Editable s) {
 
             }
-        });
+        });*/
 
     }
     public abstract class TextChangedListener<T> implements TextWatcher {
@@ -139,6 +164,7 @@ public class BarcodeActivity extends AppCompatActivity {
         }
     }
     public void ReadtBarCode(String bar_code){
+        Log.e("bar_code", "se guardo como localstorage"+bar_code);
             SharedPreferences savePreferencesBarcode=getSharedPreferences("barcode", Context.MODE_PRIVATE);
             String barcode_request=savePreferencesBarcode.getString("barcode", "");
             if(barcode_request.isEmpty()){
@@ -181,6 +207,8 @@ public class BarcodeActivity extends AppCompatActivity {
         }
     }*/
     private String getCompany(){
+
+
         CompanyRepository companyRepository=new CompanyRepository(mContext);
         SharedPreferences preferenceCodeActive=BarcodeActivity.this.getSharedPreferences("code_activate", Context.MODE_PRIVATE);
         String enterprises_code=preferenceCodeActive.getString("code_activate", "");

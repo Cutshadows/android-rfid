@@ -75,6 +75,7 @@ public class BaseTabFragmentActivity extends FragmentActivity {
 		mActionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 		try {
 			mReader = RFIDWithUHF.getInstance();
+
 		} catch (Exception ex) {
 			toastMessage(ex.getMessage());
 			return;

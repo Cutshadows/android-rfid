@@ -48,6 +48,8 @@ public class UHFWriteFragment extends KeyDwonFragment implements OnClickListener
     public static final int ILLUM_AIAM_OFF=0;
     private int INVENTORY_FLAG = 1;
     private String EPCCaptura;
+    private static final int ILLUM_AIM_OFF = 0;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -58,11 +60,15 @@ public class UHFWriteFragment extends KeyDwonFragment implements OnClickListener
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        initComponent();
+    }
+    private void initComponent(){
+
         mContext = (MainActivity) getActivity();
         EtPtr_Write = (EditText) getView().findViewById(R.id.EtPtr_Write);
         EtLen_Write = (EditText) getView().findViewById(R.id.EtLen_Write);
         EtData_Write = (EditText) getView().findViewById(R.id.EtData_Write);
-       // EtAccessPwd_Write = (EditText) getView().findViewById(R.id.EtAccessPwd_Write);
+        // EtAccessPwd_Write = (EditText) getView().findViewById(R.id.EtAccessPwd_Write);
         BtWrite = (Button) getView().findViewById(R.id.BtWrite);
 
         cb_QT_W= (CheckBox) getView().findViewById(R.id.cb_QT_W);
@@ -73,23 +79,17 @@ public class UHFWriteFragment extends KeyDwonFragment implements OnClickListener
         EntryType=mContext.getIntent().getStringExtra("EntryType");
         makeLabelBool=mContext.getIntent().getBooleanExtra("makeLabelBool", false);
 
-        Log.e("ProDuctMasterId", ""+ ProductMasterId);
-        Log.e("codeRfidCompany", ""+ codeRfidCompany);
-        Log.e("DocumentId", ""+ DocumentId);
-        Log.e("Barcode", ""+ Barcode);
-        Log.e("EntryType", ""+ EntryType);
-        Log.e("makeLabelBool", ""+ makeLabelBool);
         getCompany();
         generateEPC();
         EtData_Write.setEnabled(false);
         EtData_Write.clearFocus();
     }
-
     @Override
     public void onClick(View view) {
         switch (view.getId()){
             case R.id.BtWrite:
-                write();
+                readTag();
+                //write();
                 break;
        }
     }
@@ -162,6 +162,12 @@ public class UHFWriteFragment extends KeyDwonFragment implements OnClickListener
         boolean validation= codeRfidCompany.equals(firstFourdWordsEPC);
         if(validation){
             Log.e("EQUALS", "Son iguales por lo tanto no etiqueta");
+            mContext.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    UIHelper.ToastMessage(mContext, "La etiqueta ya se encuentra en uso", 4);
+                    }
+                });
             mContext.playSound(2);
         }else {
             write();
@@ -210,6 +216,12 @@ public class UHFWriteFragment extends KeyDwonFragment implements OnClickListener
     private void readTag() {
         Thread tagtread=new TagThread();
         if (INVENTORY_FLAG == 1) {// 单标签循环  .startInventoryTag((byte) 0, (byte) 0))
+            mContext.mReader.crcOff();
+            if(mContext.mReader.setPower(9)){
+                Log.e("SuccesPower", "nivel 9 de potencia ok!!");
+            }else{
+                Log.e("ErrorPower", "fallo al activar potencia !");
+            }
             if (mContext.mReader.startInventoryTag(0, 0)) {
              tagtread.start();
             } else {

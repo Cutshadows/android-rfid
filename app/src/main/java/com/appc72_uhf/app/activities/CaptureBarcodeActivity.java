@@ -79,6 +79,7 @@ public class CaptureBarcodeActivity extends AppCompatActivity {
                 @Override
                 public void afterTextChanged(Editable s) {
                     super.afterTextChanged(s);
+                    et_barcode.setEnabled(false);
                     new android.os.Handler().postDelayed(
                             new Runnable() {
                                 public void run() {
@@ -111,6 +112,7 @@ public class CaptureBarcodeActivity extends AppCompatActivity {
         SharedPreferences prefereneceBarcode=this.getSharedPreferences("barcode", Context.MODE_PRIVATE);
         SharedPreferences.Editor barcode_request=prefereneceBarcode.edit();
         barcode_request.clear();
+        barcode_request.remove("barcode");
         barcode_request.apply();
     }
 
@@ -121,6 +123,7 @@ public class CaptureBarcodeActivity extends AppCompatActivity {
         SharedPreferences prefereneceBarcode=this.getSharedPreferences("barcode", Context.MODE_PRIVATE);
         SharedPreferences.Editor barcode_request=prefereneceBarcode.edit();
         barcode_request.clear();
+        barcode_request.remove("barcode");
         barcode_request.apply();
     }
     @Override
@@ -129,6 +132,7 @@ public class CaptureBarcodeActivity extends AppCompatActivity {
         SharedPreferences prefereneceBarcode=this.getSharedPreferences("barcode", Context.MODE_PRIVATE);
         SharedPreferences.Editor barcode_request=prefereneceBarcode.edit();
         barcode_request.clear();
+        barcode_request.remove("barcode");
         barcode_request.apply();
     }
     @Override
@@ -137,6 +141,7 @@ public class CaptureBarcodeActivity extends AppCompatActivity {
         SharedPreferences prefereneceBarcode=this.getSharedPreferences("barcode", Context.MODE_PRIVATE);
         SharedPreferences.Editor barcode_request=prefereneceBarcode.edit();
         barcode_request.clear();
+        barcode_request.remove("barcode");
         barcode_request.apply();
     }
 
@@ -145,7 +150,7 @@ public class CaptureBarcodeActivity extends AppCompatActivity {
         String barcode_request=prefereneceBarcode.getString("barcode", "");
         String barcode_result="";
         if(barcode_request.isEmpty()){
-            Log.e("No data preferences", " Error data no empty "+barcode_request);
+            Log.e("getBarcode", " Error no hay barcode "+barcode_request);
         }else{
             barcode_result=barcode_request;
         }

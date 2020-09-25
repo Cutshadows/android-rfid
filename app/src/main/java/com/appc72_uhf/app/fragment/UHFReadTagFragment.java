@@ -460,6 +460,9 @@ public class UHFReadTagFragment extends KeyDwonFragment {
 
     private void readTag() {
         if (BtInventory.getText().equals(mContext.getString(R.string.btInventory))){
+            if(mContext.mReader.setPower(30)){
+                Log.i("SetPower", "Set power readInventory :"+30);
+            }
             switch (inventoryFlag) {
                 case 1:// 单标签循环  .startInventoryTag((byte) 0, (byte) 0))
                     if(inventory_include_tid.equals("true")){
