@@ -115,7 +115,14 @@ public class CaptureBarcodeActivity extends AppCompatActivity {
         barcode_request.remove("barcode");
         barcode_request.apply();
     }
-
+    public void onBackPressed() {
+        Intent toMainAfterDelete=new Intent(this, MainActivity.class);
+        toMainAfterDelete.putExtra("EntryType", "MakeLabel");
+        toMainAfterDelete.putExtra("makeLabelBool", false);
+        toMainAfterDelete.putExtra("DocumentId", DocumentId);
+        super.onBackPressed();
+        //codigo adicional
+    }
 
     @Override
     protected void onRestart() {

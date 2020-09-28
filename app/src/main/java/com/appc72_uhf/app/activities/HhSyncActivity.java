@@ -188,7 +188,7 @@ public class HhSyncActivity extends AppCompatActivity implements View.OnClickLis
                                     Gson gson = new Gson();
                                     Application apps = gson.fromJson(response, Application.class);
 
-                                    if(apps.getAssignedResponse().equals("true")){
+                                    //if(apps.getAssignedResponse().equals("true")){
                                         boolean inserT=deviceRepository.DeviceInsert(
                                                Integer.parseInt(apps.getId()),
                                                 apps.getName(),
@@ -207,11 +207,11 @@ public class HhSyncActivity extends AppCompatActivity implements View.OnClickLis
                                             Intent goToLogin=new Intent(HhSyncActivity.this, LoginActivity.class);
                                             startActivity(goToLogin);
                                         }
-                                    }else if(apps.getAssignedResponse().equals("false")){
+                                    /*}else if(apps.getAssignedResponse().equals("false")){
                                         UIHelper.ToastMessage(HhSyncActivity.this, "Dispositivo, ya se encuentra vinculado a un inventario", 10);
                                         Intent goToLogin=new Intent(HhSyncActivity.this, LoginActivity.class);
                                         startActivity(goToLogin);
-                                    }
+                                    }*/
                                 }catch (Exception ehttp){
                                     mypDialog.dismiss();
                                     Toast.makeText(HhSyncActivity.this, "Error : "+ehttp.getMessage(), Toast.LENGTH_SHORT).show();

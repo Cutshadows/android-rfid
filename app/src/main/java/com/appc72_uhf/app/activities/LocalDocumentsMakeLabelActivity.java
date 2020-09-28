@@ -88,6 +88,7 @@ public class LocalDocumentsMakeLabelActivity extends KeyDwonFragment implements 
             docArraylist.add(new DatamodelDocumentsMakeLabel(strs[0], strs[5], Integer.parseInt(strs[1]), countTagEnabled));
         }
     }
+
     private String getCompany(){
         CompanyRepository companyRepository=new CompanyRepository(mContext);
         SharedPreferences preferenceCodeActive=getContext().getSharedPreferences("code_activate", Context.MODE_PRIVATE);

@@ -216,8 +216,7 @@ public class UHFWriteFragment extends KeyDwonFragment implements OnClickListener
     private void readTag() {
         Thread tagtread=new TagThread();
         if (INVENTORY_FLAG == 1) {// 单标签循环  .startInventoryTag((byte) 0, (byte) 0))
-            mContext.mReader.crcOff();
-            if(mContext.mReader.setPower(9)){
+            if(mContext.mReader.setPower(15)){
                 Log.e("SuccesPower", "nivel 9 de potencia ok!!");
             }else{
                 Log.e("ErrorPower", "fallo al activar potencia !");

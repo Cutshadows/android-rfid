@@ -1,5 +1,6 @@
 package com.appc72_uhf.app.adapter;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -27,6 +28,8 @@ import java.util.ArrayList;
 public class AdapterMakeLabelDocuments extends ArrayAdapter<DatamodelDocumentsMakeLabel> implements View.OnClickListener {
     Context mContext;
     ArrayList<DatamodelDocumentsMakeLabel> datadocuments;
+    ProgressDialog mypDialog;
+
 
     public AdapterMakeLabelDocuments(@NonNull Context mContext, ArrayList<DatamodelDocumentsMakeLabel> datadocuments) {
         super(mContext, R.layout.simple_list_documents_server, datadocuments);
@@ -55,6 +58,11 @@ public class AdapterMakeLabelDocuments extends ArrayAdapter<DatamodelDocumentsMa
         switch (v.getId()){
             case R.id.chbx_download_documents:
                 if(chbx_download_documents.isChecked()){
+                    mypDialog = new ProgressDialog(getContext());
+                    mypDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+                    mypDialog.setMessage("Habilitando etiquetado documento :"+dModelMakeLabel.getDocumentId()+"...");
+                    mypDialog.setCanceledOnTouchOutside(false);
+                    mypDialog.show();
                         boolean resultDocumentInsert=makeLabelRepository.InsertDocuments(
                                 dModelMakeLabel.getDocumentName(),
                                 dModelMakeLabel.getDocumentId(),
@@ -96,17 +104,16 @@ public class AdapterMakeLabelDocuments extends ArrayAdapter<DatamodelDocumentsMa
                             }
                         }
                         if(inserListTag){
-                            UIHelper.ToastMessage(getContext(), "Se habilito y descargo los documentos para etiquetado.", 3);
+                            UIHelper.ToastMessage(getContext(), "Se habilito los documentos para etiquetado.", 3);
                         }
                     }
+                    mypDialog.dismiss();
                 }else{
                     UIHelper.ToastMessage(mContext, "Se elimina los documentos para makelabel "+dModelMakeLabel.getDocumentId(), 4);
                     boolean deleteDocument=makeLabelRepository.deleteDocument(dModelMakeLabel.getDocumentId());
                     if(deleteDocument){
                       UIHelper.ToastMessage(getContext(), "El inventario '"+dModelMakeLabel.getDocumentName()+"' esta deshabilitado!!", 5);
                     }
-
-
                 }
                 break;
         }

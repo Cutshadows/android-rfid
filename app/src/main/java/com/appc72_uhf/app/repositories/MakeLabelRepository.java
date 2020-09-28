@@ -83,6 +83,7 @@ public class MakeLabelRepository {
             valContentVirtualTags.put("ProductMaster", productMaster);
             valContentVirtualTags.put("ProductVirtualId", productVirtualId);
             valContentVirtualTags.put("DocumentId", documentId);
+            valContentVirtualTags.put("Status", 1);
             valContentVirtualTags.put("CodeBar", codebar);
 
             resultInsertTags=db.insert("DocumentDetailsVirtual", null,  valContentVirtualTags)>0;
@@ -98,10 +99,10 @@ public class MakeLabelRepository {
         AdminSQLOpenHelper admin=new AdminSQLOpenHelper(context);
         SQLiteDatabase db=admin.getWritableDatabase();
         final String MY_TABLE_DOCUMENT="Documents";
-        final String MY_TABLE_VIRTUAL="Documents";
+        final String MY_TABLE_VIRTUAL="DocumentDetailsVirtual";
         try {
             db.beginTransaction();
-            boolean result1=db.delete(MY_TABLE_DOCUMENT, "Id="+documentId, null )>0;
+            boolean result1=db.delete(MY_TABLE_DOCUMENT, "DocumentId="+documentId, null )>0;
             boolean result2=false;
             if(result1){
                 result2=db.delete(MY_TABLE_VIRTUAL, "DocumentId="+documentId, null)>0;

@@ -1,5 +1,6 @@
 package com.appc72_uhf.app.adapter;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.view.LayoutInflater;
@@ -15,9 +16,11 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.appc72_uhf.app.MainActivity;
 import com.appc72_uhf.app.R;
 import com.appc72_uhf.app.activities.BarcodeActivity;
 import com.appc72_uhf.app.entities.DatamodelDocumentsMakeLabel;
+import com.appc72_uhf.app.repositories.MakeLabelRepository;
 import com.appc72_uhf.app.tools.UIHelper;
 
 import java.util.ArrayList;
@@ -42,6 +45,8 @@ public class AdapterDocumentsListMakeLabel extends ArrayAdapter<DatamodelDocumen
     public void onClick(View v) {
         int position=(Integer) v.getTag();
         DatamodelDocumentsMakeLabel datamodelDocumentsMakeLabel=getItem(position);
+        MakeLabelRepository makeLabelRepository=new MakeLabelRepository(getContext());
+
         switch (v.getId()){
             case R.id.btn_make_label_global:
                 Intent goToMain=new Intent(getContext(), BarcodeActivity.class);
@@ -54,6 +59,16 @@ public class AdapterDocumentsListMakeLabel extends ArrayAdapter<DatamodelDocumen
                 break;
             case R.id.item_delete:
                 UIHelper.ToastMessage(getContext(), "Estoy en borrar", 6);
+                UIHelper.ToastMessage(mContext, "Se elimina los documentos para makelabel "+datamodelDocumentsMakeLabel.getDocumentId(), 4);
+                boolean deleteDocument=makeLabelRepository.deleteDocument(datamodelDocumentsMakeLabel.getDocumentId());
+                if(deleteDocument){
+                    UIHelper.ToastMessage(getContext(), "El documento '"+datamodelDocumentsMakeLabel.getDocumentName()+"' esta deshabilitado!!", 5);
+                    Intent toMainAfterDelete=new Intent(getContext(), MainActivity.class);
+                    toMainAfterDelete.putExtra("EntryType", "MakeLabel");
+                    toMainAfterDelete.putExtra("makeLabelBool", false);
+                    mContext.startActivity(toMainAfterDelete);
+                    ((Activity) getContext()).onBackPressed();
+                }
                 break;
         }
     }

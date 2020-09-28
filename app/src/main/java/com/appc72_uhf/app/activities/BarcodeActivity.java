@@ -1,6 +1,7 @@
 package com.appc72_uhf.app.activities;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.Editable;
@@ -12,6 +13,7 @@ import android.widget.ListView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.appc72_uhf.app.MainActivity;
 import com.appc72_uhf.app.R;
 import com.appc72_uhf.app.adapter.AdapterMakeLabelList;
 import com.appc72_uhf.app.entities.DataModelVirtualDocument;
@@ -23,7 +25,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-public class BarcodeActivity extends AppCompatActivity {
+public class BarcodeActivity  extends AppCompatActivity {
     EditText et_searchBarcode;
     Button btn_searchProduct;
     ListView lv_detail_document;
@@ -206,6 +208,15 @@ public class BarcodeActivity extends AppCompatActivity {
             Log.e("contador2", ""+contador );
         }
     }*/
+
+    public void onBackPressed() {
+        Intent toMainAfterDelete=new Intent(this, MainActivity.class);
+        toMainAfterDelete.putExtra("EntryType", "MakeLabel");
+        toMainAfterDelete.putExtra("makeLabelBool", false);
+        super.onBackPressed();
+        //codigo adicional
+    }
+
     private String getCompany(){
 
 

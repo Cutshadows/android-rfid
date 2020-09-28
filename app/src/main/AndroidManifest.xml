@@ -26,13 +26,11 @@
         android:theme="@style/AppTheme">
         <activity android:name=".activities.CaptureBarcodeActivity"
             android:configChanges="orientation|screenSize"
-            android:parentActivityName=".MainActivity"
-            android:theme="@style/Theme.AppCompat"></activity>
+            android:theme="@style/Theme.AppCompat"></activity> <!--android:parentActivityName=".activities.BarcodeActivity" -->
         <activity
             android:name=".activities.BarcodeActivity"
             android:configChanges="orientation|screenSize"
-            android:parentActivityName=".MainActivity"
-            android:theme="@style/Theme.AppCompat"></activity>
+            android:theme="@style/Theme.AppCompat"></activity> <!-- android:parentActivityName=".MainActivity" -->
         <activity
             android:name=".activities.Make_label_documents_activity"
             android:configChanges="orientation|screenSize"
