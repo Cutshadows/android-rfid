@@ -18,6 +18,7 @@ import com.appc72_uhf.app.MainActivity;
 import com.appc72_uhf.app.R;
 import com.appc72_uhf.app.repositories.CompanyRepository;
 import com.appc72_uhf.app.repositories.DeviceRepository;
+import com.appc72_uhf.app.repositories.MakeLabelRepository;
 import com.appc72_uhf.app.tools.StringUtils;
 import com.appc72_uhf.app.tools.UIHelper;
 import com.rscja.deviceapi.RFIDWithUHF.BankEnum;
@@ -83,6 +84,11 @@ public class UHFWriteFragment extends KeyDwonFragment implements OnClickListener
         generateEPC();
         EtData_Write.setEnabled(false);
         EtData_Write.clearFocus();
+        if(mContext.mReader.setPower(9)){
+            Log.e("SuccesPower", "nivel "+mContext.mReader.getPower()+" de potencia ok!!");
+        }else{
+            Log.e("ErrorPower", "fallo al activar potencia !");
+        }
     }
     @Override
     public void onClick(View view) {
@@ -108,10 +114,10 @@ public class UHFWriteFragment extends KeyDwonFragment implements OnClickListener
          * FIN TIMESTAMP
          * PRODUCTMASTER HEXADECIMAL
          */
-        String ProductMasterRefactor = String.format("%8s", ProductMasterId).replace(' ', '0');
-        String barcodeado=(barcodeText.length()>7)?barcodeText.substring(0, 8):String.format("%8s", barcodeText).replace(' ', '0');
-        String rfid=codeRfidCompany+""+timstamp+""+barcodeado+""+ProductMasterRefactor;
-
+        String ProductMasterRefactor = String.format("%8s", ProductMasterId).replace(" ", "0");
+        String barcodeado =(barcodeText.length()>7)?barcodeText.substring(0, 8):String.format("%8s", barcodeText).replace(" ", "0");
+        //String rfid=codeRfidCompany+""+timstamp+""+barcodeado+""+Integer.parseInt(ProductMasterRefactor);
+        String rfid="1001"+timstamp+""+barcodeado+""+ProductMasterRefactor;
 
         Log.e("ts", ""+ts);
         Log.e("Timestamp", ""+timstamp);
@@ -120,7 +126,7 @@ public class UHFWriteFragment extends KeyDwonFragment implements OnClickListener
 
         Log.e("EPC", rfid+" el tamano es:"+rfid.length());
 
-        EtData_Write.setText(rfid);
+        EtData_Write.setText(rfid.trim());
         switchTypeAway=1;
         //EtData_Barcode.requestFocus();
         handler = new Handler() {
@@ -128,10 +134,9 @@ public class UHFWriteFragment extends KeyDwonFragment implements OnClickListener
             public void handleMessage(Message msg) {
                 EPCCaptura = msg.obj + "";
                 //String[] strs = result.split("@");
-                Log.e("EPCCaptura", EPCCaptura);
-                Thread validateEPCThread= new Thread(new validationEPCThread());
-                validateEPCThread.start();
-                //validateEPC(EPCCaptura);
+                //Thread validateEPCThread= new Thread(new validationEPCThread());
+                //validateEPCThread.start();
+                validateEPC(EPCCaptura);
                 mContext.playSound(1);
             }
         };
@@ -157,9 +162,11 @@ public class UHFWriteFragment extends KeyDwonFragment implements OnClickListener
             codeRfidCompany=deviceRepository.FindRFIDCode(companyId);
         }
     }
-    private void validateEPC(){
+    private void validateEPC(String EPCCaptura){
         String firstFourdWordsEPC=EPCCaptura.substring(0, 4);
         boolean validation= codeRfidCompany.equals(firstFourdWordsEPC);
+        Log.e("EPCCaptura", "EPCCaptura"+EPCCaptura);
+
         if(validation){
             Log.e("EQUALS", "Son iguales por lo tanto no etiqueta");
             mContext.runOnUiThread(new Runnable() {
@@ -170,7 +177,13 @@ public class UHFWriteFragment extends KeyDwonFragment implements OnClickListener
                 });
             mContext.playSound(2);
         }else {
-            write();
+            mContext.mReader.stopInventory();
+            mContext.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    write();
+                }
+            });
         }
     }
 
@@ -189,9 +202,9 @@ public class UHFWriteFragment extends KeyDwonFragment implements OnClickListener
                     handler.sendMessage(msg);
                     mContext.mReader.stopInventory();
                     mContext.playSound(1);
-                    if(mContext.mReader.stopInventory()){
-                        Log.i("Stop Inventory", "handheld stop inventory call with class");
-                    }
+                    //if(mContext.mReader.stopInventory()){
+                    //    Log.i("Stop Inventory", "handheld stop inventory call with class");
+                   // }
                 }else {
                     mContext.runOnUiThread(new Runnable() {
                         @Override
@@ -206,21 +219,16 @@ public class UHFWriteFragment extends KeyDwonFragment implements OnClickListener
 
 
 
-    private class validationEPCThread implements Runnable{
+   /* private class validationEPCThread implements Runnable{
         @Override
         public void run() {
            validateEPC();
         }
-    }
+    }*/
 
     private void readTag() {
         Thread tagtread=new TagThread();
         if (INVENTORY_FLAG == 1) {// 单标签循环  .startInventoryTag((byte) 0, (byte) 0))
-            if(mContext.mReader.setPower(15)){
-                Log.e("SuccesPower", "nivel 9 de potencia ok!!");
-            }else{
-                Log.e("ErrorPower", "fallo al activar potencia !");
-            }
             if (mContext.mReader.startInventoryTag(0, 0)) {
              tagtread.start();
             } else {
@@ -233,10 +241,10 @@ public class UHFWriteFragment extends KeyDwonFragment implements OnClickListener
 
     @Override
     public void myOnKeyDwon() {
-        Log.e("switchTypeAway", ""+switchTypeAway);
         switch(switchTypeAway){
             case 1:
                 readTag();
+                //write();
                 break;
         }
     }
@@ -296,7 +304,7 @@ public class UHFWriteFragment extends KeyDwonFragment implements OnClickListener
             });
             return;
         }
-
+        Log.e("vailHexInput", "valHexInput"+mContext.vailHexInput(strData));
         // 多字单次
         String cntStr = EtLen_Write.getText().toString().trim();
         if (StringUtils.isEmpty(cntStr)) {
@@ -337,14 +345,15 @@ public class UHFWriteFragment extends KeyDwonFragment implements OnClickListener
         if(cb_QT_W.isChecked()){
             r= mContext.mReader.writeDataWithQT_Ex(strPWD,
                     BankEnum.valueOf("UII"),
-                    2,
                     4,
+                    2,
                     strData);
         }else{
-            r= mContext.mReader.writeData_Ex(strPWD,
+            Log.e("strData", ""+ strData);
+           r= mContext.mReader.writeData_Ex(strPWD,
                     BankEnum.valueOf("UII"),
-                    2,
                     4,
+                    2,
                     strData);// 返回的UII strData
         }
 
@@ -354,6 +363,7 @@ public class UHFWriteFragment extends KeyDwonFragment implements OnClickListener
                 @Override
                 public void run() {
                     UIHelper.ToastMessage(mContext, getString(R.string.uhf_msg_write_succ));
+                    //updateEpcStatus(EtData_Write.getText().toString().trim());
                 }
             });
 
@@ -367,8 +377,17 @@ public class UHFWriteFragment extends KeyDwonFragment implements OnClickListener
         }
         if(!result){
             mContext.playSound(2);
+
         }else{
             mContext.playSound(1);
+        }
+    }
+
+    private void updateEpcStatus(String EPCString){
+        MakeLabelRepository makeLabelRepository=new MakeLabelRepository(mContext);
+        boolean updateTag=makeLabelRepository.UpdateVirtualMakeLabel(EPCString, String.valueOf(ProductMasterId), DocumentId);
+        if(updateTag){
+            Log.e("updateTag", "El resultado de quemar etiqueta "+updateTag);
         }
     }
 

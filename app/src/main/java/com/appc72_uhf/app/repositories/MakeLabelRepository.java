@@ -83,7 +83,7 @@ public class MakeLabelRepository {
             valContentVirtualTags.put("ProductMaster", productMaster);
             valContentVirtualTags.put("ProductVirtualId", productVirtualId);
             valContentVirtualTags.put("DocumentId", documentId);
-            valContentVirtualTags.put("Status", 1);
+            valContentVirtualTags.put("Status", 0);
             valContentVirtualTags.put("CodeBar", codebar);
 
             resultInsertTags=db.insert("DocumentDetailsVirtual", null,  valContentVirtualTags)>0;
@@ -193,7 +193,7 @@ public class MakeLabelRepository {
         int dataMakeLabelTag=0;
         AdminSQLOpenHelper admin = new AdminSQLOpenHelper(context);
         SQLiteDatabase db = admin.getWritableDatabase();
-        Cursor countRead=db.rawQuery("SELECT COUNT(Id) as counterVirtualDoc FROM DocumentDetailsVirtual WHERE DocumentId="+documentId+" AND ProductVirtualId='0'", null); //+" AND ProductVirtualId='0'"
+        Cursor countRead=db.rawQuery("SELECT COUNT(Id) as counterVirtualDoc FROM DocumentDetailsVirtual WHERE DocumentId="+documentId+"", null); //+" AND ProductVirtualId='0'"
         if (countRead.moveToFirst()) {
             dataMakeLabelTag=countRead.getInt(countRead.getColumnIndex("counterVirtualDoc"));
         }
@@ -205,11 +205,41 @@ public class MakeLabelRepository {
         int dataMakeLabelTag=0;
         AdminSQLOpenHelper admin = new AdminSQLOpenHelper(context);
         SQLiteDatabase db = admin.getWritableDatabase();
-        Cursor read=db.rawQuery("SELECT COUNT(ProductMaster) as countProductMaster FROM DocumentDetailsVirtual WHERE ProductMaster LIKE '%"+productMste+"%' AND DocumentId="+documentId, null);
+        Cursor read=db.rawQuery("SELECT COUNT(ProductMaster) as countProductMaster FROM DocumentDetailsVirtual WHERE ProductMaster LIKE '%"+productMste+"%' AND Status=0 AND DocumentId="+documentId+" AND Status=0", null);
         if (read.moveToFirst()) {
                 dataMakeLabelTag=read.getInt(read.getColumnIndex("countProductMaster"));
         }
         db.close();
         return dataMakeLabelTag;
+    }
+
+
+    public boolean UpdateVirtualMakeLabel(String EPCString, String productMster, int DocumentId){
+        final String NAME_TABLE="DocumentDetailsVirtual";
+        AdminSQLOpenHelper admin = new AdminSQLOpenHelper(context);
+        SQLiteDatabase db = admin.getWritableDatabase();
+        final ContentValues cv=new ContentValues();
+        int idVirtual=0;
+        try{
+            db.beginTransaction();
+            Cursor selectId=db.rawQuery("SELECT Id FROM DocumentDetailsVirtual WHERE ProductMaster LIKE '%"+productMster+"' AND Status=0 AND DocumentId="+DocumentId+" ORDER BY Id DESC LIMIT 1 ", null);
+            if(selectId.moveToFirst()){
+                idVirtual=selectId.getInt(selectId.getColumnIndex("Id"));
+            }
+            if(idVirtual!=0){
+                cv.put("Status", 1);
+                cv.put("EPCString", EPCString);
+                final boolean resultUpdateVirtualTags=db.update(NAME_TABLE, cv, "Id="+idVirtual+" AND DocumentId="+DocumentId+"", null)>0;
+                db.setTransactionSuccessful();
+                return resultUpdateVirtualTags;
+            }else{
+                return false;
+            }
+        }catch (SQLException sqlex){
+            throw sqlex;
+        }finally {
+            db.endTransaction();
+            db.close();
+        }
     }
 }

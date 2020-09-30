@@ -87,6 +87,7 @@ public class AdminSQLOpenHelper extends SQLiteOpenHelper {
                 "ProductVirtualId TEXT,"+
                 "DocumentId INTEGER," +
                 "Status INTEGER," +
+                "EPCString TEXT, "+
                 "CodeBar TEXT" +");");
     }
 
