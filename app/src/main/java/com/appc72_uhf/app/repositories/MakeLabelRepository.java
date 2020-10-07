@@ -167,7 +167,7 @@ public class MakeLabelRepository {
         ArrayList<String> dataMakeLabelTag=new ArrayList<>();
         AdminSQLOpenHelper admin = new AdminSQLOpenHelper(context);
         SQLiteDatabase db = admin.getWritableDatabase();
-        Cursor read=db.rawQuery("SELECT DISTINCT ProductMaster, Id, ProductVirtualId, DocumentId, CodeBar FROM DocumentDetailsVirtual WHERE DocumentId="+documentId, null);
+        Cursor read=db.rawQuery("SELECT DISTINCT ProductMaster, Id, ProductVirtualId, DocumentId, CodeBar FROM DocumentDetailsVirtual WHERE DocumentId="+documentId+" AND Status=0", null);
         if (read.moveToFirst()) {
                 do {
                     dataMakeLabelTag.add(
@@ -193,7 +193,7 @@ public class MakeLabelRepository {
         int dataMakeLabelTag=0;
         AdminSQLOpenHelper admin = new AdminSQLOpenHelper(context);
         SQLiteDatabase db = admin.getWritableDatabase();
-        Cursor countRead=db.rawQuery("SELECT COUNT(Id) as counterVirtualDoc FROM DocumentDetailsVirtual WHERE DocumentId="+documentId+"", null); //+" AND ProductVirtualId='0'"
+        Cursor countRead=db.rawQuery("SELECT COUNT(Id) as counterVirtualDoc FROM DocumentDetailsVirtual WHERE DocumentId="+documentId+" AND Status=0", null); //+" AND ProductVirtualId='0'"
         if (countRead.moveToFirst()) {
             dataMakeLabelTag=countRead.getInt(countRead.getColumnIndex("counterVirtualDoc"));
         }

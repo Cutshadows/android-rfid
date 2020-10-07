@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Handler;
 import android.os.Message;
 import android.provider.Settings;
@@ -23,6 +24,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.DefaultRetryPolicy;
@@ -74,6 +76,7 @@ public class DataAdapterInventories extends ArrayAdapter<DatamodelInventories> i
         this.datalist=datalist;
         this.mContext=context;
     }
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public void onClick(View v) {
         int position=(Integer) v.getTag();
@@ -423,7 +426,7 @@ public class DataAdapterInventories extends ArrayAdapter<DatamodelInventories> i
         holder.item_sync.setTag(position);
 
         if(datamodelInventories.getDetailForDevice()){
-            convertView.setBackgroundResource(R.color.lightblue);
+            convertView.setBackgroundResource(R.drawable.list_effect_inventories);
         }else{
             convertView.setBackgroundResource(R.color.sbc_header_text);
         }

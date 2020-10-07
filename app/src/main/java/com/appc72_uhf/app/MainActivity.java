@@ -13,7 +13,6 @@ import com.appc72_uhf.app.activities.inventoryList;
 import com.appc72_uhf.app.fragment.UHFReadTagFragment;
 import com.appc72_uhf.app.fragment.UHFSetFragment;
 import com.appc72_uhf.app.fragment.UHFWriteFragment;
-import com.appc72_uhf.app.tools.UIHelper;
 import com.rscja.utility.StringUtility;
 
 import java.util.HashMap;
@@ -57,7 +56,6 @@ public class MainActivity extends BaseTabFragmentActivity {
         }else if(this.getIntent().getStringExtra("EntryType").equals("MakeLabel")){
             if(this.getIntent().hasExtra("makeLabelBool")){
                 makelabel=false;
-                UIHelper.ToastMessage(this, "Make Label Data local");
                 initSound();
                 initUHF();
                 initViewPageData();
@@ -65,7 +63,6 @@ public class MainActivity extends BaseTabFragmentActivity {
                 initTabs();
             }else {
                 makelabel=true;
-                UIHelper.ToastMessage(this, "Make Label Burn tag");
                 initSound();
                 initUHF();
                 initViewPageData();

@@ -76,7 +76,7 @@
                 android:background="@color/full_transparent"
                 android:layout_centerVertical="true"
                 android:scaleType="fitCenter"
-                tools:src="@drawable/ic_etiquetado"/>
+                tools:src="@drawable/icon_make_label_effects"/>
 
         </RelativeLayout>
     </LinearLayout>

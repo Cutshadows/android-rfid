@@ -21,11 +21,12 @@
         android:layout_alignParentLeft="true">
         <TextView
             android:id="@+id/tv_inventory"
-            android:layout_width="270dp"
+            android:layout_width="310dp"
             android:layout_height="wrap_content"
             android:textSize="14sp"
             android:textStyle="bold"
             android:freezesText="true"
+            android:autoSizeTextType="none"
             android:padding="10sp"
             android:text="@string/tv_welkomen_user"
             android:textColor="#ffffff"

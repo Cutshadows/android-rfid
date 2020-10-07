@@ -104,9 +104,9 @@
                         android:layout_marginTop="@dimen/text_size_19"
                         android:background="@color/full_transparent"
                         android:scaleType="fitCenter"
-                        android:src="@drawable/etiquetado"
+                        android:src="@drawable/img_makelabel_effect"
                         android:focusable="true"
-                        tools:src="@drawable/etiquetado"></ImageButton>
+                        tools:src="@drawable/img_makelabel_effect"></ImageButton>
                     <TextView
                         android:id="@+id/tv_makeLabel"
                         android:layout_width="150dp"
@@ -145,7 +145,7 @@
                         android:drawingCacheQuality="auto"
                         android:focusable="true"
                         android:scaleType="fitCenter"
-                        android:src="@drawable/tomar_inventario"></ImageButton>
+                        android:src="@drawable/img_inventory_effect"></ImageButton>
                     <TextView
                         android:id="@+id/tv_take_inventory"
                         android:layout_width="150dp"

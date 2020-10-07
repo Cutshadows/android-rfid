@@ -74,6 +74,8 @@ public class inventoryList extends KeyDwonFragment implements View.OnClickListen
         //dataArrayList.add(new DatamodelInventories(9, "Android 4.0", false));*/
         code_enterprise=getCompany();
 
+
+
         getData();
 
 
@@ -82,19 +84,17 @@ public class inventoryList extends KeyDwonFragment implements View.OnClickListen
         dataAdapterInventories=new DataAdapterInventories(getContext(), R.layout.simple_list_inventories_1, dataArrayList);
         //adapter=new ArrayAdapter<String>(mContext, R.layout.simple_list_inventories_1, nombres);
         lstData.setAdapter(dataAdapterInventories);
-
-        dataAdapterInventories.notifyDataSetChanged();
-
-
         /*lstData.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 //DatamodelInventories datamodelInventories1=datamodelInventories.get(position);
                 Log.e("CLICK", "CLICK EN EL LISTVIEW");
-                UIHelper.ToastMessage(view.getContext(), "HOLA MUNDO", 3);
-                Intent i = new Intent(getActivity(), Server_inventory_activity.class);
-                startActivity(i);
+                UIHelper.ToastMessage(view.getContext(), "HOLA MUNDO"+view.getTag(), 3);
+                //Intent i = new Intent(getActivity(), Server_inventory_activity.class);
+                // startActivity(i);
             }
         });*/
+
+        dataAdapterInventories.notifyDataSetChanged();
 
         //adapter = new ArrayAdapter<>(this.mContext, R.layout.simple_list_inventories_1, data);
         /*

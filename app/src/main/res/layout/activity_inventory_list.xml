@@ -73,8 +73,8 @@
                     android:paddingRight="0dp"
                     android:scaleType="fitCenter"
                     android:soundEffectsEnabled="true"
-                    android:src="@drawable/blue_plus_button"
-                    tools:src="@drawable/blue_plus_button" />
+                    android:src="@drawable/btn_plus_effect"
+                    tools:src="@drawable/btn_plus_effect" />
             </LinearLayout>
             <!--Button
                 android:id="@+id/btnInventory"
@@ -99,5 +99,6 @@
     <ListView
         android:id="@+id/lstData"
         android:layout_width="match_parent"
-        android:layout_height="520dp"/>
+        android:layout_height="520dp"
+        android:focusable="true" />
 </LinearLayout>
