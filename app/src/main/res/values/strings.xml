@@ -1514,7 +1514,7 @@
     <!--PRODUCT DETAIL ACTIVITY -->
     <string name="title_product_detail" translatable="false">Inventario: </string>
     <string name="count_product">CANTIDAD:</string>
-    <string name="id_master_product" translatable="false">ID Producto Maestro:</string>
+    <string name="id_master_product" translatable="false">ID Producto Maestro: </string>
     <string name="title_master_product" translatable="false">Nombre del Producto</string>
     <string name="title_quantity" translatable="false">Cantidad: </string>
     <string name="btn_take_inventory" translatable="false">Tomar \n inventario </string>
