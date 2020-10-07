@@ -84,7 +84,7 @@ public class UHFWriteFragment extends KeyDwonFragment implements OnClickListener
         generateEPC();
         EtData_Write.setEnabled(false);
         EtData_Write.clearFocus();
-        if(mContext.mReader.setPower(9)){
+        if(mContext.mReader.setPower(20)){
             Log.e("SuccesPower", "nivel "+mContext.mReader.getPower()+" de potencia ok!!");
         }else{
             Log.e("ErrorPower", "fallo al activar potencia !");
@@ -117,7 +117,7 @@ public class UHFWriteFragment extends KeyDwonFragment implements OnClickListener
         String ProductMasterRefactor = String.format("%8s", ProductMasterId).replace(" ", "0");
         String barcodeado =(barcodeText.length()>7)?barcodeText.substring(0, 8):String.format("%8s", barcodeText).replace(" ", "0");
         //String rfid=codeRfidCompany+""+timstamp+""+barcodeado+""+Integer.parseInt(ProductMasterRefactor);
-        String rfid="1001"+timstamp+""+barcodeado+""+ProductMasterRefactor;
+        String rfid=codeRfidCompany+""+timstamp+""+barcodeado+""+ProductMasterRefactor;
 
         Log.e("ts", ""+ts);
         Log.e("Timestamp", ""+timstamp);
@@ -232,7 +232,7 @@ public class UHFWriteFragment extends KeyDwonFragment implements OnClickListener
             if (mContext.mReader.startInventoryTag(0, 0)) {
              tagtread.start();
             } else {
-                tagtread.destroy();
+                //tagtread.destroy();
                 mContext.mReader.stopInventory();
                 Log.e("UHFReadTagFragment", "Open Failure");
             }
@@ -345,15 +345,15 @@ public class UHFWriteFragment extends KeyDwonFragment implements OnClickListener
         if(cb_QT_W.isChecked()){
             r= mContext.mReader.writeDataWithQT_Ex(strPWD,
                     BankEnum.valueOf("UII"),
-                    4,
                     2,
+                    6,
                     strData);
         }else{
             Log.e("strData", ""+ strData);
            r= mContext.mReader.writeData_Ex(strPWD,
                     BankEnum.valueOf("UII"),
-                    4,
                     2,
+                    6,
                     strData);// 返回的UII strData
         }
 
@@ -363,7 +363,7 @@ public class UHFWriteFragment extends KeyDwonFragment implements OnClickListener
                 @Override
                 public void run() {
                     UIHelper.ToastMessage(mContext, getString(R.string.uhf_msg_write_succ));
-                    //updateEpcStatus(EtData_Write.getText().toString().trim());
+                    updateEpcStatus(EtData_Write.getText().toString().trim());
                 }
             });
 
