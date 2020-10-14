@@ -145,7 +145,6 @@ public class DataAdapterInventories extends ArrayAdapter<DatamodelInventories> i
                                             if(Tags.size()>999){
                                                // UIHelper.ToastMessage(getContext(), "aqui entran los millares", 6);
                                                 int millares=Tags.size()/1000;
-                                                Log.e("length Tags", "length: "+arregloCodigos.length());
                                                 mypDialog = new ProgressDialog(mContext);
                                                 mypDialog.setMax(millares);
                                                 mypDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
@@ -180,7 +179,7 @@ public class DataAdapterInventories extends ArrayAdapter<DatamodelInventories> i
                                                                             if(response){
                                                                                 mypDialog.dismiss();
                                                                                 UIHelper.ToastMessage(getContext(), "Envio de codigos exitoso!!", 3);
-                                                                                Log.e("Envio", "ENVIO EXITOSO");
+                                                                                //Log.e("Envio", "ENVIO EXITOSO");
                                                                                 handle.sendMessage(handle.obtainMessage());
                                                                             }
                                                                         }
@@ -233,7 +232,6 @@ public class DataAdapterInventories extends ArrayAdapter<DatamodelInventories> i
                                                     jsonBody.put("RFID", RFIDtagsString);
                                                     data.add(jsonBody);
                                                 }
-                                                Log.e("jsonBody", data.toString());
                                                BooleanRequest booleanRequest = new BooleanRequest(1, URL, data, new Response.Listener<Boolean>() {
                                                     @Override
                                                     public void onResponse(Boolean response) {
@@ -426,7 +424,7 @@ public class DataAdapterInventories extends ArrayAdapter<DatamodelInventories> i
         holder.item_sync.setTag(position);
 
         if(datamodelInventories.getDetailForDevice()){
-            convertView.setBackgroundResource(R.drawable.list_effect_inventories);
+            convertView.setBackgroundResource(R.color.blue1);
         }else{
             convertView.setBackgroundResource(R.color.sbc_header_text);
         }

@@ -485,7 +485,7 @@ public class DataAdapterInventoryServer extends ArrayAdapter<DatamodelInventorie
         result.startAnimation(animation);
 
         lastPosition = position;
-        Log.e("CREACON VIEW", "LLEGUE HASTA ACA DETALLE"+"["+datamodelInventories.getId()+"] "+datamodelInventories.getName()+ "DETAILFORDEVICE:"+datamodelInventories.getDetailForDevice()+datamodelInventories.getisSelect());
+        //Log.e("CREACON VIEW", "LLEGUE HASTA ACA DETALLE"+"["+datamodelInventories.getId()+"] "+datamodelInventories.getName()+ "DETAILFORDEVICE:"+datamodelInventories.getDetailForDevice()+datamodelInventories.getisSelect());
 
         switch (datamodelInventories.isTypeInventory()){
             case 1:
@@ -521,7 +521,6 @@ public class DataAdapterInventoryServer extends ArrayAdapter<DatamodelInventorie
         }
         holder.chbx_takeInventory.setTag(position);
         //holder.item_delete.setTag(position);
-        Log.e("CREACON VIEW", "LLEGUE HASTA ACA 2");
 
         return convertView;
     }

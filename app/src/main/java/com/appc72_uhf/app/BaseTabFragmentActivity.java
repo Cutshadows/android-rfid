@@ -295,7 +295,7 @@ public class BaseTabFragmentActivity extends FragmentActivity {
 			mypDialog.cancel();
 
 			if (!result) {
-				Log.e("result", " init fail");
+				Log.i("result", " init fail");
 				//Toast.makeText(BaseTabFragmentActivity.this, "init fail",
 						//Toast.LENGTH_SHORT).show();
 			}

@@ -100,7 +100,6 @@ public class HhSyncActivity extends AppCompatActivity implements View.OnClickLis
                 http.client(Request.Method.GET, "/api/document/GetCompanies", "application/json; charset=utf-8", null, new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                        Log.e("onResponse GetCompanies", response);
                         try {
                             Gson gson = new Gson();
                             Application[] apps = gson.fromJson(response, Application[].class);
@@ -175,12 +174,11 @@ public class HhSyncActivity extends AppCompatActivity implements View.OnClickLis
 
                 String code = et_syncCode.getText().toString().toLowerCase();
                 String URL_COMPLETE=PROTOCOL_URLRFID+code+URL;
-                Log.e("URL COMPLETA 2", URL_COMPLETE+"/api/document/GetInfoDevice");
+                //Log.e("URL COMPLETA 2", URL_COMPLETE+"/api/document/GetInfoDevice");
                 HttpHelpers http2 = new HttpHelpers(HhSyncActivity.this, URL_COMPLETE, "");
                 http2.client(Request.Method.POST, "/api/devices/GetInfoDevice", "application/json; charset=utf-8", jsonBody, new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                        Log.e("onResponse", response);
                             if(response.length()>0){
                                 try{
                                     mypDialog.dismiss();
@@ -215,7 +213,7 @@ public class HhSyncActivity extends AppCompatActivity implements View.OnClickLis
                                 }catch (Exception ehttp){
                                     mypDialog.dismiss();
                                     Toast.makeText(HhSyncActivity.this, "Error : "+ehttp.getMessage(), Toast.LENGTH_SHORT).show();
-                                    Log.e("Exception 2", ehttp.toString());
+                                    Log.i("Exception 2", ehttp.toString());
                                 }
                             }else{
                                 Toast.makeText(HhSyncActivity.this, "Dispositivo no esta habilitado", Toast.LENGTH_SHORT).show();

@@ -40,12 +40,8 @@ public class CaptureBarcodeActivity extends AppCompatActivity {
         ProductMasteId=this.getIntent().getIntExtra("ProductMasterId", 0);
         DocumentId=this.getIntent().getIntExtra("DocumentId", 0);
 
-        Log.e("ProductMasteId", ""+ProductMasteId);
-        Log.e("DocumentId", ""+DocumentId);
-
 
         barcodeado="";
-        Log.e("getNumberOfFrames", ""+frameAnimation.getNumberOfFrames());
         barcode=getBarcode();
         if(barcode.length()>0){
             et_barcode.setText(barcode.trim());

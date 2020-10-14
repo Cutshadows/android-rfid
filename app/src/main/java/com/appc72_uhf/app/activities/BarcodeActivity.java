@@ -69,14 +69,14 @@ public class BarcodeActivity  extends AppCompatActivity {
         et_searchBarcode.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence barcodeSecuence, int start, int contador, int after) {
-                Log.e("beforeTextChanged", "Charsecuence"+barcodeSecuence+" Inicio"+start+" Contador"+contador+" Despues"+after);
+               // Log.e("beforeTextChanged", "Charsecuence"+barcodeSecuence+" Inicio"+start+" Contador"+contador+" Despues"+after);
 
             }
             @Override
             public void onTextChanged(CharSequence barcodeSecuence, int start, int before, int count) {
-                Log.e("beforeTextChanged", "Charsecuence"+barcodeSecuence+" Inicio"+start+" Contador"+count+" Despues"+before);
+                //Log.e("beforeTextChanged", "Charsecuence"+barcodeSecuence+" Inicio"+start+" Contador"+count+" Despues"+before);
                 if(count>0){
-                    Log.e("et_searchBarcode", "se guardo como localstorage"+et_searchBarcode.getText().toString());
+                   // Log.e("et_searchBarcode", "se guardo como localstorage"+et_searchBarcode.getText().toString());
                     ReadtBarCode(et_searchBarcode.getText().toString().trim());
                 }else{
                     et_searchBarcode.clearFocus();
@@ -132,7 +132,6 @@ public class BarcodeActivity  extends AppCompatActivity {
         try {
             ArrayList<String> dataInter=new ArrayList<>();
             String[] ddv = new String[0];
-            Log.e("docs", ""+docs.toString());
             for(int index=0; index<docs.size();index++){
                 String recip=docs.get(index);
                 ddv = recip.split("@");
@@ -153,16 +152,16 @@ public class BarcodeActivity  extends AppCompatActivity {
 
             for(int indexEntry=0; indexEntry<dataInter.size(); indexEntry++){
                 String[] interParameter=dataInter.get(indexEntry).split("@");
-                Log.e("interparameter", ""+interParameter[0]+"@"+interParameter[1]+"@"+interParameter[2]);
+                //Log.e("interparameter", ""+interParameter[0]+"@"+interParameter[1]+"@"+interParameter[2]);
                 int codigoInterno=Integer.parseInt(interParameter[0]);
                 String def1=interParameter[1];
                 String def2=interParameter[2];
                 int counterProductMaster=makeLabelRepository.ViewVirtualCount(codigoInterno, Integer.parseInt(ddv[3]));
-                Log.e("counterProductMaster", ""+counterProductMaster);
+                //Log.e("counterProductMaster", ""+counterProductMaster);
                 dataVirtualDocuments.add(new DataModelVirtualDocument(codigoInterno, Integer.parseInt(ddv[3]), counterProductMaster, def1, def2));
             }
         }catch (JSONException jse){
-            Log.e("JSONException", ""+jse.getLocalizedMessage());
+            Log.i("JSONException", ""+jse.getLocalizedMessage());
         }
     }
     public void ReadtBarCode(String bar_code){

@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteStatement;
+import android.util.Log;
 
 import com.appc72_uhf.app.helpers.AdminSQLOpenHelper;
 
@@ -39,50 +40,51 @@ public class TagsRepository {
         }
     }
     public boolean InsertTag(ArrayList<HashMap<String, String>> maestroTagList, String idInventory, String IdHardware, int TagStatus) { //, String TID Struing RFID
-        String lastItem=null;
+        Log.e("insertTags", maestroTagList.toString());
         AdminSQLOpenHelper admin = new AdminSQLOpenHelper(context);
         SQLiteDatabase db = admin.getWritableDatabase();
-        boolean result;
+        boolean result=false;
         try {
-        String sqlSentence = "INSERT INTO Tags values(?, ?, ?, ?, ?);";
-        db.beginTransactionNonExclusive();
-        SQLiteStatement stmt=db.compileStatement(sqlSentence);
-        for (int index = 0; index < maestroTagList.size(); index++) {
-            //ContentValues reg = new ContentValues();
-            String RFID = maestroTagList.get(index).get("tagUii");
-            String TID = maestroTagList.get(index).get("tagRssi");
-            stmt.bindString(1, RFID);
-            stmt.bindString(2, idInventory);
-            stmt.bindString(3, IdHardware);
-            stmt.bindString(4, TID);
-            stmt.bindLong(5, TagStatus);
-            stmt.execute();
-            if(index==(maestroTagList.size()-1)){
-                lastItem=maestroTagList.get(index).get("tagUii");
-            }
-        }
-        db.setTransactionSuccessful();
-        /*
-            try{
-                for (int index = 0; index < maestroTagList.size(); index++) {
-                    ContentValues reg = new ContentValues();
-                    String RFID = maestroTagList.get(index).get("tagUii");
-                    String TID = maestroTagList.get(index).get("tagRssi");
-                    reg.put("RFID", RFID);
-                    reg.put("InventoryId", idInventory);
-                    reg.put("IdHardware", IdHardware);
-                    reg.put("TID", TID);
-                    reg.put("TagStatus", TagStatus);
-                    result = db.insert("Tags", null, reg) > 0;
-                    Log.e("result", ""+result);
 
+                ArrayList<HashMap<String, String>> newArraylistTags=checkIsExist(idInventory, maestroTagList);
+                String sqlSentence = "INSERT INTO Tags values(?, ?, ?, ?, ?)";
+                db.beginTransactionNonExclusive();
+                SQLiteStatement stmt=db.compileStatement(sqlSentence);
+                for (int index = 0; index < newArraylistTags.size(); index++) {
+                    //ContentValues reg = new ContentValues();
+                    String RFID = newArraylistTags.get(index).get("tagUii");
+                    String TID=(newArraylistTags.get(index).get("tagRssi")==null)? " " :newArraylistTags.get(index).get("tagRssi");
+
+                    stmt.bindString(1, RFID);
+                    stmt.bindString(2, idInventory);
+                    stmt.bindString(3, IdHardware);
+                    stmt.bindString(4, TID);
+                    stmt.bindLong(5, TagStatus);
+                    stmt.execute();
                 }
-            }catch (Exception ex){
-                result = false;
-            }
-        */
-            result=true;
+                db.setTransactionSuccessful();
+                /*
+                    try{
+                        for (int index = 0; index < maestroTagList.size(); index++) {
+                            ContentValues reg = new ContentValues();
+                            String RFID = maestroTagList.get(index).get("tagUii");
+                            String TID = maestroTagList.get(index).get("tagRssi");
+                            reg.put("RFID", RFID);
+                            reg.put("InventoryId", idInventory);
+                            reg.put("IdHardware", IdHardware);
+                            reg.put("TID", TID);
+                            reg.put("TagStatus", TagStatus);
+                            result = db.insert("Tags", null, reg) > 0;
+                            Log.e("result", ""+result);
+
+                        }
+                    }catch (Exception ex){
+                        result = false;
+                    }
+                */
+                    result=true;
         }catch (Exception ex){
+            ex.printStackTrace();
             result = false;
         }finally {
             db.endTransaction();
@@ -90,6 +92,42 @@ public class TagsRepository {
         db.close();
         return result;
     }
+
+    private ArrayList<HashMap<String, String>> checkIsExist(String inventoryId, ArrayList<HashMap<String, String>> maestroTagList) {
+        ArrayList<HashMap<String, String>> respondNewArray=new ArrayList();
+        AdminSQLOpenHelper admin = new AdminSQLOpenHelper(context);
+        SQLiteDatabase db = admin.getWritableDatabase();
+
+        for(int indexTa=0; indexTa<maestroTagList.size(); indexTa++){
+            HashMap<String, String> newHash=new HashMap<String, String>();
+            String strEPC=maestroTagList.get(indexTa).get("tagUii").toString();
+            String strTID=" ";
+            if(maestroTagList.get(indexTa).containsKey("tagRssi")){
+                strTID=maestroTagList.get(indexTa).get("tagRssi").toString();
+            }
+            if(strTID.equals(" ")) {
+                Cursor readExistTagsOne = db.rawQuery("SELECT RFID, InventoryId, TID FROM Tags WHERE RFID='" + strEPC + "' AND InventoryId='" + inventoryId + "'", null);
+                    if (readExistTagsOne.moveToFirst()) {
+                    }else{
+                        newHash.put("tagUii", strEPC);
+                        newHash.put("tagRssi", " ");
+                        respondNewArray.add(newHash);
+                    }
+                }else {
+                    Cursor readExistTags = db.rawQuery("SELECT RFID, InventoryId, TID FROM Tags WHERE RFID='" + strEPC + "' OR TID='" + strTID + "' AND InventoryId='" + inventoryId + "'", null);
+                    if (readExistTags.moveToFirst()) {}else{
+                        newHash.put("tagUii", strEPC);
+                        newHash.put("tagRssi", strTID);
+                        respondNewArray.add(newHash);
+                    }
+                }
+            }
+
+            db.close();
+
+        return respondNewArray;
+    }
+
     public Boolean ClearTags(String idInventory){
         AdminSQLOpenHelper admin= new AdminSQLOpenHelper(context);
         SQLiteDatabase db = admin.getWritableDatabase();
@@ -147,7 +185,8 @@ public class TagsRepository {
 
 
     public ArrayList ViewAllTags(String inventoryId, boolean includeTID){
-        ArrayList<String> datos=new ArrayList<>();
+        ArrayList maestroTags=new ArrayList();
+
         AdminSQLOpenHelper admin = new AdminSQLOpenHelper(context);
         SQLiteDatabase db = admin.getWritableDatabase();
         Cursor read= db.rawQuery("SELECT RFID, InventoryId, IdHardware, TID, TagStatus FROM Tags WHERE InventoryId='"+inventoryId+"'", null); //ORDER BY RFID DESC LIMIT 100
@@ -155,18 +194,25 @@ public class TagsRepository {
             //Cursor readCount2=db.rawQuery("SELECT COUNT(RFID) as countRFID FROM Tags WHERE InventoryId='"+inventoryId+"'", null);
             //if(readCount2.moveToFirst()){
                 do {
+                    HashMap<String, String> datos=new HashMap<String, String>();
                     if(includeTID){
-                        datos.add(
+                        datos.put("tagUii", read.getString(
+                                read.getColumnIndex("RFID")
+                        ));
+                        datos.put("tagRssi", read.getString(
+                                read.getColumnIndex("TID")
+                                ));
+                        /*datos.add(
                                 read.getString(
                                         read.getColumnIndex("RFID")
                                 )+"@"+read.getString(
                                         read.getColumnIndex("TID")
-                                )/*+"@"+readCount2.getInt(
+                                )+"@"+readCount2.getInt(
                                         readCount2.getColumnIndex("countRFID")
-                                )*/
-                        );
+                                )
+                        );*/
                     }else{
-                        datos.add(
+                        datos.put("tagUii",
                                 read.getString(
                                         read.getColumnIndex("RFID")
                                 )/*+"@"+readCount2.getInt(
@@ -174,11 +220,14 @@ public class TagsRepository {
                                 )*/
                         );
                     }
+                    maestroTags.add(datos);
+
                 } while (read.moveToNext());
+
             //}
 
         }
-        return datos;
+        return maestroTags;
     }
 
     public ArrayList ViewAllTagsSync(String inventoryId, boolean includeTID){
