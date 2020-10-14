@@ -58,7 +58,6 @@ public class MakeLabelRepository {
 
             resultInsert=db.insert("Documents", null, valContentDocs)>0;
         }catch (SQLiteException sqlEx){
-            Log.e("SQLIMSG", ""+sqlEx.getLocalizedMessage());
             resultInsert=false;
         }
         db.close();

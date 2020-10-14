@@ -71,7 +71,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         try {
             validate_session();
         } catch (ParseException e) {
-            Log.e("ParseException", ""+e.getLocalizedMessage());
+            Log.i("ParseException", ""+e.getLocalizedMessage());
             e.printStackTrace();
         }
 
@@ -186,9 +186,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 params.put("CompanyId", String.valueOf(companyId));
 
 
-                Log.e("valor 3", password);
-                Log.e("valor 4", String.valueOf(companyId));
-
                 mypDialog = new ProgressDialog(LoginActivity.this);
                 mypDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
                 mypDialog.setMessage("Iniciando sesion...");
@@ -199,8 +196,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 @Override
                 public void onResponse(String response) {
                     try{
-                        Log.e("eResponse", response);
-
                         JSONObject jsonResponse;
                         jsonResponse = new JSONObject(response);
                         String access_token=(String)jsonResponse.get("access_token");

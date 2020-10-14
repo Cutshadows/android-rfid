@@ -85,9 +85,9 @@ public class UHFWriteFragment extends KeyDwonFragment implements OnClickListener
         EtData_Write.setEnabled(false);
         EtData_Write.clearFocus();
         if(mContext.mReader.setPower(20)){
-            Log.e("SuccesPower", "nivel "+mContext.mReader.getPower()+" de potencia ok!!");
+            Log.i("SuccesPower", "nivel "+mContext.mReader.getPower()+" de potencia ok!!");
         }else{
-            Log.e("ErrorPower", "fallo al activar potencia !");
+            Log.i("ErrorPower", "fallo al activar potencia !");
         }
     }
     @Override
@@ -104,7 +104,6 @@ public class UHFWriteFragment extends KeyDwonFragment implements OnClickListener
          * READ BARCODE
          * */
         String barcodeText=Barcode;
-        Log.e("tamBarcode", ""+barcodeText.length());
         /**
          * TIMESTAMP
          */
@@ -123,8 +122,6 @@ public class UHFWriteFragment extends KeyDwonFragment implements OnClickListener
         Log.e("Timestamp", ""+timstamp);
         Log.e("barcodeText", ""+barcodeado);
         Log.e("ProductMasterId", ""+ProductMasterId);
-
-        Log.e("EPC", rfid+" el tamano es:"+rfid.length());
 
         EtData_Write.setText(rfid.trim());
         switchTypeAway=1;
@@ -165,10 +162,7 @@ public class UHFWriteFragment extends KeyDwonFragment implements OnClickListener
     private void validateEPC(String EPCCaptura){
         String firstFourdWordsEPC=EPCCaptura.substring(0, 4);
         boolean validation= codeRfidCompany.equals(firstFourdWordsEPC);
-        Log.e("EPCCaptura", "EPCCaptura"+EPCCaptura);
-
         if(validation){
-            Log.e("EQUALS", "Son iguales por lo tanto no etiqueta");
             mContext.runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
@@ -234,7 +228,6 @@ public class UHFWriteFragment extends KeyDwonFragment implements OnClickListener
             } else {
                 //tagtread.destroy();
                 mContext.mReader.stopInventory();
-                Log.e("UHFReadTagFragment", "Open Failure");
             }
         }
     }
@@ -304,7 +297,6 @@ public class UHFWriteFragment extends KeyDwonFragment implements OnClickListener
             });
             return;
         }
-        Log.e("vailHexInput", "valHexInput"+mContext.vailHexInput(strData));
         // 多字单次
         String cntStr = EtLen_Write.getText().toString().trim();
         if (StringUtils.isEmpty(cntStr)) {
@@ -349,7 +341,6 @@ public class UHFWriteFragment extends KeyDwonFragment implements OnClickListener
                     6,
                     strData);
         }else{
-            Log.e("strData", ""+ strData);
            r= mContext.mReader.writeData_Ex(strPWD,
                     BankEnum.valueOf("UII"),
                     2,

@@ -39,7 +39,7 @@ public class inventoryList extends KeyDwonFragment implements View.OnClickListen
 
     @Override
     public void onResume() {
-        Log.e("onResume", "ON RESUME 1 INVENTORY LIST");
+        Log.i("onResume", "ON RESUME 1 INVENTORY LIST");
         super.onResume();
         dataArrayList.clear();
         getData();
@@ -47,7 +47,7 @@ public class inventoryList extends KeyDwonFragment implements View.OnClickListen
     }
     @Override
     public void onPause() {
-        Log.e("onPause", "ON PAUSE 1 INVENTORY LIST");
+        Log.i("onPause", "ON PAUSE 1 INVENTORY LIST");
         super.onPause();
     }
 
@@ -126,7 +126,6 @@ public class inventoryList extends KeyDwonFragment implements View.OnClickListen
     }***/
 
     public void onClick(View v) {
-            Log.e("CLICK ON", "CLICK EN EL BOTON MAS");
             switch (v.getId()){
                 case R.id.btnInventory:
                     Intent goToInventory=new Intent(getContext(), Server_inventory_activity.class);
@@ -139,10 +138,8 @@ public class inventoryList extends KeyDwonFragment implements View.OnClickListen
     private void getData() {
         InventaryRespository inv = new InventaryRespository(this.mContext);
         ArrayList<String> invs = inv.ViewInventoriesHH(codeCompany);
-        Log.e("DATA HH", invs.toString());
         for(int index=0; index<=invs.size()-1;index++){
             String recip=invs.get(index);
-            Log.e("RECIP", recip);
             String[] strs = recip.split("@");
             if(strs[3].equals("0")){
                 dataArrayList.add(new DatamodelInventories(strs[0], strs[1], Boolean.parseBoolean(strs[2]), Integer.parseInt(strs[4])));

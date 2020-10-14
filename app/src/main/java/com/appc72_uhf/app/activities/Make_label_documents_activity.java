@@ -68,7 +68,7 @@ public class Make_label_documents_activity extends AppCompatActivity{
             token_access=access_token;
         }
         code_enterprise=getCompany();
-        Log.e("COdeCompany", "Codigo de la compania"+codeCompany);
+        //Log.e("COdeCompany", "Codigo de la compania"+codeCompany);
         android_id = Settings.Secure.getString(getBaseContext().getContentResolver(),
                 Settings.Secure.ANDROID_ID);
         syncronizedDocuments();
@@ -89,16 +89,15 @@ public class Make_label_documents_activity extends AppCompatActivity{
         mypDialog.show();
         HttpHelpers http= new HttpHelpers(Make_label_documents_activity.this, URL_COMPLETE, "");
         http.addHeader("Authorization", "Bearer "+token_access);
-        Log.e("INVENTARIO INT", PROTOCOL_URLRFID+code_enterprise.toLowerCase()+DOMAIN_URLRFID+"/api/devicedocument/GetAllDocumentsDeviceId?HardwareId="+android_id);
+       // Log.e("INVENTARIO INT", PROTOCOL_URLRFID+code_enterprise.toLowerCase()+DOMAIN_URLRFID+"/api/devicedocument/GetAllDocumentsDeviceId?HardwareId="+android_id);
         http.clientProductDetail(Request.Method.GET, "/api/devicedocument/GetAllDocumentsDeviceId?HardwareId="+android_id, null,  new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                Log.e("onRESPONSE PRODUCT", response);
                 try{
                     //Gson gson=new Gson();
                     JSONArray docsMakelabels=new JSONArray(response);
                     for (int index=0; index< docsMakelabels.length(); index++) {
-                        Log.e("DATA FOR", "info: " + docsMakelabels.getJSONObject(index).getJSONArray("DocumentDetailsVirtual"));
+                        //Log.e("DATA FOR", "info: " + docsMakelabels.getJSONObject(index).getJSONArray("DocumentDetailsVirtual"));
                         int documentFind=makeLabelRepository.ViewDocument(docsMakelabels.getJSONObject(index).getInt("DocumentId"));
                         if(documentFind==0 && docsMakelabels.getJSONObject(index).getBoolean("HasVirtualItems")){
                                 datamodelDocumentsMakeLabelArrayList.add(
@@ -125,7 +124,7 @@ public class Make_label_documents_activity extends AppCompatActivity{
                     mypDialog.dismiss();
                 }catch (JSONException e){
                     mypDialog.dismiss();
-                    Log.e("JSONEXECPTIOn", ""+e.getMessage());
+                    //Log.e("JSONEXECPTIOn", ""+e.getMessage());
                     e.printStackTrace();
                 }
 
@@ -145,7 +144,6 @@ public class Make_label_documents_activity extends AppCompatActivity{
                     } else if (error instanceof TimeoutError || error instanceof NoConnectionError) {
                         UIHelper.ToastMessage(Make_label_documents_activity.this, "Tiempo agotado, intente mas tarde!!!", 3);
                     }
-                    Log.e("onErrorResponse", ""+error.getLocalizedMessage());
                 }
             });
     }

@@ -171,7 +171,6 @@ public class Server_inventory_activity extends AppCompatActivity {
             http.client(Request.Method.GET, "/api/inventoryDoc/GetAllInventories", "application/json; charset=utf-8", null, new Response.Listener<String>() {
                 @Override
                 public void onResponse(String response) {
-                    Log.e("onResponse DOCUMENT", ""+response);
                     try{
                         Gson gson = new Gson();
                         Application[] inventaryDoc = gson.fromJson(response, Application[].class);
@@ -272,7 +271,6 @@ public class Server_inventory_activity extends AppCompatActivity {
             http.client(Request.Method.GET, "/api/inventoryProduct/GetAllInventories", "application/json; charset=utf-8", null, new Response.Listener<String>() {
                 @Override
                 public void onResponse(String response) {
-                    Log.e("onResponse DOCUMENT", ""+response);
                     try{
                         Gson gson = new Gson();
                         Application[] inventaryDoc = gson.fromJson(response, Application[].class);
@@ -328,7 +326,6 @@ public class Server_inventory_activity extends AppCompatActivity {
             http.client(Request.Method.GET, "/api/inventoryProductLocation/GetAllInventories", "application/json; charset=utf-8", null, new Response.Listener<String>() {
                 @Override
                 public void onResponse(String response) {
-                    Log.e("onResponse PROUBICACION", ""+response);
                     try{
                         Gson gson = new Gson();
                         Application[] inventaryDoc = gson.fromJson(response, Application[].class);

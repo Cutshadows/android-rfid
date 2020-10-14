@@ -34,6 +34,7 @@
     <color name="lightblue2">#CCCCCC</color>
     <color name="full_transparent">#00000000</color>
     <color name="half_transparent">#aa000000</color>
+    <color name="half_transparent2">#27FEFEFE</color>
 
     <color name="listitem_black">#ff000000</color>
     <color name="listitem_gray">#ff9da19e</color>

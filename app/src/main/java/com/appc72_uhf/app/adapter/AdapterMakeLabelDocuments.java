@@ -85,7 +85,6 @@ public class AdapterMakeLabelDocuments extends ArrayAdapter<DatamodelDocumentsMa
                         for(int indexVirtual=0; indexVirtual < dModelMakeLabel.getDocumentDetailsVirtual().length(); indexVirtual++){
                             try{
                                 JSONObject jsonObject=dModelMakeLabel.getDocumentDetailsVirtual().getJSONObject(indexVirtual);
-                                Log.e("jsonObject", jsonObject.toString());
                                 int id=jsonObject.getInt("Id");
                                 JSONObject productMasterArray=jsonObject.getJSONObject("ProductMaster");
                                 String productVirtualId=jsonObject.getString("ProductVirtualId");
@@ -99,7 +98,7 @@ public class AdapterMakeLabelDocuments extends ArrayAdapter<DatamodelDocumentsMa
                                         codeBar
                                 );
                             }catch (JSONException jsEx){
-                                Log.e("jsEx", ""+jsEx.getLocalizedMessage());
+                                //Log.e("jsEx", ""+jsEx.getLocalizedMessage());
                                 jsEx.printStackTrace();
                             }
                         }
