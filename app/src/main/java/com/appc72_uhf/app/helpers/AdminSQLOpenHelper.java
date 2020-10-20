@@ -6,13 +6,14 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 public class AdminSQLOpenHelper extends SQLiteOpenHelper {
-
-    public static final String DATABASE_NAME="IZYRFID.db";
-    public static final int DATABASE_VERSION=3;
+    public static String DB_PATH_ALT;
+    public static final String DATABASE_NAME="IZYINVENTORY.db";
+    public static final int DATABASE_VERSION=1;
 
 
     public AdminSQLOpenHelper( Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
+
     }
     public AdminSQLOpenHelper(Context context, SQLiteDatabase.CursorFactory factory, DatabaseErrorHandler errorHandler){
         //public AdminSQLOpenHelper(Context context, int version) {
@@ -22,7 +23,7 @@ public class AdminSQLOpenHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         db.execSQL("CREATE TABLE IF  NOT EXISTS Tags(" +
-                "RFID TEXT UNIQUE NOT NULL PRIMARY KEY, " +
+                "RFID TEXT NOT NULL, " +
                 "InventoryId TEXT, " +
                 "IdHardware TEXT, " +
                 "TID TEXT, " +

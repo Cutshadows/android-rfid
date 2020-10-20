@@ -22,7 +22,7 @@ public class MainActivity extends BaseTabFragmentActivity {
     private final static String TAG ="MainActivity";
     boolean takeInventory, makelabel;
     String inventaryName;
-    int idInventory;
+    String idInventory;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,7 +39,7 @@ public class MainActivity extends BaseTabFragmentActivity {
             if(this.getIntent().getBooleanExtra("inventoryBool", false)){
                 takeInventory=true;
                 inventaryName= this.getIntent().getStringExtra("inventoryName");
-                idInventory= this.getIntent().getIntExtra("Id", 0);
+                idInventory= this.getIntent().getStringExtra("Id");
                 initSound();
                 initUHF();
                 initViewPageData();

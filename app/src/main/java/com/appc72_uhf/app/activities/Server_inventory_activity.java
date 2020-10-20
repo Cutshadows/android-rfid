@@ -10,6 +10,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 
@@ -38,6 +39,7 @@ import com.google.gson.Gson;
 import java.util.ArrayList;
 
 public class Server_inventory_activity extends AppCompatActivity {
+    private Button btn_back_button;
     private ListView lv_server_inventories;
     public static final String PROTOCOL_URLRFID="https://";
     public static final String DOMAIN_URLRFID=".izyrfid.com";
@@ -58,6 +60,7 @@ public class Server_inventory_activity extends AppCompatActivity {
     }
     private void initComponent(){
         layout_server_inventory_load=(RelativeLayout)findViewById(R.id.layout_server_inventory_load);
+        btn_back_button=(Button) findViewById(R.id.btn_back_button);
         layout_no_data=(RelativeLayout)findViewById(R.id.layout_no_data);
         lv_server_inventories = (ListView) findViewById(R.id.lv_server_inventories);
         dataArrayList=new ArrayList<DatamodelInventories>();
@@ -78,11 +81,27 @@ public class Server_inventory_activity extends AppCompatActivity {
         }
 
         sincronizar();
+        btn_back_button.setOnClickListener(new BtnBackButton());
     }
 
-    public void onBackPressed(){
+    /*@Override
+    protected void onStop() {
         Intent goToMain=new Intent(this, MainActivity.class);
         goToMain.putExtra("EntryType", "Inventory");
+        super.onStop();
+        this.finish();
+
+    }*/
+    public class BtnBackButton implements View.OnClickListener {
+        @Override
+        public void onClick(View v) {
+            Intent goToMain=new Intent(Server_inventory_activity.this, MainActivity.class);
+            goToMain.putExtra("EntryType", "Inventory");
+            Server_inventory_activity.this.finish();
+        }
+    }
+    @Override
+    public void onBackPressed() {
         super.onBackPressed();
     }
     public void sincronizar() {
@@ -399,7 +418,7 @@ public class Server_inventory_activity extends AppCompatActivity {
         edit.clear();
         edit.apply();
         Intent goToMain=new Intent(Server_inventory_activity.this, LoginActivity.class);
-        Server_inventory_activity.this.onBackPressed();
+        //Server_inventory_activity.this.onBackPressed();
         startActivity(goToMain);
     }
 }

@@ -168,21 +168,25 @@ public class UHFReadTagFragment extends KeyDwonFragment {
     @Override
     public void onStop() {
         super.onStop();
-        Log.i("onStop", "Estado: onStop");
-        int saveMasterResponse=validationEPCToSave(maestroTagList.size());
-        if(maestroTagList.size()!=0 && saveMasterResponse==0){
-            insertTags();
-            myDialogInsertTags.dismiss();
-        }
+        Log.e("onStop", "Estado: onStop");
+        //int saveMasterResponse=validationEPCToSave(maestroTagList.size());
+       // if(maestroTagList.size()>0 && saveMasterResponse==0){
+            //insertTags();
+            //myDialogInsertTags.dismiss();
+        //}
         stopInventory();
     }
     @Override
     public void onPause() {
         super.onPause();
-        Log.i("onPause", "Estado: onPause");
-        int saveMasterResponse=validationEPCToSave(maestroTagList.size());
-        if(maestroTagList.size()!=0 && saveMasterResponse==0){
-            myDialogInsertTags.dismiss();
+        Log.e("onPause", "Estado: onPause");
+
+        //if(maestroTagList.size()!=0 && saveMasterResponse==0){
+            //myDialogInsertTags.dismiss();
+        //}
+        if(maestroTagList.size()>0){
+            insertTags();
+            //myDialogInsertTags.dismiss();
         }
         stopInventory();
     }
@@ -295,7 +299,6 @@ public class UHFReadTagFragment extends KeyDwonFragment {
          * Validacion para actualizar el estado de la lectura
          */
         int valEPCToSave=validationEPCToSave(tagSize);
-        Log.e("valEPCToSave", ""+valEPCToSave);
         if(valEPCToSave==0) {
            myDialogInsertTags = new ProgressDialog(this.mContext);
             @SuppressLint("HandlerLeak") final Handler handle = new Handler() {
@@ -311,7 +314,6 @@ public class UHFReadTagFragment extends KeyDwonFragment {
             myDialogInsertTags.setCanceledOnTouchOutside(false);
             myDialogInsertTags.setCancelable(false);
             if (maestroTagList.size() > 0) {
-
                 MiTareaAsincrona taskMy = new MiTareaAsincrona();
                 taskMy.execute();
 
@@ -350,12 +352,13 @@ public class UHFReadTagFragment extends KeyDwonFragment {
             /*for(int i=1; i<=10; i++) {
             }*/
             TagsRepository repositoryTag = new TagsRepository(mContext);
-            boolean respon= repositoryTag.InsertTag(maestroTagList, inventoryID, android_id, 0);
+            boolean respon=false;
             try {
-                int timeTolapse=(maestroTagList.size()>=1000)?1000:500;
+                respon=repositoryTag.InsertTag(maestroTagList, inventoryID, android_id, 0);
+                int timeTolapse=(maestroTagList.size()>=1000)?10:20;
                 for (int index = 0; index < maestroTagList.size(); index++) {
                     if (index <= myDialogInsertTags.getMax()) {
-                        publishProgress(index *5);
+                        publishProgress(index *2);
                         // String strEPC = maestroTagList.get(index).get("tagUii");
                         //String strTID = maestroTagList.get(index).get("tagRssi");
                         //Log.e("SaveRes", "" + saveRes);
@@ -371,7 +374,8 @@ public class UHFReadTagFragment extends KeyDwonFragment {
                     }
                 }
             }catch(Exception ex){
-                ex.printStackTrace();
+                Log.e("Exception", ""+ex.getLocalizedMessage());
+                //ex.printStackTrace();
             }
 
             return respon;
@@ -438,12 +442,10 @@ public class UHFReadTagFragment extends KeyDwonFragment {
         }
     }
 
-
-
-
-
-      private void searchTags() {
+      private boolean searchTags() {
+        UIHelper.ToastMessage(mContext, "Procesando codigos en detalle...", (maestroTagList.size()*10));
         TagsRepository tagsRepository=new TagsRepository(mContext);
+        boolean resultFound=false;
         if(maestroTagList.size()>0){
             if(detailFordevice){
                 try{
@@ -453,22 +455,29 @@ public class UHFReadTagFragment extends KeyDwonFragment {
                     dialogSearchTags.setCanceledOnTouchOutside(false);
                     dialogSearchTags.show();
                     int contadorFound=0;
-                    for(int tagPosition=0; tagPosition<maestroTagList.size(); tagPosition++){
-                        String strEPC=maestroTagList.get(tagPosition).get("tagUii");
-                        boolean respFound=tagsRepository.UpdateTagsFound(strEPC, inventoryID);
-                        if(respFound){
-                            contadorFound++;
-                        }
-                    }
-                    UIHelper.ToastMessage(mContext, "Lectura finalizado con exito, se encontraron "+contadorFound+" codigos", 5);
+                    //for(int tagPosition=0; tagPosition<maestroTagList.size(); tagPosition++){
+                        //String strEPC=maestroTagList.get(tagPosition).get("tagUii");
+                        contadorFound=tagsRepository.UpdateTagsFound(maestroTagList, inventoryID);
+                        //if(respFound){
+                            //contadorFound++;
+                        //}
+                    //}
+                   // Log.e("Found", ""+contadorFound);
                     saveRestedTags=true;
-                    dialogSearchTags.dismiss();
+                    if(contadorFound>0){
+                        dialogSearchTags.dismiss();
+                        UIHelper.ToastMessage(mContext, "Lectura finalizado con exito, se encontraron "+contadorFound+" codigos", 5);
+                        resultFound=true;
+                    }else if(contadorFound==0){
+                        UIHelper.ToastMessage(mContext, "Lectura finalizado, no se encontraron codigos en detalle", 5);
+                    }
                 }catch (Exception e){
                     dialogSearchTags.dismiss();
                     e.printStackTrace();
                 }
             }
         }
+        return resultFound;
     }
 
 
@@ -700,16 +709,16 @@ public class UHFReadTagFragment extends KeyDwonFragment {
             if (tagSize == masterTagToSave) {
                 SharedPreferences.Editor obj_edite_maestro = savePreferenceMasterTagToSave.edit();
                 obj_edite_maestro.apply();
-                //Log.e("masterTagToSave", "son iguales No se actualiza" + masterTagToSave + " tagSize" + tagSize);
+                //Log.e("masterTagToSave", "SON iguales No se actualiza" + masterTagToSave + " tagSize" + tagSize);
                 response = 1;
             } else {
                 SharedPreferences.Editor obj_edite_maestro = savePreferenceMasterTagToSave.edit();
                 obj_edite_maestro.putInt(String.valueOf(inventoryID), tagSize);
                 obj_edite_maestro.apply();
-                //Log.e("masterTagToSave", "No son iguales se actualiza el guardado" + masterTagToSave + " tagSize" + tagSize);
+                //Log.e("masterTagToSave", "NO SON iguales se actualiza el guardado" + masterTagToSave + " tagSize" + tagSize);
                 response = 0;
             }
-            Log.e("response", ""+response);
+            //Log.e("response", ""+response);
         return  response;
     }
 
