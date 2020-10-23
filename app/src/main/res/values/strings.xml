@@ -1476,7 +1476,7 @@
     <string name="title_inventory_status" translatable="false">Estado Inventarios</string>
     <string name="title_local_documents" translatable="false">Documentos Local</string>
     <string name="tv_inventaryofServer" translatable="false">Inventarios en Servidor</string>
-    <string name="btn_syncronousInventary" translatable="false">Obtener \n Inventarios</string>
+    <string name="btn_syncronousInventary" translatable="false">Volver</string>
     <string name="txt_inventoryLoad" translatable="false">Obteniendo inventarios...</string>
     <string name="txt_no_data_load" translatable="false">No hay inventarios nuevos</string>
 

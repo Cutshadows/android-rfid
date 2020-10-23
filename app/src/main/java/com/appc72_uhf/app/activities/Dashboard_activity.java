@@ -139,6 +139,9 @@ public class Dashboard_activity extends AppCompatActivity implements View.OnClic
         out.close();
     }
 
+    @Override
+    public void onBackPressed() {
+    }
     private int getCompany(){
         CompanyRepository companyRepository=new CompanyRepository(this);
         SharedPreferences preferenceCodeActive=getSharedPreferences("code_activate", Context.MODE_PRIVATE);
