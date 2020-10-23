@@ -115,7 +115,7 @@ public class DataAdapterInventories extends ArrayAdapter<DatamodelInventories> i
                             };
                                     ArrayList data = new ArrayList();
                                     TagsRepository tagRepo= new TagsRepository(getContext());
-                                    ArrayList Tags=tagRepo.ViewAllTagsSync(datamodelInventories.getId(), false);
+                                    ArrayList Tags=tagRepo.ViewAllTagsSync(datamodelInventories.getId(), datamodelInventories.getIncludeTID());
                                     String inventory_include_tid=inventaryRespository.inventoryWithTID(datamodelInventories.getId());
                                     if(Tags.size()>0){
                                         try{
@@ -154,6 +154,7 @@ public class DataAdapterInventories extends ArrayAdapter<DatamodelInventories> i
                                                 mypDialog.setCancelable(false);
                                                 mypDialog.show();
                                                             for(int i=0; i< Tags.size();i++){
+
                                                                 JSONObject jsonBody=new JSONObject();
                                                                 String etags=String.valueOf(Tags.get(i));
                                                                 String[] spliTags=etags.split("@");
@@ -171,8 +172,9 @@ public class DataAdapterInventories extends ArrayAdapter<DatamodelInventories> i
                                                             }
 
                                                             List<List<String>> smallerLists= Lists.partition(data, 1000);
+
                                                             int indexSmallArreglos=0;
-                                                            while(indexSmallArreglos<millares){
+                                                            while(indexSmallArreglos<smallerLists.size()){
                                                                  BooleanRequest booleanRequest = new BooleanRequest(1, URL, smallerLists.get(indexSmallArreglos), new Response.Listener<Boolean>() {
                                                                         @Override
                                                                         public void onResponse(Boolean response) {
@@ -263,37 +265,6 @@ public class DataAdapterInventories extends ArrayAdapter<DatamodelInventories> i
                                                 requestQueue.add(booleanRequest);
                                             }
 
-                                           /*
-
-                                            BooleanRequest booleanRequest = new BooleanRequest(1, URL, data, new Response.Listener<Boolean>() {
-                                                @Override
-                                                public void onResponse(Boolean response) {
-                                                    if(response){
-                                                        mypDialog.dismiss();
-                                                        UIHelper.ToastMessage(getContext(), "Envio de codigos exitoso!!", 3);
-                                                    }
-                                                }
-                                            }, new Response.ErrorListener() {
-                                                @Override
-                                                public void onErrorResponse(VolleyError error) {
-                                                    mypDialog.dismiss();
-                                                    if (error instanceof NetworkError) {
-                                                        UIHelper.ToastMessage(getContext(), "Error de conexion, no hay conexion a internet", 3);
-                                                    } else if (error instanceof ServerError) {
-                                                        UIHelper.ToastMessage(getContext(), "Error de conexion, credenciales invalidas", 3);
-                                                    } else if (error instanceof AuthFailureError) {
-                                                        UIHelper.ToastMessage(getContext(), "Error de conexion, intente mas tarde.", 3);
-                                                    } else if (error instanceof ParseError) {
-                                                        UIHelper.ToastMessage(getContext(), "Error desconocido, intente mas tarde", 3);
-                                                    } else if (error instanceof TimeoutError || error instanceof NoConnectionError) {
-                                                        UIHelper.ToastMessage(getContext(), "Error con el servidor, intente mas tarde!!!", 3);
-                                                    }
-                                                }
-                                            });
-                                            int socketTimeout = 30000;//30 seconds - change to what you want
-                                            RetryPolicy policy = new DefaultRetryPolicy(socketTimeout, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
-                                            booleanRequest.setRetryPolicy(policy);
-                                            requestQueue.add(booleanRequest);*/
                                         }catch (JSONException ex){
                                             ex.printStackTrace();
                                         }
@@ -312,7 +283,7 @@ public class DataAdapterInventories extends ArrayAdapter<DatamodelInventories> i
                 try {
                     AlertDialog.Builder builder = new AlertDialog.Builder((Activity) getContext());
                     builder.setTitle(R.string.ap_dialog_delete_inventory);
-                    builder.setMessage("Desea eliminar inventario?");
+                    builder.setMessage("Desea eliminar inventario "+datamodelInventories.getName()+"?");
                     builder.setIcon(R.drawable.button_bg_up);
                     builder.setNegativeButton(R.string.ap_dialog_cancel, new DialogInterface.OnClickListener() {
                         @Override

@@ -6,9 +6,13 @@ import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
-import android.util.Log;
+import android.database.sqlite.SQLiteStatement;
 
+import com.appc72_uhf.app.entities.DatamodelDocumentsMakeLabel;
 import com.appc72_uhf.app.helpers.AdminSQLOpenHelper;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 
@@ -66,29 +70,70 @@ public class MakeLabelRepository {
 
 
     public boolean insertVirtualTag(
-    int id,
-    String productMaster,
-    String productVirtualId,
-    int documentId,
-    String codebar
+            JSONArray documentDetailVirtual
+           // int id,
+           // String productMaster,
+           // String productVirtualId,
+           // int documentId,
+           // String codebar
     ){
+        final DatamodelDocumentsMakeLabel dModelMakeLabel=new DatamodelDocumentsMakeLabel();
+        dModelMakeLabel.setDocumentDetailsVirtual(documentDetailVirtual);
         AdminSQLOpenHelper admin = new AdminSQLOpenHelper(context);
         SQLiteDatabase db = admin.getWritableDatabase();
-        boolean resultInsertTags;
-
+        boolean resultInsertTags=false;
         try {
-            ContentValues valContentVirtualTags= new ContentValues();
-            valContentVirtualTags.put("Id", id);
-            valContentVirtualTags.put("ProductMaster", productMaster);
-            valContentVirtualTags.put("ProductVirtualId", productVirtualId);
-            valContentVirtualTags.put("DocumentId", documentId);
-            valContentVirtualTags.put("Status", 0);
-            valContentVirtualTags.put("CodeBar", codebar);
 
-            resultInsertTags=db.insert("DocumentDetailsVirtual", null,  valContentVirtualTags)>0;
-        }catch (SQLiteException sqliEx){
+        /*try {
+            for(int indexVirtual=0; indexVirtual < dModelMakeLabel.getDocumentDetailsVirtual().length(); indexVirtual++){
+                JSONObject jsonObject=dModelMakeLabel.getDocumentDetailsVirtual().getJSONObject(indexVirtual);
+                int id=jsonObject.getInt("Id");
+                JSONObject productMasterArray=jsonObject.getJSONObject("ProductMaster");
+                String productVirtualId=jsonObject.getString("ProductVirtualId");
+                int documentId=jsonObject.getInt("DocumentId");
+                String codeBar=jsonObject.getString("CodeBar");
+
+                ContentValues valContentVirtualTags= new ContentValues();
+                valContentVirtualTags.put("Id", id);
+                valContentVirtualTags.put("ProductMaster", productMasterArray.toString());
+                valContentVirtualTags.put("ProductVirtualId", productVirtualId);
+                valContentVirtualTags.put("DocumentId", documentId);
+                valContentVirtualTags.put("Status", 0);
+                valContentVirtualTags.put("CodeBar", codeBar);
+
+                resultInsertTags=db.insert("DocumentDetailsVirtual", null,  valContentVirtualTags)>0;
+            }
+        }catch (SQLiteException | JSONException sqliEx){
             Log.e("SQLIEX", ""+sqliEx.getLocalizedMessage());
             resultInsertTags=false;
+        }*/
+            String sqlSecuences="INSERT INTO DocumentDetailsVirtual VALUES(?, ?, ?, ?, ?, ?, ?)";
+            db.beginTransactionNonExclusive();
+            SQLiteStatement stmt=db.compileStatement(sqlSecuences);
+            for(int indexVirtual=0; indexVirtual < dModelMakeLabel.getDocumentDetailsVirtual().length(); indexVirtual++){
+                JSONObject jsonObject=dModelMakeLabel.getDocumentDetailsVirtual().getJSONObject(indexVirtual);
+                int id=jsonObject.getInt("Id");
+                JSONObject productMasterArray=jsonObject.getJSONObject("ProductMaster");
+                String productVirtualId=jsonObject.getString("ProductVirtualId");
+                int documentId=jsonObject.getInt("DocumentId");
+                String codeBar=jsonObject.getString("CodeBar");
+
+                stmt.bindString(1, String.valueOf(id));
+                stmt.bindString(2, String.valueOf(productMasterArray));
+                stmt.bindString(3, productVirtualId);
+                stmt.bindLong(4, documentId);
+                stmt.bindLong(5, 0);
+                stmt.bindString(6, " ");
+                stmt.bindString(7, codeBar);
+                stmt.execute();
+            }
+            db.setTransactionSuccessful();
+            resultInsertTags=true;
+        }catch (Exception ex){
+            ex.printStackTrace();
+            resultInsertTags = false;
+        }finally {
+            db.endTransaction();
         }
         db.close();
         return resultInsertTags;
@@ -240,5 +285,27 @@ public class MakeLabelRepository {
             db.endTransaction();
             db.close();
         }
+    }
+
+
+    public ArrayList GetReadyMakelabel(int DocumentId){
+        ArrayList<String> datos=new ArrayList<>();
+        AdminSQLOpenHelper admin = new AdminSQLOpenHelper(context);
+        SQLiteDatabase db = admin.getWritableDatabase();
+        Cursor read= db.rawQuery("SELECT Id, EPCString FROM DocumentDetailsVirtual WHERE DocumentId="+DocumentId, null); //ORDER BY RFID DESC LIMIT 100
+        if (read.moveToFirst()) {
+            do {
+                    datos.add(
+                            read.getString(
+                                    read.getColumnIndex("Id")
+                            )+"@"+read.getString(
+                                    read.getColumnIndex("EPCString")
+                            )
+                    );
+
+            } while (read.moveToNext());
+
+        }
+        return datos;
     }
 }

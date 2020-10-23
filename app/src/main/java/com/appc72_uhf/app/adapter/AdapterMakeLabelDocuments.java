@@ -2,7 +2,6 @@ package com.appc72_uhf.app.adapter;
 
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,15 +19,12 @@ import com.appc72_uhf.app.entities.DatamodelDocumentsMakeLabel;
 import com.appc72_uhf.app.repositories.MakeLabelRepository;
 import com.appc72_uhf.app.tools.UIHelper;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.util.ArrayList;
 
 public class AdapterMakeLabelDocuments extends ArrayAdapter<DatamodelDocumentsMakeLabel> implements View.OnClickListener {
     Context mContext;
     ArrayList<DatamodelDocumentsMakeLabel> datadocuments;
-    ProgressDialog mypDialog;
+    ProgressDialog mypDialogDownloads;
 
 
     public AdapterMakeLabelDocuments(@NonNull Context mContext, ArrayList<DatamodelDocumentsMakeLabel> datadocuments) {
@@ -58,11 +54,7 @@ public class AdapterMakeLabelDocuments extends ArrayAdapter<DatamodelDocumentsMa
         switch (v.getId()){
             case R.id.chbx_download_documents:
                 if(chbx_download_documents.isChecked()){
-                    mypDialog = new ProgressDialog(getContext());
-                    mypDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-                    mypDialog.setMessage("Habilitando etiquetado documento :"+dModelMakeLabel.getDocumentId()+"...");
-                    mypDialog.setCanceledOnTouchOutside(false);
-                    mypDialog.show();
+
                         boolean resultDocumentInsert=makeLabelRepository.InsertDocuments(
                                 dModelMakeLabel.getDocumentName(),
                                 dModelMakeLabel.getDocumentId(),
@@ -82,31 +74,20 @@ public class AdapterMakeLabelDocuments extends ArrayAdapter<DatamodelDocumentsMa
 
                     if(resultDocumentInsert){
                         boolean inserListTag=false;
-                        for(int indexVirtual=0; indexVirtual < dModelMakeLabel.getDocumentDetailsVirtual().length(); indexVirtual++){
-                            try{
-                                JSONObject jsonObject=dModelMakeLabel.getDocumentDetailsVirtual().getJSONObject(indexVirtual);
-                                int id=jsonObject.getInt("Id");
-                                JSONObject productMasterArray=jsonObject.getJSONObject("ProductMaster");
-                                String productVirtualId=jsonObject.getString("ProductVirtualId");
-                                int documentId=jsonObject.getInt("DocumentId");
-                                String codeBar=jsonObject.getString("CodeBar");
-                                inserListTag=makeLabelRepository.insertVirtualTag(
-                                        id,
-                                        productMasterArray.toString(),
-                                        productVirtualId,
-                                        documentId,
-                                        codeBar
-                                );
-                            }catch (JSONException jsEx){
-                                //Log.e("jsEx", ""+jsEx.getLocalizedMessage());
-                                jsEx.printStackTrace();
-                            }
-                        }
+                        UIHelper.ToastMessage(getContext(), "Descargando documento para etiquetado "+dModelMakeLabel.getDocumentName()+"...", dModelMakeLabel.getDocumentDetailsVirtual().length()/100);
+                        mypDialogDownloads = new ProgressDialog(getContext());
+                        mypDialogDownloads.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+                        mypDialogDownloads.setMessage("Habilitando etiquetado documento :"+dModelMakeLabel.getDocumentId()+"...");
+                        mypDialogDownloads.setCanceledOnTouchOutside(false);
+                        mypDialogDownloads.show();
+
+                        inserListTag=makeLabelRepository.insertVirtualTag(dModelMakeLabel.getDocumentDetailsVirtual());
+
                         if(inserListTag){
+                            mypDialogDownloads.dismiss();
                             UIHelper.ToastMessage(getContext(), "Se habilito los documentos para etiquetado.", 3);
                         }
                     }
-                    mypDialog.dismiss();
                 }else{
                     UIHelper.ToastMessage(mContext, "Se elimina los documentos para makelabel "+dModelMakeLabel.getDocumentId(), 4);
                     boolean deleteDocument=makeLabelRepository.deleteDocument(dModelMakeLabel.getDocumentId());
