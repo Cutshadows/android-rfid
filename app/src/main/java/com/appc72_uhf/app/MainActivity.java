@@ -54,7 +54,7 @@ public class MainActivity extends BaseTabFragmentActivity {
                 initTabs();
             }
         }else if(this.getIntent().getStringExtra("EntryType").equals("MakeLabel")){
-            if(this.getIntent().hasExtra("makeLabelBool")){
+            if(this.getIntent().getBooleanExtra("makeLabelBool", false)){
                 makelabel=false;
                 initSound();
                 initUHF();

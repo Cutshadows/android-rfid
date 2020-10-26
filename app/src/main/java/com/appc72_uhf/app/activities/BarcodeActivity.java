@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -19,13 +20,14 @@ import com.appc72_uhf.app.adapter.AdapterMakeLabelList;
 import com.appc72_uhf.app.entities.DataModelVirtualDocument;
 import com.appc72_uhf.app.repositories.CompanyRepository;
 import com.appc72_uhf.app.repositories.MakeLabelRepository;
+import com.appc72_uhf.app.tools.UIHelper;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-public class BarcodeActivity  extends AppCompatActivity {
+public class BarcodeActivity  extends AppCompatActivity implements View.OnClickListener {
     EditText et_searchBarcode;
     Button btn_searchProduct;
     ListView lv_detail_document;
@@ -34,8 +36,9 @@ public class BarcodeActivity  extends AppCompatActivity {
     private String code_enterprise, code_bar;
     Context mContext;
 
+
     DataModelVirtualDocument dvdVirtual;
-    ArrayList<DataModelVirtualDocument> dataVirtualDocuments;
+    ArrayList<DataModelVirtualDocument> dataVirtualDocuments, arrayTempDVdocuments;
     AdapterMakeLabelList adapterMakeLabelList;
 
     @Override
@@ -66,6 +69,7 @@ public class BarcodeActivity  extends AppCompatActivity {
         adapterMakeLabelList=new AdapterMakeLabelList(mContext, dataVirtualDocuments);
         lv_detail_document.setAdapter(adapterMakeLabelList);
         adapterMakeLabelList.notifyDataSetChanged();
+
         et_searchBarcode.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence barcodeSecuence, int start, int contador, int after) {
@@ -75,10 +79,26 @@ public class BarcodeActivity  extends AppCompatActivity {
             @Override
             public void onTextChanged(CharSequence barcodeSecuence, int start, int before, int count) {
                 //Log.e("beforeTextChanged", "Charsecuence"+barcodeSecuence+" Inicio"+start+" Contador"+count+" Despues"+before);
-                if(count>0){
-                   // Log.e("et_searchBarcode", "se guardo como localstorage"+et_searchBarcode.getText().toString());
-                    ReadtBarCode(et_searchBarcode.getText().toString().trim());
+                String str= et_searchBarcode.getText().toString().toLowerCase().trim();
+                if(str.length()>0){
+                    arrayTempDVdocuments= new ArrayList<DataModelVirtualDocument>();
+                    //adapterMakeLabelList.getFilter().filter(et_searchBarcode.getText().toString().trim());
+                    //adapterMakeLabelList.notifyDataSetChanged();
+                    // Log.e("et_searchBarcode", "se guardo como localstorage"+et_searchBarcode.getText().toString());
+                    for(int index=0; index<dataVirtualDocuments.size(); index++){
+                        Log.e("ProductmasterId", ""+dataVirtualDocuments.get(index).getDef1().toLowerCase());
+                        if(dataVirtualDocuments.get(index).getDef1().toLowerCase().startsWith(str) ||
+                                String.valueOf(dataVirtualDocuments.get(index).getProductMasterId()).toLowerCase().startsWith(str)){
+                            arrayTempDVdocuments.add(dataVirtualDocuments.get(index));
+                            if(String.valueOf(dataVirtualDocuments.get(index).getProductMasterId()).toLowerCase().equals(str)){
+                                ReadtBarCode(et_searchBarcode.getText().toString().trim());
+                            }
+                        }
+                        lv_detail_document.setAdapter(new AdapterMakeLabelList(mContext, arrayTempDVdocuments));
+                    }
+                   //ReadtBarCode(et_searchBarcode.getText().toString().trim());
                 }else{
+                    lv_detail_document.setAdapter(new AdapterMakeLabelList(mContext, dataVirtualDocuments));
                     et_searchBarcode.clearFocus();
                 }
             }
@@ -86,6 +106,7 @@ public class BarcodeActivity  extends AppCompatActivity {
             public void afterTextChanged(Editable s) {
             }
         });
+
         /*et_searchBarcode.addTextChangedListener(new TextChangedListener<EditText> (et_searchBarcode){
             @Override
             public void beforeTextChanged(CharSequence barcodeSecuence, int start, int contador, int after) {
@@ -104,8 +125,20 @@ public class BarcodeActivity  extends AppCompatActivity {
 
             }
         });*/
+        btn_searchProduct.setOnClickListener(this);
 
     }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()){
+            case R.id.btn_searchProduct:
+                UIHelper.ToastMessage(mContext, "estoy filtrando...");
+
+                break;
+        }
+    }
+
     public abstract class TextChangedListener<T> implements TextWatcher {
         private T target;
 

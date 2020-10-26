@@ -88,6 +88,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         et_password=(EditText)findViewById(R.id.et_password);
         //et_code=(EditText)findViewById(R.id.et_code);
         codeCompany=0;
+
         sp_code.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -109,12 +110,13 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
         setViewEnabled(true);
 
+
         dataSelect=new ArrayList<>();
+
         /**
          * LLenaddo de los codigos ingresados
          */
         getDataCompany();
-
 
         SharedPreferences preferencesGetUsername=getSharedPreferences("username", Context.MODE_PRIVATE);
         String Username=preferencesGetUsername.getString("username", "");
