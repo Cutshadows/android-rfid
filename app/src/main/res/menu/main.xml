@@ -31,10 +31,15 @@
         android:id="@+id/action_lock"
         android:title="@string/uhf_msg_tab_lock"
         app:showAsAction="never" /-->
+
     <item
         android:id="@+id/action_set"
         android:title="@string/uhf_msg_tab_set"
         app:showAsAction="never" />
+
+    <item android:id="@+id/action_logout"
+        android:title="Cerrar sesión"
+        app:showAsAction="never"/>
     <item
         android:id="@+id/UHF_ver"
         android:title="@string/action_about"

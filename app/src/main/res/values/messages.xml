@@ -43,6 +43,7 @@
     <string name="msg_login_success">Inicio de sesión exitoso</string>
     <string name="msg_login_fail">Inicio de sesión fallido</string>
     <string name="msg_login_logout">Salir exitosamente</string>
+    <string name="msg_btn_logout" translatable="false">Cerrar sesión</string>
     <string name="msg_login_error">El usuario no ha iniciado sesión o la contraseña es incorrecta</string>
     <string name="msg_load_userface_fail">El avatar del usuario no se pudo cargar</string>
     <string name="msg_load_image_fail">La imagen no se pudo cargar</string>

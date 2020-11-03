@@ -20,6 +20,7 @@ import androidx.fragment.app.FragmentActivity;
 
 import com.appc72_uhf.app.adapter.ViewPagerAdapter;
 import com.appc72_uhf.app.fragment.KeyDwonFragment;
+import com.appc72_uhf.app.helpers.DialogOptionsHelpers;
 import com.appc72_uhf.app.tools.UIHelper;
 import com.appc72_uhf.app.widget.NoScrollViewPager;
 import com.rscja.deviceapi.RFIDWithUHF;
@@ -176,6 +177,10 @@ public class BaseTabFragmentActivity extends FragmentActivity {
 				index = 2;
 				mActionBar.addTab(tab_lock, true);
 				break;*/
+			case R.id.action_logout:
+				DialogOptionsHelpers dialogOptionsHelpers=new DialogOptionsHelpers(this);
+				dialogOptionsHelpers.showDialog();
+				break;
 			case R.id.action_support:
 				String strSrc = "/data/data/com.appc72_uhf.app/databases/IZYRFID.db";
 				String strDst = "/sdcard/IZYRFID.db";

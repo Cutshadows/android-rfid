@@ -67,6 +67,7 @@
                     />
 
             </LinearLayout>
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -87,10 +88,9 @@
 
             <LinearLayout
                 android:layout_width="fill_parent"
-                android:layout_height="220dp"
+                android:layout_height="210dp"
                 android:gravity="center"
-                android:orientation="horizontal"
-                android:paddingTop="20dp">
+                android:orientation="horizontal">
                 <RelativeLayout
                     android:id="@+id/Relative_layout_Makelabel"
                     android:layout_width="wrap_content"
@@ -99,7 +99,7 @@
                     <ImageButton
                         android:id="@+id/ibtn_Labelled"
                         android:layout_width="150dp"
-                        android:layout_height="141dp"
+                        android:layout_height="131dp"
                         android:layout_margin="15dp"
                         android:layout_marginTop="@dimen/text_size_19"
                         android:background="@color/full_transparent"
@@ -134,7 +134,7 @@
                     <ImageButton
                         android:id="@+id/ibtn_takeInventory"
                         android:layout_width="150dp"
-                        android:layout_height="140dp"
+                        android:layout_height="130dp"
                         android:layout_marginStart="15dp"
                         android:layout_marginLeft="15dp"
                         android:layout_marginTop="15dp"
@@ -162,6 +162,24 @@
                         android:textSize="@dimen/text_size_19"
                         android:textStyle="bold" />
                 </RelativeLayout>
+
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:gravity="center_horizontal"
+                android:layout_marginTop="10dp"
+                android:orientation="horizontal">
+                <Button
+                    android:id="@+id/btn_logout"
+                    android:background="@drawable/button_bg"
+                    android:textColor="@color/white"
+                    android:layout_width="fill_parent"
+                    android:gravity="center"
+                    android:layout_gravity="center_horizontal"
+                    android:text="@string/msg_btn_logout"
+                    android:layout_height="40dp"
+                    />
             </LinearLayout>
             <LinearLayout
                 android:layout_width="fill_parent"

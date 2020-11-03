@@ -1492,6 +1492,7 @@
     <!-- Botones opciones inventarios -->
     <string name="ap_dialog_inventario_vaciar" translatable="false">Vaciar codigos</string>
     <string name="ap_dialog_configuration_entry" translatable="false">Configuración</string>
+    <string name="ap_dialog_configuration_logout" translatable="false">Cerrar sesión</string>
     <string name="ap_dialog_delete_inventory" translatable="false">Eliminar</string>
     <string name="ap_dialog_sync_inventory" translatable="false">Enviar</string>
     <string name="ap_dialog_acept" translatable="false">aceptar</string>

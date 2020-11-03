@@ -126,13 +126,13 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             et_email.setText(Username);
             userDataName=Username;
         }
-        SharedPreferences preferencesGetPassword=getSharedPreferences("password", Context.MODE_PRIVATE);
-        String Password=preferencesGetPassword.getString("password", "");
-        if(Password.length()==0){
-            Log.i("No data preferences", Username);
-        }else{
-            userDataPassword=Password;
-        }
+        //SharedPreferences preferencesGetPassword=getSharedPreferences("password", Context.MODE_PRIVATE);
+        //String Password=preferencesGetPassword.getString("password", "");
+        //if(Password.length()==0){
+            //Log.i("No data preferences", Username);
+       // }else{
+            //userDataPassword=Password;
+        //}
         SharedPreferences preferencesExpireDate=getSharedPreferences("expireDate", Context.MODE_PRIVATE);
         String expireDateString=preferencesExpireDate.getString("expireDate", "");
         if(expireDateString.length()==0){
@@ -171,10 +171,10 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             SharedPreferences.Editor obj_edite_username=savePreferencesUsername.edit();
             obj_edite_username.putString("username", username);
             obj_edite_username.apply();
-            SharedPreferences savePreferencesPassword=getSharedPreferences("password", Context.MODE_PRIVATE);
+           /* SharedPreferences savePreferencesPassword=getSharedPreferences("password", Context.MODE_PRIVATE);
             SharedPreferences.Editor obj_edite_pw=savePreferencesPassword.edit();
             obj_edite_pw.putString("password", password);
-            obj_edite_pw.apply();
+            obj_edite_pw.apply();*/
             try{
                 setViewEnabled(false);
                 final String code=et_code;
@@ -272,7 +272,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         adapterSelect.notifyDataSetChanged();
     }
     public void validate_session() throws ParseException {
-        if(userDataPassword!=null && userDataName!=null && expires!=null){
+        if(userDataName!=null && expires!=null){ //userDataPassword!=null &&
             Date fecha=new Date(expires);
             Date c = Calendar.getInstance().getTime();
 
@@ -287,6 +287,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 obj_expireDate.apply();
             }
         }
+    }
+    @Override
+    public void onBackPressed() {
     }
     private void setViewEnabled(boolean enabled) {
         btn_ingresar.setEnabled(enabled);

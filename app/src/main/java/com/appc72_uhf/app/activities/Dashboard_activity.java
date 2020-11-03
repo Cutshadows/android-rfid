@@ -20,6 +20,7 @@ import androidx.core.app.ActivityCompat;
 
 import com.appc72_uhf.app.MainActivity;
 import com.appc72_uhf.app.R;
+import com.appc72_uhf.app.helpers.DialogOptionsHelpers;
 import com.appc72_uhf.app.repositories.CompanyRepository;
 import com.appc72_uhf.app.tools.UIHelper;
 
@@ -32,6 +33,7 @@ import java.io.OutputStream;
 
 public class Dashboard_activity extends AppCompatActivity implements View.OnClickListener {
     private ImageButton ibtn_takeInventory, ibtn_Labelled;
+    private Button btn_logout;
     private TextView tv_welkomen_user;
     private Button btn_create_recovery;
     private String token_access, android_id;
@@ -56,6 +58,8 @@ public class Dashboard_activity extends AppCompatActivity implements View.OnClic
         ibtn_takeInventory=(ImageButton) findViewById(R.id.ibtn_takeInventory);
         ibtn_Labelled=(ImageButton) findViewById(R.id.ibtn_Labelled);
         tv_welkomen_user=(TextView) findViewById(R.id.tv_welkomen_user);
+        btn_logout=(Button) findViewById(R.id.btn_logout);
+        btn_logout.setOnClickListener(this);
         ibtn_Labelled.setOnClickListener(this);
         ibtn_takeInventory.setOnClickListener(this);
         Relative_layout_Makelabel=(RelativeLayout) findViewById(R.id.Relative_layout_Makelabel);
@@ -111,6 +115,10 @@ public class Dashboard_activity extends AppCompatActivity implements View.OnClic
                     Log.e("IOException", e.toString());
                 }
                 break;
+            case R.id.btn_logout:
+                DialogOptionsHelpers dialogOptionsHelpers=new DialogOptionsHelpers(this);
+                dialogOptionsHelpers.showDialog();
+               break;
         }
     }
 
