@@ -24,17 +24,19 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name=".activities.reception_hh_activity"></activity>
+        <activity android:name=".activities.DetailMakeLabelsActivity" />
         <activity
             android:name=".activities.CaptureBarcodeActivity"
+            android:configChanges="orientation|screenSize"
             android:icon="@mipmap/ic_launcher"
             android:roundIcon="@mipmap/ic_launcher_round"
-            android:configChanges="orientation|screenSize"
-            android:theme="@style/Theme.AppCompat" /> <!--android:parentActivityName=".activities.BarcodeActivity" -->
+            android:theme="@style/Theme.AppCompat" /> <!-- android:parentActivityName=".activities.BarcodeActivity" -->
         <activity
             android:name=".activities.BarcodeActivity"
+            android:configChanges="orientation|screenSize"
             android:icon="@mipmap/ic_launcher"
             android:roundIcon="@mipmap/ic_launcher_round"
-            android:configChanges="orientation|screenSize"
             android:theme="@style/Theme.AppCompat" /> <!-- android:parentActivityName=".MainActivity" -->
         <activity
             android:name=".activities.Make_label_documents_activity"
@@ -49,8 +51,8 @@
             android:theme="@style/Theme.AppCompat.NoActionBar" />
         <activity
             android:name=".activities.Server_inventory_activity"
-            android:icon="@mipmap/ic_launcher"
             android:configChanges="orientation|screenSize"
+            android:icon="@mipmap/ic_launcher"
             android:theme="@style/Theme.AppCompat" /> <!-- android:parentActivityName=".MainActivity" -->
         <activity
             android:name=".activities.Detail_product_activity"
