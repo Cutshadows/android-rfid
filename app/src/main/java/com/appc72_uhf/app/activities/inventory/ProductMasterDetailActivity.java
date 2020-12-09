@@ -1,4 +1,4 @@
-package com.appc72_uhf.app.activities;
+package com.appc72_uhf.app.activities.inventory;
 
 import android.os.Bundle;
 import android.widget.ListView;

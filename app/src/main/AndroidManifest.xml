@@ -24,38 +24,56 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".activities.reception_hh_activity"></activity>
-        <activity android:name=".activities.DetailMakeLabelsActivity" />
+        <activity android:name=".activities.reception.Dashboard_reception_activity"
+            android:configChanges="orientation|screenSize"
+            android:parentActivityName=".activities.Dashboard_activity"
+            android:theme="@style/Theme.AppCompat.NoActionBar" ></activity>
+        <activity android:name=".activities.reception.Read_epc_reception_activity"
+            android:configChanges="orientation|screenSize"
+            android:parentActivityName=".activities.Dashboard_activity"
+            android:theme="@style/Theme.AppCompat.NoActionBar"/>
+        <activity android:name=".activities.reception.Automatic_reception_activity"
+            android:configChanges="orientation|screenSize"
+            android:parentActivityName=".activities.Dashboard_activity"
+            android:theme="@style/Theme.AppCompat.NoActionBar"/>
+        <activity android:name=".activities.reception.Reception_activity"
+            android:configChanges="orientation|screenSize"
+            android:parentActivityName=".activities.Dashboard_activity"
+            android:theme="@style/Theme.AppCompat.NoActionBar"/>
+        <activity android:name=".activities.makelabel.DetailMakeLabelsActivity"
+            android:configChanges="orientation|screenSize"
+            android:parentActivityName=".activities.Dashboard_activity"
+            android:theme="@style/Theme.AppCompat.NoActionBar"/>
         <activity
-            android:name=".activities.CaptureBarcodeActivity"
+            android:name=".activities.makelabel.CaptureBarcodeActivity"
             android:configChanges="orientation|screenSize"
             android:icon="@mipmap/ic_launcher"
             android:roundIcon="@mipmap/ic_launcher_round"
             android:theme="@style/Theme.AppCompat" /> <!-- android:parentActivityName=".activities.BarcodeActivity" -->
         <activity
-            android:name=".activities.BarcodeActivity"
+            android:name=".activities.makelabel.BarcodeActivity"
             android:configChanges="orientation|screenSize"
             android:icon="@mipmap/ic_launcher"
             android:roundIcon="@mipmap/ic_launcher_round"
             android:theme="@style/Theme.AppCompat" /> <!-- android:parentActivityName=".MainActivity" -->
         <activity
-            android:name=".activities.Make_label_documents_activity"
+            android:name=".activities.makelabel.Make_label_documents_activity"
             android:configChanges="orientation|screenSize"
             android:parentActivityName=".activities.Dashboard_activity"
             android:theme="@style/Theme.AppCompat" />
         <activity
-            android:name=".activities.ProductMasterDetailActivity"
+            android:name=".activities.inventory.ProductMasterDetailActivity"
             android:configChanges="orientation|screenSize"
             android:icon="@mipmap/ic_launcher"
-            android:parentActivityName=".activities.Detail_product_activity"
+            android:parentActivityName=".activities.inventory.Detail_product_activity"
             android:theme="@style/Theme.AppCompat.NoActionBar" />
         <activity
-            android:name=".activities.Server_inventory_activity"
+            android:name=".activities.inventory.Server_inventory_activity"
             android:configChanges="orientation|screenSize"
             android:icon="@mipmap/ic_launcher"
             android:theme="@style/Theme.AppCompat" /> <!-- android:parentActivityName=".MainActivity" -->
         <activity
-            android:name=".activities.Detail_product_activity"
+            android:name=".activities.inventory.Detail_product_activity"
             android:configChanges="orientation|screenSize"
             android:parentActivityName=".MainActivity"
             android:theme="@style/Theme.AppCompat.NoActionBar" />

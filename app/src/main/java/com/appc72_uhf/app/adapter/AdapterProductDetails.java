@@ -15,7 +15,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.appc72_uhf.app.R;
-import com.appc72_uhf.app.activities.ProductMasterDetailActivity;
+import com.appc72_uhf.app.activities.inventory.ProductMasterDetailActivity;
 import com.appc72_uhf.app.entities.DataModelProductDetails;
 import com.appc72_uhf.app.repositories.DetailProductRepository;
 

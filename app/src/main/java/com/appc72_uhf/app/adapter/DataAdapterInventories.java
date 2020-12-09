@@ -44,7 +44,7 @@ import com.android.volley.toolbox.HttpHeaderParser;
 import com.android.volley.toolbox.Volley;
 import com.appc72_uhf.app.MainActivity;
 import com.appc72_uhf.app.R;
-import com.appc72_uhf.app.activities.Detail_product_activity;
+import com.appc72_uhf.app.activities.inventory.Detail_product_activity;
 import com.appc72_uhf.app.entities.DatamodelInventories;
 import com.appc72_uhf.app.repositories.CompanyRepository;
 import com.appc72_uhf.app.repositories.InventaryRespository;

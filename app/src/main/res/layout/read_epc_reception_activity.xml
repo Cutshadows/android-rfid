@@ -4,6 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activities.makelabel.DetailMakeLabelsActivity">
+    tools:context=".activities.reception.Read_epc_reception_activity">
 
 </androidx.constraintlayout.widget.ConstraintLayout>

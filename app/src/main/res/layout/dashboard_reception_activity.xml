@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".activities.Dashboard_activity">
+
+    <RelativeLayout
+        android:layout_width="379dp"
+        android:layout_height="700dp"
+        android:layout_marginStart="40dp"
+        android:layout_marginLeft="40dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="41dp"
+        android:layout_marginRight="41dp"
+        android:layout_marginBottom="10dp"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.489"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0"
+        tools:ignore="MissingConstraints">
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="200dp"
+                android:gravity="center"
+                android:layout_marginTop="150dp"
+                android:orientation="horizontal">
+
+                <RelativeLayout
+                    android:id="@+id/Relative_layout_Makelabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical">
+
+                    <ImageButton
+                        android:id="@+id/ibtn_Labelled"
+                        android:layout_width="150dp"
+                        android:layout_height="111dp"
+                        android:layout_margin="15dp"
+                        android:layout_marginTop="@dimen/text_size_19"
+                        android:background="@color/full_transparent"
+                        android:focusable="true"
+                        android:scaleType="fitCenter"
+                        android:src="@drawable/img_makelabel_effect"
+                        tools:src="@drawable/img_makelabel_effect"></ImageButton>
+
+                    <TextView
+                        android:id="@+id/tv_makeLabel"
+                        android:layout_width="150dp"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/ibtn_Labelled"
+                        android:layout_gravity="center"
+                        android:layout_marginLeft="15dp"
+                        android:layout_marginTop="0dp"
+                        android:layout_weight="2"
+                        android:gravity="center"
+                        android:paddingLeft="10dp"
+                        android:text="@string/ibn_reception_automatic"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                        android:textSize="@dimen/text_size_19"
+                        android:textStyle="bold" />
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/Relative_layout_takeInventory"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical">
+
+                    <ImageButton
+                        android:id="@+id/ibtn_takeInventory"
+                        android:layout_width="150dp"
+                        android:layout_height="110dp"
+                        android:layout_marginStart="15dp"
+                        android:layout_marginLeft="15dp"
+                        android:layout_marginTop="15dp"
+                        android:layout_marginEnd="15dp"
+                        android:layout_marginRight="15dp"
+                        android:layout_marginBottom="15dp"
+                        android:background="@color/full_transparent"
+                        android:drawingCacheQuality="auto"
+                        android:focusable="true"
+                        android:scaleType="fitCenter"
+                        android:src="@drawable/img_inventory_effect"></ImageButton>
+
+                    <TextView
+                        android:id="@+id/tv_take_inventory"
+                        android:layout_width="150dp"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/ibtn_takeInventory"
+                        android:layout_gravity="center"
+                        android:layout_marginLeft="15dp"
+                        android:layout_marginTop="0dp"
+                        android:layout_weight="2"
+                        android:gravity="center"
+                        android:paddingLeft="10dp"
+                        android:text="@string/ibtn_reception_document"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                        android:textSize="@dimen/text_size_19"
+                        android:textStyle="bold" />
+                </RelativeLayout>
+            </LinearLayout>
+    </RelativeLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

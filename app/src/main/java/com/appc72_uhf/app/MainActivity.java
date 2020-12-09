@@ -8,8 +8,9 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 
-import com.appc72_uhf.app.activities.LocalDocumentsMakeLabelActivity;
-import com.appc72_uhf.app.activities.inventoryList;
+import com.appc72_uhf.app.activities.makelabel.LocalDocumentsMakeLabelActivity;
+import com.appc72_uhf.app.activities.inventory.inventoryList;
+import com.appc72_uhf.app.activities.reception.Reception_activity;
 import com.appc72_uhf.app.fragment.UHFReadTagFragment;
 import com.appc72_uhf.app.fragment.UHFSetFragment;
 import com.appc72_uhf.app.fragment.UHFWriteFragment;
@@ -20,7 +21,7 @@ import java.util.HashMap;
 
 public class MainActivity extends BaseTabFragmentActivity {
     private final static String TAG ="MainActivity";
-    boolean takeInventory, makelabel;
+    boolean takeInventory, makelabel, reception_document;
     String inventaryName;
     String idInventory;
 
@@ -70,6 +71,13 @@ public class MainActivity extends BaseTabFragmentActivity {
                 initTabs();
             }
 
+        }else if(this.getIntent().getStringExtra("EntryType").equals("ReceptionDocuments")){
+            reception_document=true;
+            initSound();
+            initUHF();
+            initViewPageData();
+            initViewPager();
+            initTabs();
         }
 
     }
@@ -108,6 +116,15 @@ public class MainActivity extends BaseTabFragmentActivity {
                 lstFrg.add(new UHFSetFragment());
 
                 lstTitles.add(getString(R.string.uhf_title_write));
+                lstTitles.add(getString(R.string.uhf_msg_tab_set));
+            }
+
+        }else if(this.getIntent().getStringExtra("EntryType").equals("ReceptionDocuments")){
+            if(reception_document){
+                lstFrg.add(new Reception_activity());
+                lstFrg.add(new UHFSetFragment());
+
+                lstTitles.add(getString(R.string.uhf_msg_tab_receptiondocument));
                 lstTitles.add(getString(R.string.uhf_msg_tab_set));
             }
 

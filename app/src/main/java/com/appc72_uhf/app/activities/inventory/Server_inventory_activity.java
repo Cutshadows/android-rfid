@@ -1,4 +1,4 @@
-package com.appc72_uhf.app.activities;
+package com.appc72_uhf.app.activities.inventory;
 
 import android.content.Context;
 import android.content.Intent;
@@ -27,6 +27,7 @@ import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
 import com.appc72_uhf.app.MainActivity;
 import com.appc72_uhf.app.R;
+import com.appc72_uhf.app.activities.LoginActivity;
 import com.appc72_uhf.app.adapter.DataAdapterInventoryServer;
 import com.appc72_uhf.app.domain.Application;
 import com.appc72_uhf.app.entities.DatamodelInventories;

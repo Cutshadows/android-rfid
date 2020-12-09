@@ -1,4 +1,4 @@
-package com.appc72_uhf.app.activities;
+package com.appc72_uhf.app.activities.makelabel;
 
 import android.app.ProgressDialog;
 import android.content.Context;

@@ -1,4 +1,4 @@
-package com.appc72_uhf.app.activities;
+package com.appc72_uhf.app.activities.inventory;
 
 import android.content.Intent;
 import android.os.Bundle;

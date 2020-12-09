@@ -832,6 +832,7 @@
     <string name="uhf_msg_tab_scan">Lectura</string>
     <string name="uhf_msg_tab_inventory" translatable="false">Inventario</string>
     <string name="uhf_msg_tab_barcoderead" translatable="false">Lectura barcode</string>
+    <string name="uhf_msg_tab_receptiondocument" translatable="false">Recepcion documento</string>
 
     <string name="uhf_msg_tab_read">Leer</string>
     <string name="uhf_msg_tab_write">Escribir</string>
@@ -1474,6 +1475,7 @@
 
     <string name="name">Name</string>
     <string name="title_inventory_status" translatable="false">Estado Inventarios</string>
+    <string name="title_reception_status" translatable="false">Estado Recepción</string>
     <string name="title_local_documents" translatable="false">Documentos Local</string>
     <string name="tv_inventaryofServer" translatable="false">Inventarios en Servidor</string>
     <string name="btn_syncronousInventary" translatable="false">Volver</string>
@@ -1509,6 +1511,9 @@
     <!--DASHBOARD-->
     <string name="ibtn_takeInventory" translatable="false">Inventario</string>
     <string name="ibtn_takelallable" translatable="false">Etiquetado</string>
+    <string name="ibn_reception_automatic" translatable="false">Recepción Automática</string>
+    <string name="ibtn_reception_document" translatable="false">Recepción por documento</string>
+
     <!--string name="tv_wellcome" translatable="false">Bienvenido:</string-->
 
 

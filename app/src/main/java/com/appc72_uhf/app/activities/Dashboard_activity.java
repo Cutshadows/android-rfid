@@ -20,6 +20,7 @@ import androidx.core.app.ActivityCompat;
 
 import com.appc72_uhf.app.MainActivity;
 import com.appc72_uhf.app.R;
+import com.appc72_uhf.app.activities.reception.Dashboard_reception_activity;
 import com.appc72_uhf.app.helpers.DialogOptionsHelpers;
 import com.appc72_uhf.app.repositories.CompanyRepository;
 import com.appc72_uhf.app.tools.UIHelper;
@@ -32,7 +33,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 
 public class Dashboard_activity extends AppCompatActivity implements View.OnClickListener {
-    private ImageButton ibtn_takeInventory, ibtn_Labelled;
+    private ImageButton ibtn_takeInventory, ibtn_Labelled, ibtn_reception;
     private Button btn_logout;
     private TextView tv_welkomen_user;
     private Button btn_create_recovery;
@@ -56,15 +57,17 @@ public class Dashboard_activity extends AppCompatActivity implements View.OnClic
     }
     private void initComponent(){
         ibtn_takeInventory=(ImageButton) findViewById(R.id.ibtn_takeInventory);
+        ibtn_reception=(ImageButton) findViewById(R.id.ibtn_reception);
         ibtn_Labelled=(ImageButton) findViewById(R.id.ibtn_Labelled);
         tv_welkomen_user=(TextView) findViewById(R.id.tv_welkomen_user);
         btn_logout=(Button) findViewById(R.id.btn_logout);
         btn_logout.setOnClickListener(this);
         ibtn_Labelled.setOnClickListener(this);
         ibtn_takeInventory.setOnClickListener(this);
+        ibtn_reception.setOnClickListener(this);
         Relative_layout_Makelabel=(RelativeLayout) findViewById(R.id.Relative_layout_Makelabel);
         Relative_layout_takeInventory=(RelativeLayout) findViewById(R.id.Relative_layout_takeInventory);
-        btn_create_recovery=(Button) findViewById(R.id.btn_create_recovery);
+       // btn_create_recovery=(Button) findViewById(R.id.btn_create_recovery);
         android_id = Settings.Secure.getString(getBaseContext().getContentResolver(),
                 Settings.Secure.ANDROID_ID);
         companyId=getCompany();
@@ -86,7 +89,7 @@ public class Dashboard_activity extends AppCompatActivity implements View.OnClic
         }else{
             token_access=access_token;
         }
-        btn_create_recovery.setOnClickListener(this);
+       // btn_create_recovery.setOnClickListener(this);
 
     }
     @Override
@@ -102,7 +105,12 @@ public class Dashboard_activity extends AppCompatActivity implements View.OnClic
                 goToMain2.putExtra("EntryType", "MakeLabel");
                 startActivity(goToMain2);
                 break;
-            case R.id.btn_create_recovery:
+            case R.id.ibtn_reception:
+                Intent goToMainReception=new Intent(Dashboard_activity.this, Dashboard_reception_activity.class);
+                goToMainReception.putExtra("EntryType", "ReceptionDocuments");
+                startActivity(goToMainReception);
+                break;
+           /* case R.id.btn_create_recovery:
                 String strSrc = "/data/data/com.appc72_uhf.app/databases/IZYRFID.db";
                 String strDst = "/sdcard/IZYRFID.db";
 
@@ -114,7 +122,7 @@ public class Dashboard_activity extends AppCompatActivity implements View.OnClic
                 }catch(IOException e){
                     Log.e("IOException", e.toString());
                 }
-                break;
+                break;*/
             case R.id.btn_logout:
                 DialogOptionsHelpers dialogOptionsHelpers=new DialogOptionsHelpers(this);
                 dialogOptionsHelpers.showDialog();

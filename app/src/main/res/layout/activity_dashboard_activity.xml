@@ -8,13 +8,13 @@
 
     <RelativeLayout
         android:layout_width="379dp"
-        android:layout_height="522dp"
+        android:layout_height="700dp"
         android:layout_marginStart="40dp"
         android:layout_marginLeft="40dp"
-        android:layout_marginTop="119dp"
+        android:layout_marginTop="20dp"
         android:layout_marginEnd="41dp"
         android:layout_marginRight="41dp"
-        android:layout_marginBottom="120dp"
+        android:layout_marginBottom="10dp"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -28,19 +28,18 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
-            android:paddingTop="30dp">
-
+            android:paddingTop="10dp">
 
             <ImageView
                 android:id="@+id/imageView"
                 android:layout_width="match_parent"
                 android:layout_height="78dp"
-                android:layout_marginTop="50dp"
+                android:layout_marginTop="80dp"
                 android:background="@color/gray"
+                android:contentDescription="TODO"
                 android:paddingLeft="50dp"
                 android:paddingRight="50dp"
-                app:srcCompat="@drawable/logo_white_text1"
-                android:contentDescription="TODO" />
+                app:srcCompat="@drawable/logo_white_text1" />
 
             <View
                 android:layout_width="match_parent"
@@ -50,74 +49,78 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="5dp"
                 android:gravity="center_vertical"
-                android:orientation="horizontal"
-                android:layout_marginTop="50dp"
-                android:layout_marginLeft="20dp">
+                android:orientation="horizontal">
+
                 <TextView
                     android:id="@+id/tv_wellcome"
                     android:layout_width="10dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
                     android:layout_gravity="center_vertical"
+                    android:layout_weight="1"
                     android:gravity="center"
                     android:text="@string/tv_wellcome"
                     android:textSize="16dp"
-                    android:textStyle="bold"
-                    />
+                    android:textStyle="bold" />
 
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="0dp"
                 android:gravity="center_vertical"
-                android:orientation="horizontal"
-                android:layout_marginTop="5dp"
-                android:layout_marginLeft="20dp">
+                android:orientation="horizontal">
+
                 <TextView
                     android:id="@+id/tv_welkomen_user"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
                     android:layout_gravity="center"
-                    android:textStyle="bold"
+                    android:layout_weight="1"
                     android:gravity="center"
-                    android:textSize="18dp" />
+                    android:textSize="18dp"
+                    android:textStyle="bold" />
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="fill_parent"
-                android:layout_height="210dp"
+                android:layout_height="200dp"
                 android:gravity="center"
                 android:orientation="horizontal">
+
                 <RelativeLayout
                     android:id="@+id/Relative_layout_Makelabel"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical">
+
                     <ImageButton
                         android:id="@+id/ibtn_Labelled"
                         android:layout_width="150dp"
-                        android:layout_height="131dp"
+                        android:layout_height="111dp"
                         android:layout_margin="15dp"
                         android:layout_marginTop="@dimen/text_size_19"
                         android:background="@color/full_transparent"
+                        android:focusable="true"
                         android:scaleType="fitCenter"
                         android:src="@drawable/img_makelabel_effect"
-                        android:focusable="true"
                         tools:src="@drawable/img_makelabel_effect"></ImageButton>
+
                     <TextView
                         android:id="@+id/tv_makeLabel"
                         android:layout_width="150dp"
                         android:layout_height="wrap_content"
                         android:layout_below="@+id/ibtn_Labelled"
-                        android:layout_weight="2"
                         android:layout_gravity="center"
-                        android:paddingLeft="10dp"
-                        android:gravity="center"
-                        android:layout_marginTop="0dp"
                         android:layout_marginLeft="15dp"
+                        android:layout_marginTop="0dp"
+                        android:layout_weight="2"
+                        android:gravity="center"
+                        android:paddingLeft="10dp"
                         android:text="@string/ibtn_takelallable"
                         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
                         android:textSize="@dimen/text_size_19"
@@ -134,7 +137,7 @@
                     <ImageButton
                         android:id="@+id/ibtn_takeInventory"
                         android:layout_width="150dp"
-                        android:layout_height="130dp"
+                        android:layout_height="110dp"
                         android:layout_marginStart="15dp"
                         android:layout_marginLeft="15dp"
                         android:layout_marginTop="15dp"
@@ -146,17 +149,18 @@
                         android:focusable="true"
                         android:scaleType="fitCenter"
                         android:src="@drawable/img_inventory_effect"></ImageButton>
+
                     <TextView
                         android:id="@+id/tv_take_inventory"
                         android:layout_width="150dp"
                         android:layout_height="wrap_content"
                         android:layout_below="@+id/ibtn_takeInventory"
-                        android:layout_weight="2"
                         android:layout_gravity="center"
-                        android:paddingLeft="10dp"
-                        android:gravity="center"
-                        android:layout_marginTop="0dp"
                         android:layout_marginLeft="15dp"
+                        android:layout_marginTop="0dp"
+                        android:layout_weight="2"
+                        android:gravity="center"
+                        android:paddingLeft="10dp"
                         android:text="@string/ibtn_takeInventory"
                         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
                         android:textSize="@dimen/text_size_19"
@@ -164,39 +168,83 @@
                 </RelativeLayout>
 
             </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="180dp"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <RelativeLayout
+                    android:id="@+id/Relative_layout_reception"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical">
+
+                    <ImageButton
+                        android:id="@+id/ibtn_reception"
+                        android:layout_width="150dp"
+                        android:layout_height="110dp"
+                        android:layout_margin="15dp"
+                        android:layout_marginTop="@dimen/text_size_19"
+                        android:background="@color/full_transparent"
+                        android:focusable="true"
+                        android:scaleType="fitCenter"
+                        android:src="@drawable/img_makelabel_effect"
+                        tools:src="@drawable/img_makelabel_effect"></ImageButton>
+
+                    <TextView
+                        android:id="@+id/tv_reception"
+                        android:layout_width="150dp"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/ibtn_reception"
+                        android:layout_gravity="center"
+                        android:layout_marginLeft="15dp"
+                        android:layout_marginTop="0dp"
+                        android:layout_weight="2"
+                        android:gravity="center"
+                        android:paddingLeft="10dp"
+                        android:text="Recepción"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                        android:textSize="@dimen/text_size_19"
+                        android:textStyle="bold" />
+                </RelativeLayout>
+            </LinearLayout>
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
+                android:layout_marginTop="30dp"
                 android:gravity="center_horizontal"
-                android:layout_marginTop="10dp"
                 android:orientation="horizontal">
+
                 <Button
                     android:id="@+id/btn_logout"
-                    android:background="@drawable/button_bg"
-                    android:textColor="@color/white"
                     android:layout_width="fill_parent"
-                    android:gravity="center"
-                    android:layout_gravity="center_horizontal"
-                    android:text="@string/msg_btn_logout"
                     android:layout_height="40dp"
-                    />
+                    android:layout_gravity="center_horizontal"
+                    android:background="@drawable/button_bg"
+                    android:gravity="center"
+                    android:text="@string/msg_btn_logout"
+                    android:textColor="@color/white" />
             </LinearLayout>
-            <LinearLayout
+
+            <!--LinearLayout
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:visibility="invisible"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:visibility="invisible">
+
                 <Button
+                    android:id="@+id/btn_create_recovery"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@drawable/button_bg"
-                    android:id="@+id/btn_create_recovery"
-                    android:visibility="visible"
                     android:text="Respaldo archivo BD"
                     android:textAppearance="@style/TextAppearance.AppCompat.Title"
-                    />
-            </LinearLayout>
+                    android:visibility="visible" />
+            </LinearLayout-->
 
 
         </LinearLayout>

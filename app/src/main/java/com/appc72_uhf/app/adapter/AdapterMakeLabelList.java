@@ -15,7 +15,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.appc72_uhf.app.R;
-import com.appc72_uhf.app.activities.CaptureBarcodeActivity;
+import com.appc72_uhf.app.activities.makelabel.CaptureBarcodeActivity;
 import com.appc72_uhf.app.entities.DataModelVirtualDocument;
 import com.appc72_uhf.app.tools.UIHelper;
 

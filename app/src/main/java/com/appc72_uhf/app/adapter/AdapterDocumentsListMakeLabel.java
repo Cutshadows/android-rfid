@@ -41,7 +41,7 @@ import com.android.volley.toolbox.HttpHeaderParser;
 import com.android.volley.toolbox.Volley;
 import com.appc72_uhf.app.MainActivity;
 import com.appc72_uhf.app.R;
-import com.appc72_uhf.app.activities.BarcodeActivity;
+import com.appc72_uhf.app.activities.makelabel.BarcodeActivity;
 import com.appc72_uhf.app.entities.DatamodelDocumentsMakeLabel;
 import com.appc72_uhf.app.repositories.CompanyRepository;
 import com.appc72_uhf.app.repositories.MakeLabelRepository;
