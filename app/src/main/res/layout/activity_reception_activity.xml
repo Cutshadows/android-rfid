@@ -53,7 +53,7 @@
                 android:paddingBottom="5dp">
 
                 <ImageButton
-                    android:id="@+id/ibtn_reception"
+                    android:id="@+id/ibtn_add_reception"
                     android:layout_width="40dp"
                     android:layout_height="37dp"
                     android:background="@color/full_transparent"

@@ -93,7 +93,6 @@ public class Make_label_documents_activity extends AppCompatActivity{
         http.clientProductDetail(Request.Method.GET, "/api/devicedocument/GetAllDocumentsDeviceId?HardwareId="+android_id, null,  new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                Log.e("response", "re: "+response);
                 try{
                     //Gson gson=new Gson();
                     JSONArray docsMakelabels=new JSONArray(response);

@@ -832,7 +832,7 @@
     <string name="uhf_msg_tab_scan">Lectura</string>
     <string name="uhf_msg_tab_inventory" translatable="false">Inventario</string>
     <string name="uhf_msg_tab_barcoderead" translatable="false">Lectura barcode</string>
-    <string name="uhf_msg_tab_receptiondocument" translatable="false">Recepcion documento</string>
+    <string name="uhf_msg_tab_receptiondocument" translatable="false">Recepción</string>
 
     <string name="uhf_msg_tab_read">Leer</string>
     <string name="uhf_msg_tab_write">Escribir</string>
@@ -1476,6 +1476,7 @@
     <string name="name">Name</string>
     <string name="title_inventory_status" translatable="false">Estado Inventarios</string>
     <string name="title_reception_status" translatable="false">Estado Recepción</string>
+    <string name="title_reception_automatic" translatable="false">Recepciónando</string>
     <string name="title_local_documents" translatable="false">Documentos Local</string>
     <string name="tv_inventaryofServer" translatable="false">Inventarios en Servidor</string>
     <string name="btn_syncronousInventary" translatable="false">Volver</string>
@@ -1487,18 +1488,23 @@
     <string name="title_prompt_select" translatable="false">Seleccionar Inventario</string>
     <string name="et_email" translatable="false">Email</string>
     <string name="et_password" translatable="false">Password</string>
+    <string name="et_comentarys" translatable="false">Comentarios</string>
     <string name="et_code" translatable="false">Codigo</string>
     <string name="btn_ingresar" translatable="false">Ingresar</string>
+    <string name="btn_add_reception" translatable="false">Agregar</string>
     <string name="btn_nueva_empresa" translatable="false">Nueva empresa</string>
+    <string name="btn_back_reception" translatable="false">Volver</string>
 
     <!-- Botones opciones inventarios -->
     <string name="ap_dialog_inventario_vaciar" translatable="false">Vaciar codigos</string>
     <string name="ap_dialog_configuration_entry" translatable="false">Configuración</string>
     <string name="ap_dialog_configuration_logout" translatable="false">Cerrar sesión</string>
     <string name="ap_dialog_delete_inventory" translatable="false">Eliminar</string>
+    <string name="ap_dialog_comentary_reception" translatable="false">Comentarios </string>
     <string name="ap_dialog_sync_inventory" translatable="false">Enviar</string>
     <string name="ap_dialog_acept" translatable="false">aceptar</string>
     <string name="ap_dialog_cancel" translatable="false">cancelar</string>
+    <string name="ap_dialog_back" translatable="false">volver</string>
 
 
     <!--Sincronizar-->
@@ -1511,8 +1517,13 @@
     <!--DASHBOARD-->
     <string name="ibtn_takeInventory" translatable="false">Inventario</string>
     <string name="ibtn_takelallable" translatable="false">Etiquetado</string>
-    <string name="ibn_reception_automatic" translatable="false">Recepción Automática</string>
+    <string name="input_label_select_location_reception" translatable="false">¿Donde estas recibiendo?</string>
+    <string name="text_label_add_reception" translatable="false">Ingresar nueva recepción</string>
+    <string name="input_text_comentary" translatable="false">Comentarios</string>
+    <string name="ibn_reception_automatic" translatable="false">Recepción automática</string>
+    <string name="ibn_reception_initLecture" translatable="false">Comenzar</string>
     <string name="ibtn_reception_document" translatable="false">Recepción por documento</string>
+    <string name="ibtn_reception_automatic_readEpc" translatable="false">Sincronizar lectura</string>
 
     <!--string name="tv_wellcome" translatable="false">Bienvenido:</string-->
 

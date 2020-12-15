@@ -43,4 +43,11 @@ public class DialogOptionsHelpers extends AlertDialog {
         });
         builder.create().show();
     }
+
+    public void DialogCommentary(){
+
+    }
+    public void DialogSincronizateParameters(){
+
+    }
 }

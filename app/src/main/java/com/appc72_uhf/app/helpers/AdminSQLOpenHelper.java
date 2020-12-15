@@ -90,6 +90,18 @@ public class AdminSQLOpenHelper extends SQLiteOpenHelper {
                 "Status INTEGER," +
                 "EPCString TEXT, "+
                 "CodeBar TEXT" +");");
+
+        db.execSQL("CREATE TABLE IF NOT EXISTS Location("+
+                "IdLocation INTEGER UNIQUE NOT NULL PRIMARY KEY,"+
+                "LocationName TEXT,"+
+                "EmailUser TEXT"+")");
+
+        db.execSQL("CREATE TABLE IF NOT EXISTS Reception("+
+                "IdReception INTEGER UNIQUE NOT NULL PRIMARY KEY AUTOINCREMENT,"+
+                "dateReception TEXT,"+
+                "Comment TEXT,"+
+                "Fk_IdLocation INTEGER,"+
+                "EmailUserCreate TEXT"+")");
     }
 
     @Override
@@ -101,6 +113,8 @@ public class AdminSQLOpenHelper extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS DetailForDevice");
         db.execSQL("DROP TABLE IF EXISTS Documents");
         db.execSQL("DROP TABLE IF EXISTS DocumentDetailsVirtual");
+        db.execSQL("DROP TABLE IF EXISTS Location");
+        db.execSQL("DROP TABLE IF EXISTS Reception");
     }
 
 }

@@ -1,9 +1,84 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<LinearLayout android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".activities.reception.Automatic_reception_activity">
+    android:orientation="vertical"
+    xmlns:android="http://schemas.android.com/apk/res/android">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="@color/gray1" />
+
+    <LinearLayout
+        android:id="@+id/layout2"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp">
+
+
+        <LinearLayout
+            android:id="@+id/llContinuous"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:clickable="false"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="60dp"
+                android:layout_marginRight="60dp"
+                android:text="@string/title_reception_automatic"
+                android:textSize="@dimen/text_size_19"
+                android:textStyle="bold" />
+
+            <LinearLayout
+                android:id="@+id/llPlusReceptionServer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:layout_marginStart="60dp"
+                android:layout_marginLeft="60dp"
+                android:gravity="end"
+                android:orientation="horizontal"
+                android:paddingTop="5dp"
+                android:paddingBottom="5dp">
+
+                <ImageButton
+                    android:id="@+id/ibtn_add_reception"
+                    android:layout_width="40dp"
+                    android:layout_height="37dp"
+                    android:background="@color/full_transparent"
+                    android:focusableInTouchMode="false"
+                    android:paddingLeft="0dp"
+                    android:paddingRight="0dp"
+                    android:scaleType="fitCenter"
+                    android:soundEffectsEnabled="true"
+                    android:src="@drawable/btn_plus_effect"
+                    tools:src="@drawable/btn_plus_effect" />
+            </LinearLayout>
+
+        </LinearLayout>
+    </LinearLayout>
+    <View
+        android:layout_width="fill_parent"
+        android:layout_height="1px"
+        android:background="@color/gray1"
+        android:orientation="horizontal" />
+
+    <ListView
+        android:id="@+id/lv_data_reception_automatic"
+        android:layout_width="match_parent"
+        android:layout_height="450dp"
+        android:scrollingCache="true"
+        android:smoothScrollbar="true"
+        android:focusable="true" />
+</LinearLayout>

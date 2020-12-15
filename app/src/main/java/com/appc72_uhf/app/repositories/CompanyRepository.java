@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 
 import com.appc72_uhf.app.helpers.AdminSQLOpenHelper;
 
@@ -61,6 +62,7 @@ public class CompanyRepository {
     }
 
     public int getCompanieId(String companyName){
+        Log.e("CompanyName", companyName);
         int datos=0;
         AdminSQLOpenHelper admin = new AdminSQLOpenHelper(context);
         SQLiteDatabase db = admin.getWritableDatabase();

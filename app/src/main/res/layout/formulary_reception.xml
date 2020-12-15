@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".activities.LoginActivity">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:background="@color/blue2"
+            android:layout_height="30dp"
+            android:layout_gravity="start"
+            android:layout_marginLeft="1dp"
+            android:paddingLeft="10dp"
+            android:layout_marginTop="20dp"
+            android:text="@string/text_label_add_reception"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+            android:textSize="@dimen/text_size_19"
+            android:textStyle="bold" />
+    </LinearLayout>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="558dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="30dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginBottom="0dp"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:ignore="MissingConstraints">
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="340dp"
+                android:background="@color/gray"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/ibtn_Labelled"
+                android:layout_gravity="start"
+                android:layout_marginLeft="1dp"
+                android:layout_marginTop="0dp"
+                android:paddingLeft="10dp"
+                android:text="@string/input_label_select_location_reception"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                android:textSize="@dimen/text_size_14"
+                android:textStyle="bold" />
+            <Spinner
+                android:id="@+id/sp_location"
+                android:layout_width="280dp"
+                android:layout_gravity="center"
+                android:layout_height="60dp"
+                android:prompt="@string/title_prompt_select"
+                android:layout_marginTop="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginBottom="40dp"
+                android:spinnerMode="dropdown"
+                android:visibility="visible" />
+            <TextView
+                android:layout_width="340dp"
+                android:background="@color/gray"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/ibtn_Labelled"
+                android:layout_gravity="start"
+                android:layout_marginLeft="1dp"
+                android:layout_marginTop="0dp"
+                android:paddingLeft="10dp"
+                android:text="@string/input_text_comentary"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                android:textSize="@dimen/text_size_14"
+                android:textStyle="bold" />
+            <EditText
+                android:id="@+id/et_comentary"
+                android:layout_width="340dp"
+                android:layout_height="150dp"
+                android:background="@color/cardview_shadow_start_color"
+                android:inputType="text|textMultiLine"
+                android:gravity="top"
+                android:lineSpacingMultiplier="@android:integer/config_longAnimTime"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="40dp"
+                android:hint="@string/et_comentarys" />
+
+
+            <Button
+                android:id="@+id/btn_add_reception"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:background="@drawable/button_bg_up"
+                android:text="@string/btn_add_reception"
+                android:textColor="@color/white1"
+                android:textSize="@dimen/text_size_19" />
+
+            <Button
+                android:id="@+id/btn_back_reception"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_marginTop="30dp"
+                android:background="@drawable/button_bg_up"
+                android:text="@string/btn_back_reception"
+                android:textColor="@color/white1"
+                android:textSize="@dimen/text_size_19" />
+        </LinearLayout>
+    </RelativeLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

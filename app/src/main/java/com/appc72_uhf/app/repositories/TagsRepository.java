@@ -24,7 +24,6 @@ public class TagsRepository {
     //public boolean UpdateTagsFound(String RFID, String inventoryId){
     public int UpdateTagsFound(ArrayList<HashMap<String, String>> listMaster, String inventoryId){
         //final String NAME_TABLE="DetailForDevice";
-        Log.e("listMaster", ""+listMaster.toString());
         AdminSQLOpenHelper admin = new AdminSQLOpenHelper(context);
         SQLiteDatabase db = admin.getWritableDatabase();
         int counterState=0;

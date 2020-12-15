@@ -10,6 +10,7 @@ import android.util.Log;
 
 import com.appc72_uhf.app.activities.makelabel.LocalDocumentsMakeLabelActivity;
 import com.appc72_uhf.app.activities.inventory.inventoryList;
+import com.appc72_uhf.app.activities.reception.Automatic_reception_activity;
 import com.appc72_uhf.app.activities.reception.Reception_activity;
 import com.appc72_uhf.app.fragment.UHFReadTagFragment;
 import com.appc72_uhf.app.fragment.UHFSetFragment;
@@ -78,6 +79,12 @@ public class MainActivity extends BaseTabFragmentActivity {
             initViewPageData();
             initViewPager();
             initTabs();
+        }else if(this.getIntent().getStringExtra("EntryType").equals("ReceptionAutomatics")){
+            initSound();
+            initUHF();
+            initViewPageData();
+            initViewPager();
+            initTabs();
         }
 
     }
@@ -124,10 +131,16 @@ public class MainActivity extends BaseTabFragmentActivity {
                 lstFrg.add(new Reception_activity());
                 lstFrg.add(new UHFSetFragment());
 
-                lstTitles.add(getString(R.string.uhf_msg_tab_receptiondocument));
+                lstTitles.add(getString(R.string.uhf_msg_tab_receptiondocument)+" por documentos");
                 lstTitles.add(getString(R.string.uhf_msg_tab_set));
             }
 
+        }else if(this.getIntent().getStringExtra("EntryType").equals("ReceptionAutomatics")){
+            lstFrg.add(new Automatic_reception_activity() );
+            lstFrg.add(new UHFSetFragment());
+
+            lstTitles.add(getString(R.string.uhf_msg_tab_receptiondocument)+" automática");
+            lstTitles.add(getString(R.string.uhf_msg_tab_set));
         }
         //lstFrg.add(new UHFReadFragment());
         //lstFrg.add(new UHFWriteFragment());

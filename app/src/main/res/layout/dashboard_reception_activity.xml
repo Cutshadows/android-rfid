@@ -38,7 +38,7 @@
                     android:layout_gravity="center_vertical">
 
                     <ImageButton
-                        android:id="@+id/ibtn_Labelled"
+                        android:id="@+id/ibtn_reception_automatic"
                         android:layout_width="150dp"
                         android:layout_height="111dp"
                         android:layout_margin="15dp"
@@ -50,10 +50,10 @@
                         tools:src="@drawable/img_makelabel_effect"></ImageButton>
 
                     <TextView
-                        android:id="@+id/tv_makeLabel"
+                        android:id="@+id/tv_automatic_reception"
                         android:layout_width="150dp"
                         android:layout_height="wrap_content"
-                        android:layout_below="@+id/ibtn_Labelled"
+                        android:layout_below="@+id/ibtn_reception_automatic"
                         android:layout_gravity="center"
                         android:layout_marginLeft="15dp"
                         android:layout_marginTop="0dp"
@@ -74,7 +74,7 @@
                     android:layout_gravity="center_vertical">
 
                     <ImageButton
-                        android:id="@+id/ibtn_takeInventory"
+                        android:id="@+id/ibtn_reception_document"
                         android:layout_width="150dp"
                         android:layout_height="110dp"
                         android:layout_marginStart="15dp"
@@ -90,10 +90,10 @@
                         android:src="@drawable/img_inventory_effect"></ImageButton>
 
                     <TextView
-                        android:id="@+id/tv_take_inventory"
+                        android:id="@+id/tv_document_reception"
                         android:layout_width="150dp"
                         android:layout_height="wrap_content"
-                        android:layout_below="@+id/ibtn_takeInventory"
+                        android:layout_below="@+id/ibtn_reception_document"
                         android:layout_gravity="center"
                         android:layout_marginLeft="15dp"
                         android:layout_marginTop="0dp"

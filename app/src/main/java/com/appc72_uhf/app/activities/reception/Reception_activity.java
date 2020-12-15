@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageButton;
 import android.widget.ListView;
 
 import androidx.annotation.Nullable;
@@ -17,9 +18,10 @@ import com.appc72_uhf.app.fragment.KeyDwonFragment;
 
 import java.util.ArrayList;
 
-public class Reception_activity extends KeyDwonFragment {
+public class Reception_activity extends KeyDwonFragment implements View.OnClickListener {
     private MainActivity mContext;
     ListView lv_data_reception;
+    ImageButton ibtn_add_reception;
 
 
     ArrayList<DataModelReceptionDocuments> dataArrayListReception;
@@ -48,9 +50,10 @@ public class Reception_activity extends KeyDwonFragment {
     private void initComponents(){
         mContext = (MainActivity) getActivity();
         lv_data_reception=(ListView) getView().findViewById(R.id.lv_data_reception);
+        ibtn_add_reception=(ImageButton) getView().findViewById(R.id.ibtn_add_reception);
        // ibtn_reception=(ImageButton) getView().findViewById(R.id.ibtn_reception);
 
-
+        ibtn_add_reception.setOnClickListener(this);
         dataArrayListReception=new ArrayList<DataModelReceptionDocuments>();
         dataArrayListReception.add(new DataModelReceptionDocuments("AD1231232132311231232222", 21, 23, "0", "demo"));
         dataArrayListReception.add(new DataModelReceptionDocuments("AD1231232132311231232222", 21, 23, "0", "demo"));
@@ -62,5 +65,16 @@ public class Reception_activity extends KeyDwonFragment {
         adpaterListReceptionDocuments.notifyDataSetChanged();
 
         ((BaseAdapter) lv_data_reception.getAdapter()).notifyDataSetChanged();
+        ibtn_add_reception.setOnClickListener(this);
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()){
+            case R.id.ibtn_add_reception:
+                //Intent goToMainReception=new Intent(mContext, FormularyReceptionActivity.class);
+                //startActivity(goToMainReception);
+                break;
+        }
     }
 }
